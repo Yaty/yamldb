@@ -109,7 +109,7 @@ data/
 │    ├─ ...
 ```
 
-### Description de la base : tables.yaml
+### Tables
 
 ```
 data/
@@ -148,4 +148,5 @@ data:
       name: Dupont
       lastname: Michel
       address: 5 rue de l'église
+    - ...
 ```
