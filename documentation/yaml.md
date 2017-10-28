@@ -2,12 +2,14 @@
 
 ## Bases
 
+```
 data/
 ├─ bases.yaml
 ├─ base1/
 │    ├─ ...
 ├─ base2/
 │    ├─ ...
+```
 
 Contenu de bases.yaml :
 
@@ -21,6 +23,7 @@ base2:
 
 ## Description de la base : tables.yaml
 
+```
 data/
 ├─ bases.yaml
 ├─ base1/
@@ -28,6 +31,7 @@ data/
 │    ├─ tables/
 │    |    ├─ table1/
 │    |    ├─ table2/
+```
 
 Contenu de tables.yaml :
 
@@ -41,6 +45,7 @@ table2:
 
 ## Description d'une table
 
+```
 data/
 ├─ bases.yaml
 ├─ base1/
@@ -48,6 +53,7 @@ data/
 │    ├─ tables/
 │    |    ├─ table1/
 │    |    |    ├─ metadata.yaml
+```
 
 Contenu de metadata.yaml :
 
@@ -64,6 +70,7 @@ columns:
 
 ## Stockage d'une table
 
+```
 data/
 ├─ bases.yaml
 ├─ base1/
@@ -72,6 +79,7 @@ data/
 │    |    ├─ table1/
 │    |    |    ├─ metadata.yaml
 │    |    |    ├─ data.yaml
+```
 
 Contenu de data.yaml :
 
