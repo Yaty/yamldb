@@ -1,0 +1,29 @@
+# depslib dependency file v1.0
+1509228174 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manager.c
+	"../header/db_manager.h"
+	"../header/general.h"
+	"../header/file_manager.h"
+	<windows.h>
+	<stdio.h>
+
+1509219741 source:d:\esgi\3al-s1\language c\cbdd1\src\code\file_manager.c
+	<stdio.h>
+	"../header/file_manager.h"
+
+1509228192 source:d:\esgi\3al-s1\language c\cbdd1\src\code\general.c
+	<stdio.h>
+	<string.h>
+	"../header/general.h"
+
+1509228227 source:d:\esgi\3al-s1\language c\cbdd1\src\code\main.c
+	<stdio.h>
+	<stdlib.h>
+	"../header/db_manager.h"
+	"../header/general.h"
+
+1509220203 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manager.h
+
+1509228185 d:\esgi\3al-s1\language c\cbdd1\src\header\general.h
+
+1509212432 d:\esgi\3al-s1\language c\cbdd1\src\header\file_manager.h
+
