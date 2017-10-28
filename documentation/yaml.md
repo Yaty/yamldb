@@ -1,6 +1,8 @@
 # Structure des BDD YAML : Proposition
 
-## Bases
+## Version lourde
+
+### Bases
 
 ```
 data/
@@ -21,7 +23,7 @@ base2:
     ...
 ```
 
-## Description de la base : tables.yaml
+### Description de la base : tables.yaml
 
 ```
 data/
@@ -43,7 +45,7 @@ table2:
     ...
 ```
 
-## Description d'une table
+### Description d'une table
 
 ```
 data/
@@ -68,7 +70,7 @@ columns:
     ...
 ```
 
-## Stockage d'une table
+### Stockage d'une table
 
 ```
 data/
@@ -95,3 +97,55 @@ data:
       address: 5 rue de l'église
 ```
 
+## Version allégée
+
+### Bases
+
+```
+data/
+├─ base1/
+│    ├─ ...
+├─ base2/
+│    ├─ ...
+```
+
+### Description de la base : tables.yaml
+
+```
+data/
+├─ base1/
+│    ├─ table1/
+│    ├─ table2/
+```
+
+### Stockage et description d'une table
+
+```
+data/
+├─ base1/
+│    ├─ table1/
+│    |    ├─ data.yaml
+```
+
+Contenu de data.yaml :
+
+``` yaml
+metadatas:
+    name: nomTable
+    description: blabla
+    columns:
+        id: integer
+        name: string
+        lastname: string
+        address: string
+        ...
+data:
+    - id: 1
+      name: Michel
+      lastname: Dupont
+      address: 8 rue de l'église
+    - id: 2
+      name: Dupont
+      lastname: Michel
+      address: 5 rue de l'église
+```
