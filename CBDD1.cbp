@@ -31,9 +31,21 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="main.c">
+		<Unit filename="src/code/db_manager.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/code/file_manager.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/code/general.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/code/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/header/db_manager.h" />
+		<Unit filename="src/header/file_manager.h" />
+		<Unit filename="src/header/general.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

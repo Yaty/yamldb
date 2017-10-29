@@ -84,8 +84,8 @@ void createDatabase(char* name) {
     char filename[255];
 
     //Create filename
-    //strcpy(filename, "..\\..\\resources\\db\\"); //Pour lancement depuis /bin/Debug/CBDD1.exe
-    strcpy(filename, "resources\\db\\"); //Pour lancement depuis codeblocks
+    //strcpy(filename, "..\\..\\resources\\"); //Pour lancement depuis /bin/Debug/CBDD1.exe
+    strcpy(filename, "resources\\"); //Pour lancement depuis codeblocks
     strcat(filename, name);
     strcat(filename, ".yml");
 
