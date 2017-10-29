@@ -56,4 +56,12 @@ Output : void
 */
 void getInput(short length, char *input);
 
+/*
+Goal : Returns the position of the last occurence of symbol in str
+Input : - str (char*), string we want to search into
+        - symbol (char), symbol we want to find in str
+Output : char*, pointer to the last occurence of symbol in str.
+*/
+char* getLastOccInStr(char *str, char symbol);
+
 #endif // GENERAL_H_INCLUDED

@@ -8,7 +8,9 @@
 
 /*================ INCLUDES ================*/
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 #include "../header/general.h"
 
 /*================ FUNCTIONS ================*/
@@ -134,4 +136,20 @@ void getInput(short length, char *input) {
     fgets(input, (int)length, stdin);
 
     clearInput(input);
+}
+
+/*
+Goal : Returns the position of the last occurence of symbol in str
+Input : - str (char*), string we want to search into
+        - symbol (char), symbol we want to find in str
+Output : char*, pointer to the last occurence of symbol in str.
+*/
+char* getLastOccInStr(char *str, char symbol) {
+    char *temp = NULL;
+
+    while( (str = strchr(str, symbol)) != NULL ) {
+        temp = str;
+        str++;
+    }
+    return temp;
 }

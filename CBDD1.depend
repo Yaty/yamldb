@@ -1,8 +1,9 @@
 # depslib dependency file v1.0
-1509228174 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manager.c
+1509278398 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manager.c
 	"../header/db_manager.h"
 	"../header/general.h"
 	"../header/file_manager.h"
+	"../header/directory_functions.h"
 	<windows.h>
 	<stdio.h>
 
@@ -10,20 +11,44 @@
 	<stdio.h>
 	"../header/file_manager.h"
 
-1509224592 source:d:\esgi\3al-s1\language c\cbdd1\src\code\general.c
+1509277028 source:d:\esgi\3al-s1\language c\cbdd1\src\code\general.c
 	<stdio.h>
+	<stdlib.h>
 	<string.h>
+	<dirent.h>
 	"../header/general.h"
 
-1509224627 source:d:\esgi\3al-s1\language c\cbdd1\src\code\main.c
+1509278410 source:d:\esgi\3al-s1\language c\cbdd1\src\code\main.c
 	<stdio.h>
 	<stdlib.h>
 	"../header/db_manager.h"
 	"../header/general.h"
+	"../header/string_array_functions.h"
+	"../header/directory_functions.h"
 
-1509216603 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manager.h
+1509278375 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manager.h
 
-1509224585 d:\esgi\3al-s1\language c\cbdd1\src\header\general.h
+1509277919 d:\esgi\3al-s1\language c\cbdd1\src\header\general.h
 
 1509208832 d:\esgi\3al-s1\language c\cbdd1\src\header\file_manager.h
+
+1509274166 d:\esgi\3al-s1\language c\cbdd1\src\header\string_array_functions.h
+
+1509275917 d:\esgi\3al-s1\language c\cbdd1\src\header\directory_functions.h
+
+1509274619 source:d:\esgi\3al-s1\language c\cbdd1\src\code\string_array_functions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../header/general.h"
+	"../header/string_array_functions.h"
+
+1509275903 source:d:\esgi\3al-s1\language c\cbdd1\src\code\directory_functions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<dirent.h>
+	"../header/general.h"
+	"../header/string_array_functions.h"
+	"../header/directory_functions.h"
 
