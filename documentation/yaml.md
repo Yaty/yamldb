@@ -1,6 +1,6 @@
 # Structure des BDD YAML : Proposition
 
-## Version lourde
+## Version lourde : actuellement utilisée
 
 ### Bases
 
@@ -97,7 +97,9 @@ data:
       address: 5 rue de l'église
 ```
 
-## Version allégée
+
+~~~
+## Version allégée : pas choisit
 
 ### Bases
 
@@ -150,3 +152,4 @@ data:
       address: 5 rue de l'église
     - ...
 ```
+~~~
