@@ -6,18 +6,12 @@
 **  Description : Contains the database management functions
 */
 
-/*================ TODO ================*/
-//Open a database
-//Create a table
-//Drop database
-//Drop table
-//Give a list of the existing database ?
-
 /*================ INCLUDES ================*/
 #include "../header/db_manager.h"
 #include "../header/general.h"
 #include "../header/file_manager.h"
 #include "../header/directory_functions.h"
+#include "../header/db_manipulation.h"
 #include <windows.h>
 #include <stdio.h>
 
@@ -41,10 +35,10 @@ void databaseManager(void) {
             createDatabaseManager();
             break;
         case 2: //Ouvrir une bdd
-
+            openDatabaseManager();
             break;
         case 3: //Lister les bases
-            displayDatabasesList();
+            displayDatabasesListManager();
             break;
         }
 
@@ -216,7 +210,70 @@ void displayDatabasesList(void) {
     for( counter = 0; counter < length; counter++ ) {
         printf("\t%s\n", list[counter]);
     }
+}
 
+/*
+Goal : Manage the databases' list display
+Input : void
+Output : void
+*/
+void displayDatabasesListManager(void) {
+    displayDatabasesList();
     system("pause");
     system("cls");
+}
+
+/*
+Goal : Manage the database opening
+Input : void
+Output : void
+*/
+void openDatabaseManager() {
+    char **list;
+    short length;
+    short choice;
+    char db[70];
+
+    getDatabasesListManager(&length, &list); //Récupérer la liste des noms
+
+    choice = openDatabaseAskNumber(length, list);
+    if( choice == 0 ) {
+        system("cls");
+        return;
+    }
+
+    strcpy(db, list[choice - 1]);
+    databaseManipulationManager(db);
+}
+
+/*
+Goal : Ask the database to open
+Input : - length (short), length of array
+        - array (char**), list of the databases' name
+Output : number of the database
+*/
+short openDatabaseAskNumber(short length, char **array) {
+    short counter;
+    short choice;
+
+    do{
+        printf("Liste des bases de donnees :\n");
+
+        printf("\t0. Retourner au menu precedent\n");
+        for( counter = 0; counter < length; counter++ ) {
+            printf("\t%hd. %s\n", counter + 1, array[counter]);
+        }
+
+        printf("Entrer le numero de la base a ouvrir : ");
+        scanf("%hd", &choice);
+
+        if( choice < 0 || choice > length ) {
+            printf("Valeur non valide, Reessayer\n");
+            system("pause");
+            system("cls");
+        }
+
+    }while( choice < 0 || choice > length );
+
+    return choice;
 }

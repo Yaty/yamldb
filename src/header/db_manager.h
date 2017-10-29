@@ -71,4 +71,26 @@ Output : void
 */
 void displayDatabasesList(void);
 
+/*
+Goal : Manage the databases' list display
+Input : void
+Output : void
+*/
+void displayDatabasesListManager(void);
+
+/*
+Goal : Manage the database opening
+Input : void
+Output : void
+*/
+void openDatabaseManager();
+
+/*
+Goal : Ask the database to open
+Input : - length (short), length of array
+        - array (char**), list of the databases' name
+Output : number of the database
+*/
+short openDatabaseAskNumber(short length, char **array);
+
 #endif // DB_MANAGER_H_INCLUDED
