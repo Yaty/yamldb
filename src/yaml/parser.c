@@ -10,7 +10,7 @@
 
 #define BUFFER_SIZE 512
 
-typedef enum NodeType { VALUE, SEQUENCE } NodeType;
+typedef enum NodeType { VALUE, SEQUENCE, SEQUENCE_VALUE } NodeType;
 typedef struct Node Node;
 
 /**
@@ -22,11 +22,11 @@ typedef struct Node Node;
  *
  * Example :
  * data: -> data is a Node of type SEQUENCE
- *   - id: 1 -> data[0] is a Node of type SEQUENCE, data[0][0] is a VALUE Node
+ *   - id: 1 -> data[0] is a Node of type SEQUENCE_VALUE, data[0][0] is a VALUE Node
  *     name: Michel -> data[0][1] -> VALUE Node
  *     lastname: Dupont -> idem
  *     address: 8 rue de l'église -> idem
- *   - id: 2 -> data[1] -> SEQUENCE Node, data[1][0] is a VALUE Node
+ *   - id: 2 -> data[1] -> SEQUENCE_VALUE Node, data[1][0] is a VALUE Node
  *     name: Dupont -> data[1][1] -> VALUE Node
  *     lastname: Michel -> idem
  *     address: 5 rue de l'église -> idem
@@ -58,6 +58,7 @@ void addChild (Node *parent, Node *child) {
 Node* getEmptyNode() {
     Node* node = (Node*) malloc(sizeof(Node));
     node->childrenNumber = 0;
+    return node;
 }
 
 /**
@@ -118,8 +119,97 @@ int isValidYamlKey (char *key) {
     return isValid;
 }
 
-int isValidYamlValue (char *value) {
-    return isValidYamlKey(value); // for now a value follow the same rules as a key
+int countPrefixSpaces (const char *str) {
+    int counter = 0;
+    int i = 0;
+    while (str[i++] == ' ');
+    return counter;
+}
+
+void setNodeKeyValue (Node *node, char *key, char *value) {
+    node->type = VALUE;
+    node->key = strdup(key);
+    node->value = strdup(value);
+}
+
+int isValidSequenceInitializer (char *sequence) {
+    char* trimmedSequence = trim(sequence);
+    if (strlen(trimmedSequence) > 0) {
+        return trimmedSequence[0] == '-';
+    }
+    return 0;
+}
+
+/**
+ * This function retrieve values from a sequence value
+ * data:
+ *   - id: 1                        }   SEQUENCE VALUE CHILD
+ *     name: Michel -> data[0][1]   }   SEQUENCE VALUE CHILD
+ *     lastname: Dupont             }   SEQUENCE VALUE CHILD
+ *     address: 8 rue de l'église   }   SEQUENCE VALUE CHILD
+ */
+Node *retrieveSequenceValueChilds (Node *parent, FILE *file) {
+    char buffer[BUFFER_SIZE];
+    char key[BUFFER_SIZE];
+    char value[BUFFER_SIZE];
+    int firstIteration = 1;
+    int childsPrefixSpaces = 0;
+    int currentPrefixSpaces = 0;
+
+    while (fgets(buffer, BUFFER_SIZE, file)) {
+        // Init
+        if (firstIteration) {
+            childsPrefixSpaces = countPrefixSpaces(buffer) + 2; // + 2 to count "- "
+            memmove(buffer, buffer + 2, strlen(buffer) - 2 + 1); // move the start of the buffer to the first key (after "- ")
+            firstIteration = 0;
+        }
+
+        // Breaking condition
+        currentPrefixSpaces = countPrefixSpaces(buffer);
+        if (currentPrefixSpaces != childsPrefixSpaces) { // We are no longer in the sequence
+            fseek(file, sizeof(char) * (strlen(buffer) + 1), SEEK_CUR); // move back, , + 1 to count '\0'
+            break;
+        }
+
+        // Reset the key/value pair
+        key[0] = '\0';
+        value[0] = '\0';
+
+        // Retrieve and sanitize
+        sscanf(buffer, "%[^:]: %s", key, value);
+        strcpy(key, trim(key));
+        strcpy(key, trim(key));
+
+        // Add child to the parent
+        Node* child = getEmptyNode();
+        setNodeKeyValue(child, key, value);
+        addChild(parent, child);
+    }
+}
+
+// When we detect that we are no longer in a sequence juste move back the file cursor
+/**
+ * This function retrieve sequence into an array of Node
+ * data:
+ *   - id: 1                        }   THIS
+ *     name: Michel -> data[0][1]   }   IS A
+ *     lastname: Dupont             }   SEQUENCE
+ *     address: 8 rue de l'église   }   VALUE
+ */
+void *retrieveSequence (Node* parent, FILE *file) {
+    char buffer[BUFFER_SIZE];
+
+    while (fgets(buffer, BUFFER_SIZE, file)) { // One loop = one sequence value
+        if (isValidSequenceInitializer(buffer)) {
+            fseek(file, sizeof(char) * (strlen(buffer) + 1), SEEK_CUR); // move back to the key, + 1 to count '\0'
+            Node* sequenceValue = getEmptyNode();
+            sequenceValue->type = SEQUENCE_VALUE;
+            retrieveSequenceValueChilds(sequenceValue, file);
+            addChild(parent, sequenceValue);
+        } else {
+            break;
+        }
+    }
 }
 
 /**
@@ -138,25 +228,25 @@ Node *parseFile (FILE *file) {
             root->type = SEQUENCE;
 
             while(fgets(line, BUFFER_SIZE, file)) {
-                // Reset
+                // Reset and sanitize
                 key[0] = '\0';
                 value[0] = '\0';
 
                 // Get a pair of key/value and sanitize them with trim
                 sscanf(line, "%[^:]: %s", key, value);
                 strcpy(key, trim(key));
-                strcpy(value, trim(value));
 
-                if (isValidYamlKey(key) && isValidYamlValue(key)) {
+                if (isValidYamlKey(key)) {
+                    strcpy(value, trim(value));
                     currentNode = getEmptyNode();
-                    currentNode->type = VALUE;
-                    if (currentNode) {
-                        currentNode->key = strdup(key);
-                        currentNode->value = strdup(value);
+
+                    if (strlen(value) == 0) { // Sequence
+                        currentNode->type = SEQUENCE;
+                        retrieveSequence(currentNode, file);
+                    } else { // Value
+                        setNodeKeyValue(currentNode, key, value);
                         addChild(root, currentNode);
                     }
-                } else {
-                    // printf("Invalid key or value while parsing : |%s| |%s|\n", key, value);
                 }
             }
 
@@ -181,7 +271,10 @@ void nodeToString (Node *node, int depth) {
         printf("%s: %s\n", node->key, node->value);
     } else if (node->type == SEQUENCE) {
         for (int i = 0; i < node->childrenNumber; i++) {
-            nodeToString(&(node->children[i]), depth + 1);
+            Node sequenceValue = node->children[i];
+            for (int j = 0; j < sequenceValue.childrenNumber; j++) {
+                nodeToString(&(sequenceValue.children[j]), depth + 1);
+            }
         }
     }
 }
