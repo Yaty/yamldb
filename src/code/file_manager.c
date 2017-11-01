@@ -38,7 +38,7 @@ Output : char (1 byte) :
             - 1, error while creating the file
             - 2, file as been successfully created
 */
-char createFile(char* filename, char *name) {
+char createFile(char* filename) {
     FILE* pf;
 
     if( fileExist(filename) ) { //Le fichier existe deja
@@ -49,7 +49,5 @@ char createFile(char* filename, char *name) {
     if( pf == NULL ) { //Le fichier n'a pas été créé
         return 1;
     }
-    createDir(name);
-    mkdir(filename);
     return 2;
 }

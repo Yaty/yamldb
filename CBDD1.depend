@@ -95,7 +95,7 @@
 
 1509386579 e:\git\cbdd1\src\header\string_array_functions.h
 
-1509386579 source:e:\git\cbdd1\src\code\db_manipulation.c
+1509531805 source:e:\git\cbdd1\src\code\db_manipulation.c
 	<stdio.h>
 	<windows.h>
 	"../header/db_manipulation.h"

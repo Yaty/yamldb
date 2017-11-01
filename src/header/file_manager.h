@@ -30,7 +30,7 @@ Output : char (1 byte) :
             - 1, error while creating the file
             - 2, file as been successfully created
 */
-char createFile(char *filename, char *name);
+char createFile(char *filename);
 
 
 
