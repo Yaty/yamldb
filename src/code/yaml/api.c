@@ -8,7 +8,6 @@
 #include <string.h>
 #include "../../header/yaml/node.h"
 #include "../../header/yaml/parser.h"
-#include "../../header/file_manager.h"
 
 /**
  * Parse a YAML file
@@ -16,13 +15,11 @@
  * @return a Node struct representing the YAML
  */
 Node *YAMLParseFile (char* path) {
-    if (fileExist(path)) {
-        FILE* file = fopen(path, "r");
-        if (file) {
-            Node *parsedFile = parserParseFile(file);
-            fclose(file);
-            return parsedFile;
-        }
+    FILE* file = fopen(path, "r");
+    if (file) {
+        Node *parsedFile = parserParseFile(file);
+        fclose(file);
+        return parsedFile;
     }
     return NULL;
 }
