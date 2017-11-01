@@ -15,6 +15,7 @@
 #include "../header/general.h"
 #include "../header/string_array_functions.h"
 #include "../header/directory_functions.h"
+#include "../header/yaml/api.h"
 
 int main (int argc, char **argv) {
     /*
@@ -40,12 +41,12 @@ int main (int argc, char **argv) {
     //funcState = getDirInDirectory(&arrayLength, &array, "src\\");
     funcState = getFilesInDirectory(&arrayLength, &array, "src\\");
 
-    if( funcState == 1 ) { //Erreur lors de l'ouverture du répertoire
+    if( funcState == 1 ) { //Erreur lors de l'ouverture du rï¿½pertoire
         printf("Impossible d'ouvrir le repertoire demande. Verifier le chemin donne.\n");
         return EXIT_FAILURE;
     }
 
-    if( funcState == 2 ) { //Erreur lors de l'allocation mémoire
+    if( funcState == 2 ) { //Erreur lors de l'allocation mï¿½moire
         printf("Une erreur s'est produite. Il est possible que la RAM de votre ordinateur soit insuffisante pour le traitement demande.\n");
         return EXIT_FAILURE;
     }
@@ -59,9 +60,11 @@ int main (int argc, char **argv) {
     freeStrArray(arrayLength, array);
     */
 
+    Node* root = YAMLParseFile("test.yaml");
+    YAMLNodeToString(root, 0);
+    YAMLFreeNode(root);
 
-
-    databaseManager();
+    // databaseManager();
 
     return EXIT_SUCCESS;
 }

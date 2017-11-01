@@ -7,9 +7,11 @@
 #include <stdlib.h>
 
 #include "../../header/string_array_functions.h"
-#include "../../header/yaml/node.h"
+#include "../../header/yaml/parser.h"
 
 #define BUFFER_SIZE 512
+
+int nodes = 0;
 
 /**
  * Add a child to a parent node
@@ -22,6 +24,8 @@ void parserAddChild (Node *parent, Node *child) {
             parent->childrenNumber += 1;
             parent->children = realloc(parent->children, sizeof(Node) * parent->childrenNumber);
             parent->children[parent->childrenNumber - 1] = *child;
+            printf("%d\n", parent->id);
+            child->parentId = parent->id;
         } else {
             printf("Can't add a child to a non sequence typed node.\n");
         }
@@ -40,6 +44,8 @@ Node* parserGetEmptyNode() {
         node->childrenNumber = 0;
         node->key = (char*) malloc(sizeof(char) * BUFFER_SIZE);
         node->value = (char*) malloc(sizeof(char) * BUFFER_SIZE);
+        node->type = UNDEFINED;
+        node->id = nodes++;
         return node;
     }
     return NULL;
@@ -125,7 +131,7 @@ int parserIsValidSequenceInitializer (char *sequence) {
  */
 void parserGetKeyValueFromString (char *str, char *key, char *value) {
     if (str && key && value) {
-        sscanf(str, "%[^:]: %s", key, value);
+        sscanf(str, "%[^:]: %[^]", key, value);
     }
 }
 
@@ -137,11 +143,9 @@ void parserGetKeyValueFromString (char *str, char *key, char *value) {
  *     lastname: Dupont             }   SEQUENCE VALUE CHILD
  *     address: 8 rue de l'église   }   SEQUENCE VALUE CHILD
  */
-Node *parserRetrieveSequenceValueChilds (Node *parent, FILE *file) {
+void *parserRetrieveSequenceValueChilds (Node *parent, FILE *file) {
     if (parent && file) {
         char buffer[BUFFER_SIZE];
-        char key[BUFFER_SIZE];
-        char value[BUFFER_SIZE];
         int firstIteration = 1;
         int childsPrefixSpaces = 0;
         int currentPrefixSpaces = 0;
@@ -157,26 +161,11 @@ Node *parserRetrieveSequenceValueChilds (Node *parent, FILE *file) {
             // Breaking condition
             currentPrefixSpaces = countPrefixSpaces(buffer);
             if (currentPrefixSpaces != childsPrefixSpaces) { // We are no longer in the sequence
-                fseek(file, -strlen(buffer), SEEK_CUR); // move back, , + 1 to count '\0'
+                fseek(file, -strlen(buffer), SEEK_CUR); // move back
                 break;
             }
 
-            // Reset the key/value pair
-            key[0] = '\0';
-            value[0] = '\0';
-
-            // Retrieve and sanitize
-            parserGetKeyValueFromString(buffer, key, value);
-            strcpy(key, trim(key));
-            strcpy(value, trim(value));
-
-            // Add child to the parent
-            Node* child = parserGetEmptyNode();
-            if (child) {
-                child->type = VALUE;
-                parserSetNodeKeyValue(child, key, value);
-                parserAddChild(parent, child);
-            }
+            parserParseLine(parent, buffer, file);
         }
     }
 }
@@ -193,7 +182,6 @@ void *parserRetrieveSequence (Node* parent, FILE *file) {
     if (parent && file) {
         char buffer[BUFFER_SIZE];
         Node* sequenceValue;
-        parent->type = SEQUENCE;
 
         while (fgets(buffer, BUFFER_SIZE, file)) { // One loop = one sequence value
             fseek(file, -strlen(buffer), SEEK_CUR); // move back to the key
@@ -212,6 +200,45 @@ void *parserRetrieveSequence (Node* parent, FILE *file) {
 }
 
 /**
+ * Parse a line of a YAML file
+ * @param parent the node parent
+ * @param line
+ * @param file
+ * @return a filled Node struct
+ */
+void *parserParseLine (Node *parent, char *line, FILE *file) {
+    if (parent && line && file) {
+        char key[BUFFER_SIZE];
+        char value[BUFFER_SIZE];
+        Node *currentNode;
+
+        // Reset
+        key[0] = '\0';
+        value[0] = '\0';
+
+        // Get a pair of key/value and sanitize them with trim
+        parserGetKeyValueFromString(line, key, value);
+        strcpy(key, trim(key));
+
+        if (parserIsValidYamlKey(key)) {
+            currentNode = parserGetEmptyNode();
+            if (currentNode) {
+                strcpy(value, trim(value));
+                if (strlen(value) == 0) { // Sequence
+                    currentNode->key = strdup(key);
+                    currentNode->type = SEQUENCE;
+                    parserRetrieveSequence(currentNode, file);
+                } else { // Value
+                    currentNode->type = VALUE;
+                    parserSetNodeKeyValue(currentNode, key, value);
+                }
+                parserAddChild(parent, currentNode);
+            }
+        }
+    }
+}
+
+/**
  * Parse a YAML file
  * @param file stream
  * @return a filled Node
@@ -221,36 +248,12 @@ Node *parserParseFile (FILE *file) {
         Node *root = parserGetEmptyNode();
         if (root) {
             char line[BUFFER_SIZE];
-            char key[BUFFER_SIZE];
-            char value[BUFFER_SIZE];
-            Node *currentNode;
 
             root->type = SEQUENCE;
             root->key = "root";
 
             while(fgets(line, BUFFER_SIZE, file)) {
-                // Reset
-                key[0] = '\0';
-                value[0] = '\0';
-
-                // Get a pair of key/value and sanitize them with trim
-                parserGetKeyValueFromString(line, key, value);
-                strcpy(key, trim(key));
-
-                if (parserIsValidYamlKey(key)) {
-                    currentNode = parserGetEmptyNode();
-                    strcpy(value, trim(value));
-                    if (currentNode) {
-                        if (strlen(value) == 0) { // Sequence
-                            currentNode->key = strdup(key);
-                            parserRetrieveSequence(currentNode, file);
-                        } else { // Value
-                            currentNode->type = VALUE;
-                            parserSetNodeKeyValue(currentNode, key, value);
-                        }
-                        parserAddChild(root, currentNode);
-                    }
-                }
+                parserParseLine(root, line, file);
             }
 
             return root;

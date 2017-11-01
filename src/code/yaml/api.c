@@ -38,10 +38,12 @@ void YAMLNodeToString (Node *node, int depth) {
         printf("    ");
     }
 
+    // printf("[%d][%d]", node->id, node->parentId);
+
     if (node->type == VALUE) {
         printf("%s: %s\n", node->key, node->value);
     } else if (node->type == SEQUENCE) {
-        printf("%s:\n", node->key);
+        printf("%s, %d:\n", node->key, node->childrenNumber);
         for (i = 0; i < node->childrenNumber; i++) {
             YAMLNodeToString(&(node->children[i]), depth + 1);
         }

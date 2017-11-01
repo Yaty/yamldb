@@ -62,7 +62,7 @@ void parserGetKeyValueFromString (char *str, char *key, char *value);
  *     lastname: Dupont             }   SEQUENCE VALUE CHILD
  *     address: 8 rue de l'église   }   SEQUENCE VALUE CHILD
  */
-Node *parserRetrieveSequenceValueChilds (Node *parent, FILE *file);
+void *parserRetrieveSequenceValueChilds (Node *parent, FILE *file);
 
 /**
  * This function retrieve sequence into an array of Node
@@ -73,6 +73,15 @@ Node *parserRetrieveSequenceValueChilds (Node *parent, FILE *file);
  *     address: 8 rue de l'église   }   VALUE
  */
 void *parserRetrieveSequence (Node* parent, FILE *file);
+
+/**
+ * Parse a line of a YAML file
+ * @param parent the node parent
+ * @param line
+ * @param file
+ * @return a filled Node struct
+ */
+void* parserParseLine (Node *parent, char *line, FILE *file);
 
 /**
  * Parse a YAML file
