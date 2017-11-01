@@ -1,7 +1,7 @@
 /*
 **  Filename : file_manager.c
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUï¿½NIN ESGI - 3AL-1
 **
 **  Description : Contains the functions for files using
 */
@@ -45,9 +45,11 @@ char createFile(char* filename) {
     }
 
     pf = fopen(filename, "w");
-    if( pf == NULL ) { //Le fichier n'a pas été créé
+    if( pf == NULL ) { //Le fichier n'a pas ï¿½tï¿½ crï¿½ï¿½
         return 1;
     }
 
     return 2;
 }
+
+

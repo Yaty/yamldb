@@ -2,12 +2,25 @@ cmake_minimum_required(VERSION 3.8)
 project(CBDD1)
 
 set(SRCS
-        src/main.c
-        src/gui/gui.c
-        src/ui/ui.c)
+        src/code/main.c
+        src/code/yaml/api.c
+        src/code/yaml/parser.c
+        src/code/db_manager.c
+        src/code/db_manipulation.c
+        src/code/directory_functions.c
+        src/code/file_manager.c
+        src/code/general.c
+        src/code/string_array_functions.c)
 
 set(HEADERS
-        src/gui/gui.h
-        src/ui/ui.h)
+        src/header/yaml/api.h
+        src/header/yaml/parser.h
+        src/header/db_manager.h
+        src/header/db_manipulation.h
+        src/header/directory_functions.h
+        src/header/file_manager.h
+        src/header/general.h
+        src/header/string_array_functions.h
+        )
 
 add_executable(cbdd ${SRCS} ${HEADERS})
