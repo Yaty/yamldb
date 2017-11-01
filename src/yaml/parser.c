@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <ctype.h>
 
 #define BUFFER_SIZE 512
 
@@ -45,20 +44,32 @@ struct Node {
  * @param child
  */
 void addChild (Node *parent, Node *child) {
-    parent->type = SEQUENCE;
-    parent->childrenNumber += 1;
-    parent->children = realloc(parent->children, sizeof(Node) * parent->childrenNumber);
-    parent->children[parent->childrenNumber - 1] = *child;
+    if (parent && child) {
+        if (parent->type == SEQUENCE || parent->type == SEQUENCE_VALUE) {
+            parent->childrenNumber += 1;
+            parent->children = realloc(parent->children, sizeof(Node) * parent->childrenNumber);
+            parent->children[parent->childrenNumber - 1] = *child;
+        } else {
+            printf("Can't add a child to a non sequence typed node.\n");
+        }
+    } else {
+        printf("Warn : addChild, parent or child is null.\n");
+    }
 }
 
 /**
  * Make an empty node
- * @return an empty initialized node
+ * @return an empty initialized node, NULL if error
  */
 Node* getEmptyNode() {
     Node* node = (Node*) malloc(sizeof(Node));
-    node->childrenNumber = 0;
-    return node;
+    if (node) {
+        node->childrenNumber = 0;
+        node->key = (char*) malloc(sizeof(char) * BUFFER_SIZE);
+        node->value = (char*) malloc(sizeof(char) * BUFFER_SIZE);
+        return node;
+    }
+    return NULL;
 }
 
 /**
@@ -75,20 +86,26 @@ Node* getEmptyNode() {
  * @return the trimed string
  */
 char *trim(char *str) {
-    char *end;
+    if (str) {
+        size_t strLength = strlen(str);
+        char *end;
 
-    // Trim left
-    while(isspace((unsigned char)*str)) str++;
+        // Trim left
+        while(isspace((unsigned char)*str)) str++;
 
-    if(*str == 0) { // Empty string
+        if(*str == 0) { // Empty string
+            return str;
+        }
+
+        // Trim right
+        end = str + strLength - 1;
+        while(end > str && isspace((unsigned char)*end)) end--;
+        *(end+1) = 0; // \0
         return str;
     }
 
-    // Trim right
-    end = str + strlen(str) - 1;
-    while(end > str && isspace((unsigned char)*end)) end--;
-    *(end+1) = 0; // \0
-    return str;
+    printf("Warn : triming an empty string.\n");
+    return NULL;
 }
 
 /**
@@ -97,47 +114,87 @@ char *trim(char *str) {
  * @return
  */
 int isValidYamlKey (char *key) {
-    int isValid = 1;
-    size_t keyLength = strlen(key);
+    if (key) {
+        size_t keyLength = strlen(key);
+        int isValid = 1;
 
-    if (keyLength == 0) {
-        return 0;
-    }
+        if (keyLength == 0) {
+            return 0;
+        }
 
-    for (int i = 0; i < keyLength; i++) {
-        char car = key[i];
-        if ((car >= 'a' && car <= 'z')
+        for (int i = 0; i < keyLength; i++) {
+            char car = key[i];
+            if ((car >= 'a' && car <= 'z')
                 || (car >= 'A' && car <= 'Z')
                 || (car >= '0' && car <= '9')
                 || car == '-' || car == '_') {
-            continue;
-        } else {
-            return 0;
+                continue;
+            } else {
+                return 0;
+            }
         }
+
+        return isValid;
     }
 
-    return isValid;
+    return 0;
 }
 
-int countPrefixSpaces (const char *str) {
-    int counter = 0;
-    int i = 0;
-    while (str[i++] == ' ');
-    return counter;
+int countPrefixSpaces (char *str) {
+    size_t strLength = strlen(str);
+
+    if (str && strLength > 0) {
+        int i = 0;
+        while (i < strLength && str[i++] == ' ');
+        return i - 1; // -1 to remove the last non space character
+    }
+
+    printf("Warn : countPrefixSpaces an empty string.\n");
+    return 0;
 }
 
 void setNodeKeyValue (Node *node, char *key, char *value) {
-    node->type = VALUE;
-    node->key = strdup(key);
-    node->value = strdup(value);
+    if (node && key && value) {
+        if (node->type == VALUE) {
+            node->key = strdup(key);
+            node->value = strdup(value);
+        } else {
+            printf("Can't set node key value to a non Value type node.\n");
+        }
+    } else {
+        printf("Invalid node, key or value : setNodeKeyValue.\n");
+    }
 }
 
 int isValidSequenceInitializer (char *sequence) {
-    char* trimmedSequence = trim(sequence);
-    if (strlen(trimmedSequence) > 0) {
-        return trimmedSequence[0] == '-';
+    if (sequence) {
+        char* trimmedSequence = trim(sequence);
+        if (strlen(trimmedSequence) > 1) {
+            return trimmedSequence[0] == '-' && trimmedSequence[1] == ' ';
+        } else {
+            printf("Wrong sequence initializer %s\n", sequence);
+        }
     }
+
     return 0;
+}
+
+/**
+ * This function remove X characters at index from a string);
+ * @param str
+ * @param startPosition, where to start the removal
+ * @param length, the number of characters to remove
+ */
+void removeChars (char *str, int startPosition, int length) {
+    if (str && startPosition >= 0 && length > 0) {
+        memmove(&str[startPosition], &str[startPosition + length], strlen(str) - startPosition);
+    }
+}
+
+void getKeyValue (char *str, char *key, char *value) {
+    if (str && key && value) {
+        sscanf(str, "%[^:]: %s", key, value);
+    }
 }
 
 /**
@@ -149,41 +206,46 @@ int isValidSequenceInitializer (char *sequence) {
  *     address: 8 rue de l'église   }   SEQUENCE VALUE CHILD
  */
 Node *retrieveSequenceValueChilds (Node *parent, FILE *file) {
-    char buffer[BUFFER_SIZE];
-    char key[BUFFER_SIZE];
-    char value[BUFFER_SIZE];
-    int firstIteration = 1;
-    int childsPrefixSpaces = 0;
-    int currentPrefixSpaces = 0;
+    if (parent && file) {
+        char buffer[BUFFER_SIZE];
+        char key[BUFFER_SIZE];
+        char value[BUFFER_SIZE];
+        int firstIteration = 1;
+        int childsPrefixSpaces = 0;
+        int currentPrefixSpaces = 0;
 
-    while (fgets(buffer, BUFFER_SIZE, file)) {
-        // Init
-        if (firstIteration) {
-            childsPrefixSpaces = countPrefixSpaces(buffer) + 2; // + 2 to count "- "
-            memmove(buffer, buffer + 2, strlen(buffer) - 2 + 1); // move the start of the buffer to the first key (after "- ")
-            firstIteration = 0;
+        while (fgets(buffer, BUFFER_SIZE, file)) {
+            // Init
+            if (firstIteration) {
+                childsPrefixSpaces = countPrefixSpaces(buffer) + 2; // count "- "
+                buffer[childsPrefixSpaces - 2] = ' ';
+                firstIteration = 0;
+            }
+
+            // Breaking condition
+            currentPrefixSpaces = countPrefixSpaces(buffer);
+            if (currentPrefixSpaces != childsPrefixSpaces) { // We are no longer in the sequence
+                fseek(file, -strlen(buffer), SEEK_CUR); // move back, , + 1 to count '\0'
+                break;
+            }
+
+            // Reset the key/value pair
+            key[0] = '\0';
+            value[0] = '\0';
+
+            // Retrieve and sanitize
+            getKeyValue(buffer, key, value);
+            strcpy(key, trim(key));
+            strcpy(value, trim(value));
+
+            // Add child to the parent
+            Node* child = getEmptyNode();
+            if (child) {
+                child->type = VALUE;
+                setNodeKeyValue(child, key, value);
+                addChild(parent, child);
+            }
         }
-
-        // Breaking condition
-        currentPrefixSpaces = countPrefixSpaces(buffer);
-        if (currentPrefixSpaces != childsPrefixSpaces) { // We are no longer in the sequence
-            fseek(file, sizeof(char) * (strlen(buffer) + 1), SEEK_CUR); // move back, , + 1 to count '\0'
-            break;
-        }
-
-        // Reset the key/value pair
-        key[0] = '\0';
-        value[0] = '\0';
-
-        // Retrieve and sanitize
-        sscanf(buffer, "%[^:]: %s", key, value);
-        strcpy(key, trim(key));
-        strcpy(key, trim(key));
-
-        // Add child to the parent
-        Node* child = getEmptyNode();
-        setNodeKeyValue(child, key, value);
-        addChild(parent, child);
     }
 }
 
@@ -197,17 +259,23 @@ Node *retrieveSequenceValueChilds (Node *parent, FILE *file) {
  *     address: 8 rue de l'église   }   VALUE
  */
 void *retrieveSequence (Node* parent, FILE *file) {
-    char buffer[BUFFER_SIZE];
+    if (parent && file) {
+        char buffer[BUFFER_SIZE];
+        Node* sequenceValue;
+        parent->type = SEQUENCE;
 
-    while (fgets(buffer, BUFFER_SIZE, file)) { // One loop = one sequence value
-        if (isValidSequenceInitializer(buffer)) {
-            fseek(file, sizeof(char) * (strlen(buffer) + 1), SEEK_CUR); // move back to the key, + 1 to count '\0'
-            Node* sequenceValue = getEmptyNode();
-            sequenceValue->type = SEQUENCE_VALUE;
-            retrieveSequenceValueChilds(sequenceValue, file);
-            addChild(parent, sequenceValue);
-        } else {
-            break;
+        while (fgets(buffer, BUFFER_SIZE, file)) { // One loop = one sequence value
+            fseek(file, -strlen(buffer), SEEK_CUR); // move back to the key
+            if (isValidSequenceInitializer(buffer)) {
+                sequenceValue = getEmptyNode();
+                if (sequenceValue) {
+                    sequenceValue->type = SEQUENCE_VALUE;
+                    retrieveSequenceValueChilds(sequenceValue, file);
+                    addChild(parent, sequenceValue);
+                }
+            } else {
+                break;
+            }
         }
     }
 }
@@ -225,26 +293,30 @@ Node *parseFile (FILE *file) {
             char key[BUFFER_SIZE];
             char value[BUFFER_SIZE];
             Node *currentNode;
+
             root->type = SEQUENCE;
+            root->key = "root";
 
             while(fgets(line, BUFFER_SIZE, file)) {
-                // Reset and sanitize
+                // Reset
                 key[0] = '\0';
                 value[0] = '\0';
 
                 // Get a pair of key/value and sanitize them with trim
-                sscanf(line, "%[^:]: %s", key, value);
+                getKeyValue(line, key, value);
                 strcpy(key, trim(key));
 
                 if (isValidYamlKey(key)) {
-                    strcpy(value, trim(value));
                     currentNode = getEmptyNode();
-
-                    if (strlen(value) == 0) { // Sequence
-                        currentNode->type = SEQUENCE;
-                        retrieveSequence(currentNode, file);
-                    } else { // Value
-                        setNodeKeyValue(currentNode, key, value);
+                    strcpy(value, trim(value));
+                    if (currentNode) {
+                        if (strlen(value) == 0) { // Sequence
+                            currentNode->key = strdup(key);
+                            retrieveSequence(currentNode, file);
+                        } else { // Value
+                            currentNode->type = VALUE;
+                            setNodeKeyValue(currentNode, key, value);
+                        }
                         addChild(root, currentNode);
                     }
                 }
@@ -263,17 +335,27 @@ Node *parseFile (FILE *file) {
  * @param depth initialize with 0 or -1 this value handle indentations
  */
 void nodeToString (Node *node, int depth) {
-    for (int i = 0; i < depth; i++) {
-        printf("\t");
+    int i;
+
+    for (i = 0; i < depth; i++) {
+        printf("    ");
     }
 
     if (node->type == VALUE) {
         printf("%s: %s\n", node->key, node->value);
     } else if (node->type == SEQUENCE) {
-        for (int i = 0; i < node->childrenNumber; i++) {
-            Node sequenceValue = node->children[i];
-            for (int j = 0; j < sequenceValue.childrenNumber; j++) {
-                nodeToString(&(sequenceValue.children[j]), depth + 1);
+        printf("%s:\n", node->key);
+        for (i = 0; i < node->childrenNumber; i++) {
+            nodeToString(&(node->children[i]), depth + 1);
+        }
+    } else if (node->type == SEQUENCE_VALUE) {
+        for (i = 0; i < node->childrenNumber; i++) {
+            if (i == 0) {
+                printf("- ");
+                nodeToString(&(node->children[i]), 0);
+            } else {
+                printf("  ");
+                nodeToString(&(node->children[i]), depth);
             }
         }
     }
@@ -302,7 +384,7 @@ void freeNode (Node *node) {
 int main (int argc, char **argv) {
     FILE* file = fopen("test.yaml", "r");
     Node* res = parseFile(file);
-    nodeToString(res, -1);
+    nodeToString(res, 0);
     freeNode(res);
     return EXIT_SUCCESS;
 }
