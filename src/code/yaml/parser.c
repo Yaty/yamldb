@@ -142,7 +142,7 @@ void parserGetKeyValueFromString (char *str, char *key, char *value) {
  *     lastname: Dupont             }   SEQUENCE VALUE CHILD
  *     address: 8 rue de l'église   }   SEQUENCE VALUE CHILD
  */
-void *parserRetrieveSequenceValueChilds (Node *parent, FILE *file) {
+void *parserRetrieveSequenceValueChild (Node *parent, FILE *file) {
     if (parent && file) {
         char buffer[BUFFER_SIZE];
         int firstIteration = 1;
@@ -188,7 +188,7 @@ void *parserRetrieveSequence (Node* parent, FILE *file) {
                 sequenceValue = parserGetEmptyNode();
                 if (sequenceValue) {
                     sequenceValue->type = SEQUENCE_VALUE;
-                    parserRetrieveSequenceValueChilds(sequenceValue, file);
+                    parserRetrieveSequenceValueChild(sequenceValue, file);
                     parserAddChild(parent, sequenceValue);
                 }
             } else {

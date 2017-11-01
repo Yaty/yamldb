@@ -62,7 +62,7 @@ void parserGetKeyValueFromString (char *str, char *key, char *value);
  *     lastname: Dupont             }   SEQUENCE VALUE CHILD
  *     address: 8 rue de l'église   }   SEQUENCE VALUE CHILD
  */
-void *parserRetrieveSequenceValueChilds (Node *parent, FILE *file);
+void *parserRetrieveSequenceValueChild (Node *parent, FILE *file);
 
 /**
  * This function retrieve sequence into an array of Node
