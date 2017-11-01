@@ -32,12 +32,13 @@ char fileExist(char* filename) {
 /*
 Goal : Create a file
 Input : filename (char*), path of the file we want to create
+        name (char*), name of the bdd to create folder with same same that file.yaml
 Output : char (1 byte) :
             - 0, file already exist
             - 1, error while creating the file
             - 2, file as been successfully created
 */
-char createFile(char* filename) {
+char createFile(char* filename, char *name) {
     FILE* pf;
 
     if( fileExist(filename) ) { //Le fichier existe deja
@@ -48,6 +49,7 @@ char createFile(char* filename) {
     if( pf == NULL ) { //Le fichier n'a pas été créé
         return 1;
     }
-
+    createDir(name);
+    mkdir(filename);
     return 2;
 }

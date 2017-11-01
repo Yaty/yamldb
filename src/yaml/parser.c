@@ -97,13 +97,14 @@ char *trim(char *str) {
  */
 int isValidYamlKey (char *key) {
     int isValid = 1;
+    int i = 0;
     size_t keyLength = strlen(key);
 
     if (keyLength == 0) {
         return 0;
     }
 
-    for (int i = 0; i < keyLength; i++) {
+    for (i = 0; i < keyLength; i++) {
         char car = key[i];
         if ((car >= 'a' && car <= 'z')
                 || (car >= 'A' && car <= 'Z')
@@ -173,14 +174,16 @@ Node *parseFile (FILE *file) {
  * @param depth initialize with 0 or -1 this value handle indentations
  */
 void nodeToString (Node *node, int depth) {
-    for (int i = 0; i < depth; i++) {
+    int i = 0;
+
+    for (i = 0; i < depth; i++) {
         printf("\t");
     }
 
     if (node->type == VALUE) {
         printf("%s: %s\n", node->key, node->value);
     } else if (node->type == SEQUENCE) {
-        for (int i = 0; i < node->childrenNumber; i++) {
+        for (i = 0; i < node->childrenNumber; i++) {
             nodeToString(&(node->children[i]), depth + 1);
         }
     }
@@ -191,7 +194,8 @@ void nodeToString (Node *node, int depth) {
  * @param node the node to free
  */
 void freeNode (Node *node) {
-    for (int i = 0; i < node->childrenNumber; i++) {
+    int i = 0;
+    for (i = 0; i < node->childrenNumber; i++) {
         freeNode(&(node->children[i]));
     }
 

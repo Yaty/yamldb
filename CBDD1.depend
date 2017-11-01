@@ -55,3 +55,68 @@
 
 1509299639 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manipulation.h
 
+1509530407 source:e:\git\cbdd1\src\code\db_manager.c
+	"../header/db_manager.h"
+	"../header/general.h"
+	"../header/file_manager.h"
+	"../header/directory_functions.h"
+	"../header/db_manipulation.h"
+	<windows.h>
+	<stdio.h>
+
+1509386579 e:\git\cbdd1\src\header\db_manager.h
+
+1509386579 e:\git\cbdd1\src\header\general.h
+
+1509530511 e:\git\cbdd1\src\header\file_manager.h
+
+1509530913 e:\git\cbdd1\src\header\directory_functions.h
+
+1509386579 e:\git\cbdd1\src\header\db_manipulation.h
+
+1509530486 source:e:\git\cbdd1\src\code\file_manager.c
+	<stdio.h>
+	"../header/file_manager.h"
+
+1509386579 source:e:\git\cbdd1\src\code\general.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<dirent.h>
+	"../header/general.h"
+
+1509528361 source:e:\git\cbdd1\src\code\main.c
+	<stdio.h>
+	<stdlib.h>
+	"../header/db_manager.h"
+	"../header/general.h"
+	"../header/string_array_functions.h"
+	"../header/directory_functions.h"
+
+1509386579 e:\git\cbdd1\src\header\string_array_functions.h
+
+1509386579 source:e:\git\cbdd1\src\code\db_manipulation.c
+	<stdio.h>
+	<windows.h>
+	"../header/db_manipulation.h"
+	"../header/general.h"
+
+1509530859 source:e:\git\cbdd1\src\code\directory_functions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<dirent.h>
+	<dir.h>
+	"../header/general.h"
+	"../header/string_array_functions.h"
+	"../header/directory_functions.h"
+
+1509386579 source:e:\git\cbdd1\src\code\string_array_functions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../header/general.h"
+	"../header/string_array_functions.h"
+
+1509528361 source:e:\git\cbdd1\src\code\table_manager.c
+

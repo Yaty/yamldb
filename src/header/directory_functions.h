@@ -56,4 +56,11 @@ Require : - income_array (char***) needs to be free.
 */
 char getFilesInDirectory(short *incomeArrayLength, char ***incomeArray, char* path);
 
+/*
+Goal : Create a folder
+Input : - folder name
+Output : (void)
+*/
+void createDir(char *dirName);
+
 #endif // DIRECTORY_FUNCTIONS_H_INCLUDED

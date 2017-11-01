@@ -59,8 +59,6 @@ int main (int argc, char **argv) {
     freeStrArray(arrayLength, array);
     */
 
-
-
     databaseManager();
 
     return EXIT_SUCCESS;

@@ -20,7 +20,7 @@ Output : char (1 byte) :
             - 0, file doesn't exist
             - 1, file exist
 */
-char fileExist(char* filename);
+char fileExist(char *filename);
 
 /*
 Goal : Create a file
@@ -30,7 +30,7 @@ Output : char (1 byte) :
             - 1, error while creating the file
             - 2, file as been successfully created
 */
-char createFile(char* filename);
+char createFile(char *filename, char *name);
 
 
 

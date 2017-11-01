@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include <dir.h>
 #include "../header/general.h"
 #include "../header/string_array_functions.h"
 #include "../header/directory_functions.h"
@@ -142,4 +143,18 @@ char getFilesInDirectory(short *incomeArrayLength, char ***incomeArray, char* pa
     *incomeArray = resultArray;
     *incomeArrayLength = resultArrayLength;
     return 0;
+}
+
+/*
+Goal : Create a folder
+Input : - folder name
+Output : (void)
+*/
+void createDir(char *dirName){
+    char name[255];
+
+    strcpy(name, "resources\\");
+    strcat(name, dirName);
+
+    mkdir(name);
 }

@@ -87,7 +87,7 @@ void createDatabase(char* name) {
     strcat(filename, name);
     strcat(filename, ".yml");
 
-    switch( createFile(filename) ) {
+    switch( createFile(filename, name) ) {
     case 0:
         printf("Cette base de donnee existe deja.\n");
         break;
