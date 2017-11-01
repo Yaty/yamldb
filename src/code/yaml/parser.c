@@ -24,7 +24,6 @@ void parserAddChild (Node *parent, Node *child) {
             parent->childrenNumber += 1;
             parent->children = realloc(parent->children, sizeof(Node) * parent->childrenNumber);
             parent->children[parent->childrenNumber - 1] = *child;
-            printf("%d\n", parent->id);
             child->parentId = parent->id;
         } else {
             printf("Can't add a child to a non sequence typed node.\n");
