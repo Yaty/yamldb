@@ -20,9 +20,8 @@ Node *YAMLParseFile (char* path) {
         FILE* file = fopen(path, "r");
         if (file) {
             Node *parsedFile = parserParseFile(file);
-            if (parsedFile) {
-                return parsedFile;
-            }
+            fclose(file);
+            return parsedFile;
         }
     }
     return NULL;
@@ -41,7 +40,6 @@ static void print (FILE* file, int argv, ...) {
     va_start(list, argv);
 
     if (file) {
-        fflush(file); // https://stackoverflow.com/a/14364557/6456249
         for (int j = 0; j < argv; j++) {
             fprintf(file, "%s", va_arg(list, char*));
         }
@@ -104,9 +102,11 @@ void YAMLPrintNode (Node *node) {
 int YAMLSaveNode (Node *node, char *path) {
     FILE *file = fopen(path, "w+");
     if (file) {
-        strcmp(node->key, "root") == 0
+        fflush(file); // https://stackoverflow.com/a/14364557/6456249
+        strcmp(node->key, "root") == 0 // remove root node which is added by the parser
             ? YAMLOutput(&(node->children[0]), 0, file)
             : YAMLOutput(node, 0, file);
+        fclose(file);
         return 1;
     }
     return 0;
