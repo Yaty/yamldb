@@ -22,7 +22,7 @@ static void print (FILE* file, int argv, ...);
  * @param depth set to 0
  * @param file if specified it will print in that file
  */
-static void YAMLOutput (Node *node, int depth, FILE* file);
+static void output (Node *node, int depth, FILE* file);
 
 /**
  * Print a node in the console

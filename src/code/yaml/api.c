@@ -58,7 +58,7 @@ static void print (FILE* file, int argv, ...) {
  * @param depth set to 0
  * @param file if specified it will print in that file
  */
-static void YAMLOutput (Node *node, int depth, FILE* file) {
+static void output (Node *node, int depth, FILE* file) {
     int i;
 
     for (i = 0; i < depth; i++) {
@@ -70,16 +70,16 @@ static void YAMLOutput (Node *node, int depth, FILE* file) {
     } else if (node->type == SEQUENCE) {
         print(file, 2, node->key, ":\n");
         for (i = 0; i < node->childrenNumber; i++) {
-            YAMLOutput(&(node->children[i]), depth + 1, file);
+            output(&(node->children[i]), depth + 1, file);
         }
     } else if (node->type == SEQUENCE_VALUE) {
         for (i = 0; i < node->childrenNumber; i++) {
             if (i == 0) {
                 print(file, 1, "- ");
-                YAMLOutput(&(node->children[i]), 0, file);
+                output(&(node->children[i]), 0, file);
             } else {
                 print(file, 1, "  ");
-                YAMLOutput(&(node->children[i]), depth, file);
+                output(&(node->children[i]), depth, file);
             }
         }
     }
@@ -90,7 +90,7 @@ static void YAMLOutput (Node *node, int depth, FILE* file) {
  * @param node
  */
 void YAMLPrintNode (Node *node) {
-    YAMLOutput(node, 0, NULL);
+    output(node, 0, NULL);
 }
 
 /**
@@ -104,8 +104,8 @@ int YAMLSaveNode (Node *node, char *path) {
     if (file) {
         fflush(file); // https://stackoverflow.com/a/14364557/6456249
         strcmp(node->key, "root") == 0 // remove root node which is added by the parser
-            ? YAMLOutput(&(node->children[0]), 0, file)
-            : YAMLOutput(node, 0, file);
+            ? output(&(node->children[0]), 0, file)
+            : output(node, 0, file);
         fclose(file);
         return 1;
     }
