@@ -15,7 +15,6 @@
 #include "../header/general.h"
 #include "../header/string_array_functions.h"
 #include "../header/directory_functions.h"
-#include "../header/yaml/api.h"
 
 int main (int argc, char **argv) {
     /*
@@ -60,11 +59,7 @@ int main (int argc, char **argv) {
     freeStrArray(arrayLength, array);
     */
 
-    Node* root = YAMLParseFile("test.yaml");
-    YAMLNodeToString(root, 0);
-    YAMLFreeNode(root);
-
-    // databaseManager();
+    databaseManager();
 
     return EXIT_SUCCESS;
 }
