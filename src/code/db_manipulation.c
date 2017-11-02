@@ -16,6 +16,7 @@
 #include <windows.h>
 #include "../header/db_manipulation.h"
 #include "../header/general.h"
+#include "../header/table_manager.h"
 
 /*================ FUNCTIONS ================*/
 /*
@@ -26,6 +27,7 @@ Output : void
 void databaseManipulationManager(char *db) {
     short menu;
     do{
+        system("cls");
         menu = databaseManipulationManagerMenu();
 
         system("cls");
@@ -34,7 +36,7 @@ void databaseManipulationManager(char *db) {
         case 0: //Quitter le programme
             return;
         case 1: //Créer une table
-
+            createTable(db);
             break;
         case 2: //Ouvrir une table
 
@@ -76,13 +78,4 @@ short databaseManipulationManagerMenu(void) {
     }while( choice < 0 || choice > length );
 
     return choice;
-}
-
-/*
-Goal : Create a table
-Input : db (char*), name of the db we manipulate
-Output : void
-*/
-void createTable(char *db) {
-
 }
