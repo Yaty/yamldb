@@ -11,11 +11,11 @@ typedef struct Node Node;
 /**
  * This structure represent a YAML tree of Node
  * Each node is a pair of key/value
- * A value can be a string, or a sequence
+ * A value can be a string, or a collection
  * If a value is a string then 'char *value' is filled.
- * If it's a sequence 'Node *children' is filled
+ * If it's a collection 'Node *children' is filled
  *
- * Example :
+ * Example with a SEQUENCE :
  * data: -> data is a Node of type SEQUENCE
  *   - id: 1 -> data[0] is a Node of type SEQUENCE_VALUE, data[0][0] is a VALUE Node
  *     name: Michel -> data[0][1] -> VALUE Node
@@ -25,6 +25,10 @@ typedef struct Node Node;
  *     name: Dupont -> data[1][1] -> VALUE Node
  *     lastname: Michel -> idem
  *     address: 5 rue de l'église -> idem
+ * With a map :
+ * data: -> MAP
+ *     key: bla -> VALUE
+ *     lol: lal
  */
 struct Node {
     NodeType type;
