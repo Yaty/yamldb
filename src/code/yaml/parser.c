@@ -70,13 +70,14 @@ Node* parserGetEmptyNode() {
 int parserIsValidYamlKey (char *key) {
     if (key) {
         size_t keyLength = strlen(key);
+        int i;
         int isValid = 1;
 
         if (keyLength == 0) {
             return 0;
         }
 
-        for (int i = 0; i < keyLength; i++) {
+        for (i = 0; i < keyLength; i++) {
             char car = key[i];
             if ((car >= 'a' && car <= 'z')
                 || (car >= 'A' && car <= 'Z')
