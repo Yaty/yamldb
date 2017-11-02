@@ -9,6 +9,13 @@
 #include "node.h"
 
 /**
+ * Check if a node is a collection
+ * @param node
+ * @return 1 if true, 0 if false
+ */
+int isCollection (Node *node);
+
+/**
  * Add a child to a parent node
  * @param parent
  * @param child
@@ -55,24 +62,38 @@ int parserIsValidSequenceInitializer (char *sequence);
 void parserGetKeyValueFromString (char *str, char *key, char *value);
 
 /**
- * This function retrieve values from a sequence value
- * data:
- *   - id: 1                        }   SEQUENCE VALUE CHILD
- *     name: Michel -> data[0][1]   }   SEQUENCE VALUE CHILD
- *     lastname: Dupont             }   SEQUENCE VALUE CHILD
- *     address: 8 rue de l'église   }   SEQUENCE VALUE CHILD
+ * This function retrieve values from a collection
+ *
+ * If the parent is a SEQUENCE_VALUE
+ * data: -> SEQUENCE
+ *   - id: 1                        } VALUE } THIS
+ *     name: Michel -> data[0][1]   } VALUE } IS
+ *     lastname: Dupont             } VALUE } A SEQUENCE
+ *     address: 8 rue de l'église   } VALUE } VALUE
+ * If it's a map it will get all map pair of key/values.
  */
-void *parserRetrieveSequenceValueChild (Node *parent, FILE *file);
+void *parserRetrieveCollectionValues (Node *parent, FILE *file);
 
 /**
- * This function retrieve sequence into an array of Node
- * data:
+ * This function retrieve a collection
+ * If it's a sequence :
+ * data: -> a sequence
  *   - id: 1                        }   THIS
  *     name: Michel -> data[0][1]   }   IS A
  *     lastname: Dupont             }   SEQUENCE
  *     address: 8 rue de l'église   }   VALUE
+ *   - id: 2                        }   THIS
+ *     name: Michel -> data[1][1]   }   IS ANOTHER
+ *     lastname: Dupont             }   SEQUENCE
+ *     address: 8 rue de l'église   }   VALUE
+ * If it's a map:
+ * data:
+ *   id: 1
+ *   name: Michel -> data[0][1]
+ *   lastname: Dupont
+ *   address: 8 rue de l'église
  */
-void *parserRetrieveSequence (Node* parent, FILE *file);
+void *parserRetrieveCollection (Node* parent, FILE *file);
 
 /**
  * Parse a line of a YAML file

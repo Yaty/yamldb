@@ -84,4 +84,12 @@ char *trim(char *str);
  */
 int countPrefixSpaces (char *str);
 
+/**
+ * Check is a sting is alphanumeric (a-z A-Z 0-9)
+ * @param str
+ * @param bonus if 1 it will allow _ and -
+ * @return 1 if true, 0 if false
+ */
+int isAlphanumeric (char *str, int bonus);
+
 #endif // STRING_ARRAY_FUNCTIONS_H_INCLUDED

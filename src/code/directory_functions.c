@@ -1,7 +1,7 @@
 /*
 **  Filename : directory_functions.c
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUÃ‰NIN ESGI - 3AL-1
 **
 **  Description : Contains directory manipulation related functions
 */
@@ -42,7 +42,7 @@ char getDirectoryContent(short *incomeArrayLength, char ***incomeArray, char *pa
     struct dirent *ent;
 
     while ((ent = readdir(directory)) != NULL) {
-        //Si le nom du répertoire/fichier n'est ni "." ni ".."
+        //Si le nom du rÃ©pertoire/fichier n'est ni "." ni ".."
         if( strcmp(ent->d_name, ".") && strcmp(ent->d_name, "..") ) {
 
             if( increaseStrArraySize(70, &length, 1, &array) == 0 ) { //Malloc error
@@ -86,7 +86,7 @@ char getDirInDirectory(short *incomeArrayLength, char ***incomeArray, char* path
     short counter;
 
     for( counter = 0; counter < *incomeArrayLength; counter++ ) {
-        if( strchr( tempArray[counter], '.' ) == NULL ) { //S'il n'y a pas de '.' dans le nom de fichier (c'est un répertoire)
+        if( strchr( tempArray[counter], '.' ) == NULL ) { //S'il n'y a pas de '.' dans le nom de fichier (c'est un rï¿½pertoire)
             if( increaseStrArraySize(70, &resultArrayLength, 1, &resultArray) == 0 ) { //Malloc error
                 //Free all string array
                 freeStrArray(*incomeArrayLength, tempArray);

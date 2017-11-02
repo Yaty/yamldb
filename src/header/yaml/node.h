@@ -5,7 +5,7 @@
 #ifndef CBDD1_NODE_H
 #define CBDD1_NODE_H
 
-typedef enum NodeType { VALUE, SEQUENCE, SEQUENCE_VALUE, UNDEFINED } NodeType;
+typedef enum NodeType { VALUE, SEQUENCE, SEQUENCE_VALUE, MAP, UNDEFINED } NodeType;
 typedef struct Node Node;
 
 /**

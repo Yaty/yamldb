@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+#include <unistd.h>
 #include "../../header/yaml/node.h"
 #include "../../header/yaml/parser.h"
 
@@ -33,15 +34,16 @@ Node *YAMLParseFile (char* path) {
  */
 static void print (FILE* file, int argv, ...) {
     va_list list;
+    int i;
 
     va_start(list, argv);
 
     if (file) {
-        for (int j = 0; j < argv; j++) {
+        for (i = 0; i < argv; i++) {
             fprintf(file, "%s", va_arg(list, char*));
         }
     } else {
-        for (int j = 0; j < argv; j++) {
+        for (i = 0; i < argv; i++) {
             printf("%s", va_arg(list, char*));
         }
     }
@@ -79,6 +81,11 @@ static void output (Node *node, int depth, FILE* file) {
                 output(&(node->children[i]), depth, file);
             }
         }
+    } else if (node->type == MAP) {
+        print(file, 2, node->key, ":\n");
+        for (i = 0; i < node->childrenNumber; i++) {
+            output(&(node->children[i]), depth + 1, file);
+        }
     }
 }
 
@@ -99,10 +106,18 @@ void YAMLPrintNode (Node *node) {
 int YAMLSaveNode (Node *node, char *path) {
     FILE *file = fopen(path, "w+");
     if (file) {
+        off_t position;
+
         fflush(file); // https://stackoverflow.com/a/14364557/6456249
         strcmp(node->key, "root") == 0 // remove root node which is added by the parser
             ? output(&(node->children[0]), 0, file)
             : output(node, 0, file);
+
+        // Remove the last char (\n)
+        fseeko(file, -1, SEEK_END);
+        position = ftello(file);
+        ftruncate(fileno(file), position);
+
         fclose(file);
         return 1;
     }

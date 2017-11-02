@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "../header/general.h"
 #include "../header/string_array_functions.h"
 
@@ -163,4 +164,30 @@ int countPrefixSpaces (char *str) {
 
     //printf("Warn : countPrefixSpaces an empty string.\n");
     return 0;
+}
+
+/**
+ * Check is a sting is alphanumeric (a-z A-Z 0-9)
+ * @param str
+ * @param bonus if 1 it will allow _ and -
+ * @return 1 if true, 0 if false
+ */
+int isAlphanumeric (char *str, int bonus) {
+    int i;
+    size_t strLength = strlen(str);
+
+    if (strLength == 0) {
+        return 0;
+    }
+
+    for (i = 0; i < strLength; i++) {
+        if ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9')) {
+            continue;
+        } else if (bonus && (str[i] == '_' || str[i] == '-')) {
+            continue;
+        }
+        return 0;
+    }
+
+    return 1;
 }
