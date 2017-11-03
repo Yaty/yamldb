@@ -34,7 +34,7 @@ void tableManipulationManager(char *dbName, char *tableName) {
         case 0: //Quitter le programme
             return;
         case 1: //Supprimer la table
-            deleteTableFromDb(dbName, tableName);
+            dropTable(dbName, tableName);
             printf("Supprimer la table.\n");
             system("pause");
             system("cls");
@@ -82,8 +82,37 @@ short tableManipulationManagerMenu(char *dbName, char *tableName) {
 Goal : Suppress a table from a database
 Input : - dbName (char*), name of the database
         - tableName (char*), name of the table we want to suppress
-Input : void
+Input : short, state of the process
+            - 0, success
+            - 1, error while deleting the table's file
 */
-void deleteTableFromDb(char *dbName, char *tableName) {
+short dropTable(char *dbName, char *tableName) {
+    char path[15] = "resources\\";
+    short strLength = 5;
+    char *str[] = {path, dbName, "\\", tableName, ".yml"};
+    char tablePath[255];
+
+    concatenateSeveralStr(255, tablePath, strLength, str);
+
+    if( deleteFile(tablePath) != 0 ) { //Supprime le fichier correspondant à la table
+        return 1;
+    }
+
+    //Supprime le fichier correspondant à la structure de la table
+
+
+    //Supprime la ligne correspondant à la table dans le fichier de la db
+    deleteTableInDb(dbName, tableName);
+
+    return 0;
+}
+
+/*
+Goal : Delete the line that correspond to the table to suppress in the db's file
+Input : - dbName (char*), name of the database
+        - tableName (char*), name of the table to suppress
+Output : void
+*/
+void deleteTableInDb(char *dbName, char *tableName) {
 
 }

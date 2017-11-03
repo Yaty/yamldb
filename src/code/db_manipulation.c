@@ -101,7 +101,7 @@ short deleteTableFiles(char *dirName) {
     for( counter = 0; counter < tablesNameLength; counter++ ) {
         strcpy(fileName, dirName);
         strcat(fileName, tablesName[counter]);
-        funcState = (short)remove(fileName); //Supprime le fichier table
+        funcState = deleteFile(fileName); //Supprime le fichier table
         if( funcState != 0 ) {
             return 3;
         }

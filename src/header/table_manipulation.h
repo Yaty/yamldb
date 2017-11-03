@@ -29,8 +29,18 @@ short tableManipulationManagerMenu(char *dbName, char *tableName);
 Goal : Suppress a table from a database
 Input : - dbName (char*), name of the database
         - tableName (char*), name of the table we want to suppress
-Input : void
+Input : short, state of the process
+            - 0, success
+            - 1, error while deleting the table's file
 */
-void deleteTableFromDb(char *dbName, char *tableName);
+short dropTable(char *dbName, char *tableName);
+
+/*
+Goal : Delete the line that correspond to the table to suppress in the db's file
+Input : - dbName (char*), name of the database
+        - tableName (char*), name of the table to suppress
+Output : void
+*/
+void deleteTableInDb(char *dbName, char *tableName);
 
 #endif // TABLE_MANAGER_H_INCLUDED

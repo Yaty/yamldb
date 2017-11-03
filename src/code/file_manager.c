@@ -53,8 +53,21 @@ char createFile(char* filename) {
 }
 
 /*
-
+Goal : Delete a file
+Input : filename (char*), path to the file to delete
+Output : short, state of the process
+            - 0, success
+            - 1, file does not exist
+            - 2, error while deleting the file
 */
-void removeFile(char* filename) {
+short deleteFile(char* filename) {
+    if( !fileExist(filename) ) {
+        return 1;
+    }
 
+    if( !remove(filename) ) {
+        return 2;
+    }
+
+    return 0;
 }
