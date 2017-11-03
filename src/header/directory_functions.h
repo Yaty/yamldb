@@ -56,4 +56,22 @@ Require : - income_array (char***) needs to be free.
 */
 char getFilesInDirectory(short *incomeArrayLength, char ***incomeArray, char* path);
 
+/*
+Goal : Create a folder
+Input : - folder name
+Output : (void)
+*/
+void createDir(char *dirName);
+
+/*
+Goal : Check if a dir exist in an other dir
+Input : - dirPath (char*), path of the directory
+        - dirName (char*), name of the directory we want to check if exist
+Output : short, state of the process
+            - 0, success, subdirectory doesn't exist
+            - 1, success, subdir exist
+            - - 1, error while listing the sub-directories
+*/
+short dirExist(char *dirPath, char *dirName);
+
 #endif // DIRECTORY_FUNCTIONS_H_INCLUDED

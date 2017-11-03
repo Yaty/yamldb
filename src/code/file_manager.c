@@ -32,6 +32,7 @@ char fileExist(char* filename) {
 /*
 Goal : Create a file
 Input : filename (char*), path of the file we want to create
+        name (char*), name of the bdd to create folder with same same that file.yaml
 Output : char (1 byte) :
             - 0, file already exist
             - 1, error while creating the file
@@ -48,8 +49,25 @@ char createFile(char* filename) {
     if( pf == NULL ) { //Le fichier n'a pas �t� cr��
         return 1;
     }
-
     return 2;
 }
 
+/*
+Goal : Delete a file
+Input : filename (char*), path to the file to delete
+Output : short, state of the process
+            - 0, success
+            - 1, file does not exist
+            - 2, error while deleting the file
+*/
+short deleteFile(char* filename) {
+    if( !fileExist(filename) ) {
+        return 1;
+    }
 
+    if( !remove(filename) ) {
+        return 2;
+    }
+
+    return 0;
+}

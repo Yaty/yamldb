@@ -15,17 +15,118 @@
 /*================ PROTOTYPES ================*/
 /*
 Goal : Manage the database's manipulations
-Input : db (char*), name of the database we manipulate
+Input : dbName (char*), name of the database we manipulate
 Output : void
 */
-void databaseManipulationManager(char *db);
+void databaseManipulationManager(char *dbName);
 
 /*
 Goal : display the menu for the database manipulation
-Input : void
+Input : dbName (char*), name of the database
 Output : short, choice of the user in the menu
 */
-short databaseManipulationManagerMenu(void);
+short databaseManipulationManagerMenu(char *dbName);
 
+/*
+Goal : Remove all tables' files
+Input : dirName (char*), path of the database to destroy
+Output : short, state of the process :
+            - 0, success
+            - 1, error while opening the directory
+            - 2, error while memory allocation
+            - 3, error while deleting the file
+*/
+short deleteTableFiles(char *dirName);
+
+/*
+Goal : Drop a database
+Input : dbName (char*), name of the database to destroy
+Output : short, state of the function
+            - 0, success
+            - 1, error while opening the directory
+            - 2, error while memory allocation
+            - 3, error while deleting the table's file
+            - 4, error while deleting the db's directory
+            - 5, error while deleting the db's file
+*/
+short dropDatabase(char *dbName);
+
+/*
+Goal : Manage the db suppression
+Input : dbName (char*), name of the database to suppress
+Output : short, state of the process
+            - 0, success
+            - other, error
+*/
+short dropDatabaseManager(char *dbName);
+
+/*
+Goal : Create a table
+Input : db (char*), name of the db we manipulate
+Output : void
+*/
+void createTable(char *db);
+
+/*
+Goal : Create a table in database folder
+Input : db (char*), name of the db we manipulate
+        tableName(char*), name of the table
+Output : int
+*/
+int createTableFile(char *db, char *tableName);
+
+/*
+Goal : Get the names of all tables created
+Input : - dirName (char*), path of the db directory
+        - tableNamesLength (short*), length of tableNames (char***)
+        - tableNames (char***), array to fill.
+Output : char, state of the treatment :
+            - 0, success
+            - 1, error while opening the directory
+            - 2, error while memory allocation
+Require : - tableNames (char***) needs to be free.
+          - tableNames (char***) needs to be initialized - malloc(0) works
+*/
+char getTablesList(char *dirName, short *tableNamesLength, char ***tableNames);
+
+/*
+Goal : Get the names of all tables
+Input : - dirName (char*), path of the database's directory
+        - resultArrayLength (short*), length of resultArray.
+        - resultArray (char***), at the end of the function, this array contains
+            the name of every database.
+Output : void
+Require : - resultArray char*** needs to be free.
+*/
+void getTablesListManager(char *dirName, short *resultArrayLength, char ***resultArray);
+
+/*
+Goal : Display the tables' list
+Input : dirName (char*), path of the database's directory
+Output : void
+*/
+void displayTablesList(char *dirName);
+
+/*
+Goal : Manage the tables' list display
+Input : dirName (char*), path of the database's directory
+Output : void
+*/
+void displayTablesListManager(char *dirName);
+
+/*
+Goal : Manage the table opening
+Input : void
+Output : void
+*/
+void openTableManager(char *dbName);
+
+/*
+Goal : Ask the table to open
+Input : - length (short), length of array
+        - array (char**), list of the tables' name
+Output : number of the table
+*/
+short openTableAskNumber(short length, char **array);
 
 #endif // DB_MANIPULATION_H_INCLUDED

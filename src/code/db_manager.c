@@ -58,7 +58,7 @@ char displayDatabaseManagerMenu(void) {
     char *array[4] = {"Quitter le programme", "Creer une base de donnees", "Ouvrir une base de donnees", "Lister toutes les bases de donnees"};
 
     do{
-        displayMenu(length, array);
+        displayMenu("Base de donnees", length, array);
         printf("\nVotre choix : ");
         scanf("%hd", &choice);
 
@@ -95,6 +95,7 @@ void createDatabase(char* name) {
         printf("Erreur lors de la creation de la base de donnee.\nL'emplacement ne doit pas etre accessible\n");
         break;
     case 2:
+        createDir(name);
         printf("La base de donnee a ete creee avec succes.\n");
         break;
     }
@@ -130,7 +131,7 @@ void createDatabaseManager(void) {
 
 /*
 Goal : Get the names of all databases created
-Input : - dbNamesLength (short*), length of incomeArray (char***)
+Input : - dbNamesLength (short*), length of dbNames (char***)
         - dbNames (char***), array to fill.
 Output : char, state of the treatment :
             - 0, success
@@ -142,7 +143,7 @@ Require : - dbNames (char***) needs to be free.
 char getDatabasesList(short *dbNamesLength, char ***dbNames) {
     char funcState;
     short counter;
-    char* lastOcc;
+    char *lastOcc;
     char **tempArray;
     int pos;
 
@@ -242,6 +243,7 @@ void openDatabaseManager() {
         return;
     }
 
+    system("cls");
     strcpy(db, list[choice - 1]);
     databaseManipulationManager(db);
 }

@@ -34,6 +34,12 @@
 		<Unit filename="src/code/db_manager.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/code/db_manipulation.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/code/directory_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/code/file_manager.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -43,9 +49,25 @@
 		<Unit filename="src/code/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/code/string_array_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+<<<<<<< Updated upstream
+		<Unit filename="src/code/table_manager.c">
+			<Option compilerVar="CC" />
+		</Unit>
+=======
+>>>>>>> Stashed changes
 		<Unit filename="src/header/db_manager.h" />
+		<Unit filename="src/header/db_manipulation.h" />
+		<Unit filename="src/header/directory_functions.h" />
 		<Unit filename="src/header/file_manager.h" />
 		<Unit filename="src/header/general.h" />
+		<Unit filename="src/header/string_array_functions.h" />
+<<<<<<< Updated upstream
+		<Unit filename="src/header/table_manager.h" />
+=======
+>>>>>>> Stashed changes
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -58,6 +58,26 @@ int main (int argc, char **argv) {
 
     freeStrArray(arrayLength, array);
     */
+    /*
+    //concatenateSeveralStr() Example
+    short length = 3;
+    //char* strings[] = {"Hello", " world", " ici Vincent Guenin"};
+    char* strings[] = {"Hello", " world", " !"};
+    char concatenateStr[20];
+    short funcState;
+    funcState = concatenateSeveralStr(20, concatenateStr, length, strings);
+    printf("funcState : %hd\n", funcState);
+    printf("res : %s\n", concatenateStr);
+    */
+    /*
+    //dirExist() Example
+    char path[100] = "resources\\";
+    char dirName[100] = "Base_3";
+    char dirName2[100] = "Base_4";
+
+    printf("dirExist(\"%s\", \"%s\") : %hd\n", path, dirName, dirExist(path, dirName));
+    printf("dirExist(\"%s\", \"%s\") : %hd\n", path, dirName2, dirExist(path, dirName2));
+    */
 
     databaseManager();
 

@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include <dir.h>
 #include "../header/general.h"
 #include "../header/string_array_functions.h"
 #include "../header/directory_functions.h"
@@ -142,4 +143,47 @@ char getFilesInDirectory(short *incomeArrayLength, char ***incomeArray, char* pa
     *incomeArray = resultArray;
     *incomeArrayLength = resultArrayLength;
     return 0;
+}
+
+/*
+Goal : Create a folder
+Input : - folder name
+Output : (void)
+*/
+void createDir(char *dirName){
+    char name[255];
+
+    strcpy(name, "resources\\");
+    strcat(name, dirName);
+
+    mkdir(name);
+}
+
+/*
+Goal : Check if a dir exist in an other dir
+Input : - dirPath (char*), path of the directory
+        - dirName (char*), name of the directory we want to check if exist
+Output : short, state of the process
+            - 0, success, subdirectory doesn't exist
+            - 1, success, subdir exist
+            - - 1, error while listing the sub-directories
+*/
+short dirExist(char *dirPath, char *dirName) {
+    short dirListLength = 0;
+    char **dirList = malloc(0);
+    short counter;
+
+    if( getDirInDirectory(&dirListLength, &dirList, dirPath) != 0) {
+        return -1;
+    }
+
+    for( counter = 0; counter < dirListLength; counter++ ) {
+        if( strcmp(dirName, dirList[counter]) == 0 ) { //Subdir exist
+            return 1;
+        }
+    }
+
+    freeStrArray(dirListLength, dirList);
+
+    return 0; //Subdir doesn't exist
 }

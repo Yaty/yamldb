@@ -20,7 +20,7 @@ Output : char (1 byte) :
             - 0, file doesn't exist
             - 1, file exist
 */
-char fileExist(char* filename);
+char fileExist(char *filename);
 
 /*
 Goal : Create a file
@@ -30,8 +30,16 @@ Output : char (1 byte) :
             - 1, error while creating the file
             - 2, file as been successfully created
 */
-char createFile(char* filename);
+char createFile(char *filename);
 
-
+/*
+Goal : Delete a file
+Input : filename (char*), path to the file to delete
+Output : short, state of the process
+            - 0, success
+            - 1, file does not exist
+            - 2, error while deleting the file
+*/
+short deleteFile(char* filename);
 
 #endif // FILE_MANAGER_H_INCLUDED
