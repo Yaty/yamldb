@@ -143,7 +143,7 @@ Require : - dbNames (char***) needs to be free.
 char getDatabasesList(short *dbNamesLength, char ***dbNames) {
     char funcState;
     short counter;
-    char* lastOcc;
+    char *lastOcc;
     char **tempArray;
     int pos;
 

@@ -94,7 +94,6 @@ void displayMenu(short length, char **menuStr) {
         printf("%c", bottomChar);
     }
     printf("\n");
-
 }
 
 /*

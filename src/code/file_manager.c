@@ -51,3 +51,10 @@ char createFile(char* filename) {
     }
     return 2;
 }
+
+/*
+
+*/
+void removeFile(char* filename) {
+
+}

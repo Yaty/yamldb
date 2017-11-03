@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1509299545 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manager.c
+1509695723 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manager.c
 	"../header/db_manager.h"
 	"../header/general.h"
 	"../header/file_manager.h"
@@ -8,18 +8,18 @@
 	<windows.h>
 	<stdio.h>
 
-1509216141 source:d:\esgi\3al-s1\language c\cbdd1\src\code\file_manager.c
+1509696349 source:d:\esgi\3al-s1\language c\cbdd1\src\code\file_manager.c
 	<stdio.h>
 	"../header/file_manager.h"
 
-1509278440 source:d:\esgi\3al-s1\language c\cbdd1\src\code\general.c
+1509695723 source:d:\esgi\3al-s1\language c\cbdd1\src\code\general.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<dirent.h>
 	"../header/general.h"
 
-1509278410 source:d:\esgi\3al-s1\language c\cbdd1\src\code\main.c
+1509695722 source:d:\esgi\3al-s1\language c\cbdd1\src\code\main.c
 	<stdio.h>
 	<stdlib.h>
 	"../header/db_manager.h"
@@ -31,11 +31,11 @@
 
 1509277919 d:\esgi\3al-s1\language c\cbdd1\src\header\general.h
 
-1509208832 d:\esgi\3al-s1\language c\cbdd1\src\header\file_manager.h
+1509695722 d:\esgi\3al-s1\language c\cbdd1\src\header\file_manager.h
 
 1509274166 d:\esgi\3al-s1\language c\cbdd1\src\header\string_array_functions.h
 
-1509275917 d:\esgi\3al-s1\language c\cbdd1\src\header\directory_functions.h
+1509695722 d:\esgi\3al-s1\language c\cbdd1\src\header\directory_functions.h
 
 1509297550 source:d:\esgi\3al-s1\language c\cbdd1\src\code\string_array_functions.c
 	<stdio.h>
@@ -44,16 +44,17 @@
 	"../header/general.h"
 	"../header/string_array_functions.h"
 
-1509275903 source:d:\esgi\3al-s1\language c\cbdd1\src\code\directory_functions.c
+1509695722 source:d:\esgi\3al-s1\language c\cbdd1\src\code\directory_functions.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<dirent.h>
+	<dir.h>
 	"../header/general.h"
 	"../header/string_array_functions.h"
 	"../header/directory_functions.h"
 
-1509299639 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manipulation.h
+1509702825 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manipulation.h
 
 1509532979 source:e:\git\cbdd1\src\code\db_manager.c
 	"../header/db_manager.h"
@@ -127,4 +128,20 @@
 	<stdio.h>
 
 1509643147 e:\git\cbdd1\src\header\table_manager.h
+
+1509696340 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manipulation.c
+	<stdio.h>
+	<windows.h>
+	"../header/db_manipulation.h"
+	"../header/general.h"
+	"../header/table_manager.h"
+
+1509695722 d:\esgi\3al-s1\language c\cbdd1\src\header\table_manager.h
+
+1509697219 source:d:\esgi\3al-s1\language c\cbdd1\src\code\table_manager.c
+	"../header/file_manager.h"
+	"../header/general.h"
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
 

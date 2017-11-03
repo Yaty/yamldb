@@ -210,6 +210,7 @@ void freeNode (Node *node) {
  * @param argv
  * @return
  */
+ /*
 int main (int argc, char **argv) {
     FILE* file = fopen("test.yaml", "r");
     Node* res = parseFile(file);
@@ -217,3 +218,4 @@ int main (int argc, char **argv) {
     freeNode(res);
     return EXIT_SUCCESS;
 }
+*/
