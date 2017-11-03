@@ -49,42 +49,32 @@ static void printSpaces (int numbers, FILE* file) {
  * @param depth set to 0
  * @param file if specified it will print in that file
  */
-static void output (Node *node, int depth, FILE* file, char *prependStr) {
+static void output (Node *node, int depth, FILE* file) {
     int i;
 
-    if (prependStr) {
-        if (strcmp(prependStr, "- ") == 0) {
-            print(file, 1, prependStr);
-        } else {
-            printSpaces(depth, file);
-            print(file, 1, prependStr);
-        }
-    } else {
-        printSpaces(depth, file);
-    }
-
+    printSpaces(depth, file);
 
     if (node->type == VALUE) {
         print(file, 4, node->key, ": ", node->value, "\n");
     } else if (node->type == SEQUENCE) {
         print(file, 2, node->key, ":\n");
         for (i = 0; i < node->childrenNumber; i++) {
-            output(&(node->children[i]), depth + 1, file, NULL);
+            output(&(node->children[i]), depth + 1, file);
         }
     } else if (node->type == SEQUENCE_VALUE) {
         for (i = 0; i < node->childrenNumber; i++) {
             if (i == 0) {
-                // print(file, 1, "- ");
-                output(&(node->children[i]), depth, file, "- ");
+                print(file, 1, "- ");
+                output(&(node->children[i]), depth, file);
             } else {
-                // print(file, 1, "  ");
-                output(&(node->children[i]), depth, file, "  ");
+                print(file, 1, "  ");
+                output(&(node->children[i]), depth, file);
             }
         }
     } else if (node->type == MAP) {
         print(file, 2, node->key, ":\n");
         for (i = 0; i < node->childrenNumber; i++) {
-            output(&(node->children[i]), depth + 1, file, NULL);
+            output(&(node->children[i]), depth + 1, file);
         }
     }
 }
@@ -109,7 +99,7 @@ Node *YAMLParseFile (char* path) {
  * @param node
  */
 void YAMLPrintNode (Node *node) {
-    output(node, 0, NULL, NULL);
+    output(node, 0, NULL);
 }
 
 /**
@@ -125,8 +115,8 @@ int YAMLSaveNode (Node *node, char *path) {
 
         fflush(file); // https://stackoverflow.com/a/14364557/6456249
         strcmp(node->key, "root") == 0 // remove root node which is added by the parser
-            ? output(&(node->children[0]), 0, file, NULL)
-            : output(node, 0, file, NULL);
+            ? output(&(node->children[0]), 0, file)
+            : output(node, 0, file);
 
         // Remove the last char (\n)
         fseeko(file, -1, SEEK_END);
