@@ -27,12 +27,23 @@ Example : - Input : - length : 3
 short sizeOfBiggestSlotOfStrArray(short length, char **array);
 
 /*
+Goal : Display title's menu
+Input : - maxLength (short), length of the longest str
+        - title (char*), title to display
+        - leftChar (char), char to display on the left
+        - rightChar (char), char to display on the right
+Output : void
+*/
+void displayMenuTitle(short maxLength, char *title, char leftChar, char rightChar);
+
+/*
 Goal : Display a menu
-Input : - length (short), length of the array
+Input : - title (char*), Str with the title of the menu
+        - length (short), length of the array
         - menuStr (char**), Str to display in the menu
 Output : void
 */
-void displayMenu(short length, char **menuStr);
+void displayMenu(char *title, short length, char **menuStr);
 
 /*
 Goal : Count the number of figure in a number.
@@ -63,5 +74,18 @@ Input : - str (char*), string we want to search into
 Output : char*, pointer to the last occurence of symbol in str.
 */
 char* getLastOccInStr(char *str, char symbol);
+
+/*
+Goal : concatenate several str into one
+Input : - resSize (short), size of res
+        - res (char**), str to fill
+        - strings (char**), array of str we want to concatenate
+        - length (short), length of strings
+Output : short, state of the process
+            - 0, success
+            - 1, strings is empty
+            - 2, the sum of the length of strings is greater than resSize
+*/
+short concatenateSeveralStr(short resSize, char res[resSize], short length, char **strings);
 
 #endif // GENERAL_H_INCLUDED

@@ -5,17 +5,13 @@
 **
 **  Description : Contains the database manipulation functions
 */
-
-/*================ TODO ================*/
-//Drop table
-
 /*================ INCLUDES ================*/
 #include <stdio.h>
 #include <windows.h>
 #include <unistd.h>
 #include "../header/db_manipulation.h"
 #include "../header/general.h"
-#include "../header/table_manager.h"
+#include "../header/table_manipulation.h"
 #include "../header/file_manager.h"
 #include "../header/directory_functions.h"
 #include "../header/string_array_functions.h"
@@ -24,35 +20,32 @@
 /*================ FUNCTIONS ================*/
 /*
 Goal : Manage the database's manipulations
-Input : db (char*), name of the database we manipulate
+Input : dbName (char*), name of the database we manipulate
 Output : void
 */
-void databaseManipulationManager(char *db) {
+void databaseManipulationManager(char *dbName) {
     short menu;
     do{
-        system("cls");
-        menu = databaseManipulationManagerMenu();
-
+        menu = databaseManipulationManagerMenu(dbName);
         system("cls");
 
         switch( menu ) {
         case 0: //Quitter le programme
             return;
         case 1: //Créer une table
-            createTable(db);
+            createTable(dbName);
             break;
         case 2: //Ouvrir une table
-
+            openTableManager(dbName);
             break;
         case 3: //Lister toutes les tables
-            displayTablesListManager(db);
+            displayTablesListManager(dbName);
             break;
         case 4: //Supprimer une base de données
-            dropDatabaseManager(db);
+            dropDatabaseManager(dbName);
             return;
             break;
         }
-
         system("cls");
 
     }while( menu != 0 );
@@ -60,17 +53,17 @@ void databaseManipulationManager(char *db) {
 
 /*
 Goal : display the menu for the database manipulation
-Input : void
+Input : dbName (char*), name of the database
 Output : short, choice of the user in the menu
 */
-short databaseManipulationManagerMenu(void) {
+short databaseManipulationManagerMenu(char *dbName) {
     short length = 5;
     short choice;
     char *array[] = {"Quitter le programme", "Creer une table", "Ouvrir une table", "Lister toutes les tables", "Supprimer une base de donnees"};
 
     do{
         system("cls");
-        displayMenu(length, array);
+        displayMenu(dbName, length, array);
         printf("\nVotre choix : ");
         scanf("%hd", &choice);
 
@@ -129,29 +122,39 @@ Output : short, state of the function
             - 3, error while deleting the table's file
             - 4, error while deleting the db's directory
             - 5, error while deleting the db's file
+            - 6, error while concatening the strings
 */
 short dropDatabase(char *dbName) {
-    char dirName[255];
+    short dirLength = 100;
+    char dirPath[15] = "resources\\";
+    char dirName[dirLength];
     char fileName[255];
     short funcState;
+    short str1Length = 3;
+    char *str1[] = {dirPath, dbName, "\\"};
+    short str2Length = 3;
+    char *str2[] = {dirPath, dbName, ".yml"};
 
-    strcpy(dirName, "resources\\"); //Get directory path
-    strcat(dirName, dbName);
-    strcat(dirName, "\\");
-
-    funcState = deleteTableFiles(dirName); //Supprime les fichiers table
-    if( funcState != 0 ) {
-        return funcState;
+    if( concatenateSeveralStr(dirLength, dirName, str1Length, str1) != 0 ) {
+        return 6;
     }
 
-    funcState = (short)rmdir(dirName); //Supprime le répertoire
-    if( funcState != 0 ) {
-        return 4;
+    if( dirExist(dirPath, dbName) == 1 ) { //Si le répertoire au nom de la base existe
+        funcState = deleteTableFiles(dirName); //Supprime les fichiers table
+        if( funcState != 0 ) {
+            return funcState;
+        }
+
+        funcState = (short)rmdir(dirName); //Supprime le répertoire
+        if( funcState != 0 ) {
+            return 4;
+        }
     }
 
-    strcpy(fileName, "resources\\");
-    strcat(fileName, dbName);
-    strcat(fileName, ".yml");
+    if( concatenateSeveralStr(255, fileName, str2Length, str2) != 0 ) {
+        return 6;
+    }
+
     funcState = (short)remove(fileName); //Supprime le fichier db
     if( funcState != 0 ) {
         return 5;
@@ -189,12 +192,10 @@ Output : int
 */
 int createTableFile(char *db, char *tableName){
     char tableFileName[255];
+    short strLength = 5;
+    char *str[] = {"resources\\", db, "\\", tableName, ".yml"};
 
-    strcpy(tableFileName, "resources\\");
-    strcat(tableFileName, db);
-    strcat(tableFileName, "\\");
-    strcat(tableFileName, tableName);
-    strcat(tableFileName, ".yml");
+    concatenateSeveralStr(255, tableFileName, strLength, str);
 
     switch( createFile(tableFileName) ) { //création de la table dans le fichier de base de données
     case 0:
@@ -220,10 +221,10 @@ void createTable(char *db) { /* A modifier avec les fonctions de yml parsing + A
     char tableName[100];
     char filename[255];
     FILE *pf;
+    short strLength = 3;
+    char *str[] = {"resources\\", db, ".yml"};
 
-    strcpy(filename, "resources\\"); //Pour lancement depuis codeblocks
-    strcat(filename, db);
-    strcat(filename, ".yml");
+    concatenateSeveralStr(255, filename, strLength, str);
 
     if( (pf = fopen(filename, "a")) ) { //ouverture du fichier en ajout
         fseek(pf, 0, SEEK_END);
@@ -337,11 +338,72 @@ Output : void
 */
 void displayTablesListManager(char *dbName) {
     char dirName[255];
+    short strLength = 3;
+    char *str[] = {"resources\\", dbName, "\\"};
 
-    strcpy(dirName, "resources\\");
-    strcat(dirName, dbName);
-    strcat(dirName, "\\");
+    concatenateSeveralStr(255, dirName, strLength, str);
+
     displayTablesList(dirName);
     system("pause");
     system("cls");
+}
+
+/*
+Goal : Manage the table opening
+Input : void
+Output : void
+*/
+void openTableManager(char *dbName) { //A tester en revenant
+    char **list;
+    short length;
+    short choice;
+    char table[70];
+    char dirName[255];
+    short strLength = 3;
+    char *str[] = {"resources\\", dbName, "\\"};
+
+    concatenateSeveralStr(255, dirName, strLength, str);
+    getTablesListManager(dirName, &length, &list); //Récupérer la liste des noms
+
+    choice = openTableAskNumber(length, list);
+    if( choice == 0 ) {
+        system("cls");
+        return;
+    }
+
+    system("cls");
+    strcpy(table, list[choice - 1]);
+    tableManipulationManager(dbName, table);
+}
+
+/*
+Goal : Ask the table to open
+Input : - length (short), length of array
+        - array (char**), list of the tables' name
+Output : number of the table
+*/
+short openTableAskNumber(short length, char **array) {
+    short counter;
+    short choice;
+
+    do{
+        printf("Liste des tables :\n");
+
+        printf("\t0. Retourner au menu precedent\n");
+        for( counter = 0; counter < length; counter++ ) {
+            printf("\t%hd. %s\n", counter + 1, array[counter]);
+        }
+
+        printf("Entrer le numero de la table a ouvrir : ");
+        scanf("%hd", &choice);
+
+        if( choice < 0 || choice > length ) {
+            printf("Valeur non valide, Reessayer\n");
+            system("pause");
+            system("cls");
+        }
+
+    }while( choice < 0 || choice > length );
+
+    return choice;
 }

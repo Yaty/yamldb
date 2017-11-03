@@ -47,12 +47,45 @@ short sizeOfBiggestSlotOfStrArray(short length, char **array) {
 }
 
 /*
+Goal : Display title's menu
+Input : - maxLength (short), length of the longest str
+        - title (char*), title to display
+        - leftChar (char), char to display on the left
+        - rightChar (char), char to display on the right
+Output : void
+*/
+void displayMenuTitle(short maxLength, char *title, char leftChar, char rightChar) {
+    short counter;
+    short titleLength;
+    short totalLength;
+    short gap;
+
+    totalLength = maxLength + 4;
+    titleLength = strlen(title);
+    gap = (totalLength - titleLength) / 2;
+
+    printf("%c", leftChar);
+    for( counter = 0; counter < gap; counter++ ) { //Affiche les espaces à gauche
+        printf(" ");
+    }
+
+    printf("%s", title); //Affiche le titre
+
+    gap = totalLength - (gap + titleLength) + 1;
+    for( counter = 0; counter < gap; counter++ ) { //Affiche les espaces à droite
+        printf(" ");
+    }
+    printf("%c\n", rightChar);
+}
+
+/*
 Goal : Display a menu
-Input : - length (short), length of the array
+Input : - title (char*), Str with the title of the menu
+        - length (short), length of the array
         - menuStr (char**), Str to display in the menu
 Output : void
 */
-void displayMenu(short length, char **menuStr) {
+void displayMenu(char *title, short length, char **menuStr) {
     short maxLength;
     short counter;
     short counter2;
@@ -65,6 +98,9 @@ void displayMenu(short length, char **menuStr) {
 
     //Take the length of the longest string to display
     maxLength = sizeOfBiggestSlotOfStrArray(length, menuStr);
+    if( maxLength < strlen(title) ) {
+        maxLength = strlen(title);
+    }
 
     //Take the number of figure in length
     lengthNumber = countFigureInNumber(length);
@@ -75,6 +111,9 @@ void displayMenu(short length, char **menuStr) {
         printf("%c", topChar);
     }
     printf("\n");
+
+    //Diplay title
+    displayMenuTitle(maxLength, title, leftChar, rightChar);
 
     for( counter = 0; counter < length; counter++ ) {
         printf("%c %hd. %s ", leftChar, counter, menuStr[counter]); //Display string
@@ -151,4 +190,45 @@ char* getLastOccInStr(char *str, char symbol) {
         str++;
     }
     return temp;
+}
+
+/*
+Goal : concatenate several str into one
+Input : - resSize (short), size of res
+        - res (char**), str to fill
+        - strings (char**), array of str we want to concatenate
+        - length (short), length of strings
+Output : short, state of the process
+            - 0, success
+            - 1, strings is empty
+            - 2, the sum of the length of strings is greater than resSize
+*/
+short concatenateSeveralStr(short resSize, char res[resSize], short length, char **strings) {
+    if( length < 1 ) { //Le tableau de string est vide
+        return 1;
+    }
+
+    short counter;
+    int strLength = 0;
+    char *temp;
+
+    temp = res;
+
+    //Compte la taille de la chaine de fin
+    for( counter = 0; counter < length; counter++ ) {
+        strLength += strlen(strings[counter]);
+    }
+
+    if( resSize < strLength ) { //Si la chaine de résultat n'est pas assez grande
+        return 2;
+    }
+
+    //Concatene les chaines
+    strcpy( temp, strings[0] );
+    for( counter = 1; counter < length; counter++ ) {
+        strcat(temp, strings[counter]);
+    }
+
+    res = temp;
+    return 0;
 }

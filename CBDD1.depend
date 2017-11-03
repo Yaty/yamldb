@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1509703712 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manager.c
+1509706105 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manager.c
 	"../header/db_manager.h"
 	"../header/general.h"
 	"../header/file_manager.h"
@@ -12,14 +12,14 @@
 	<stdio.h>
 	"../header/file_manager.h"
 
-1509695723 source:d:\esgi\3al-s1\language c\cbdd1\src\code\general.c
+1509716981 source:d:\esgi\3al-s1\language c\cbdd1\src\code\general.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<dirent.h>
 	"../header/general.h"
 
-1509695722 source:d:\esgi\3al-s1\language c\cbdd1\src\code\main.c
+1509718837 source:d:\esgi\3al-s1\language c\cbdd1\src\code\main.c
 	<stdio.h>
 	<stdlib.h>
 	"../header/db_manager.h"
@@ -29,13 +29,13 @@
 
 1509703738 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manager.h
 
-1509277919 d:\esgi\3al-s1\language c\cbdd1\src\header\general.h
+1509716847 d:\esgi\3al-s1\language c\cbdd1\src\header\general.h
 
 1509695722 d:\esgi\3al-s1\language c\cbdd1\src\header\file_manager.h
 
 1509274166 d:\esgi\3al-s1\language c\cbdd1\src\header\string_array_functions.h
 
-1509695722 d:\esgi\3al-s1\language c\cbdd1\src\header\directory_functions.h
+1509718436 d:\esgi\3al-s1\language c\cbdd1\src\header\directory_functions.h
 
 1509297550 source:d:\esgi\3al-s1\language c\cbdd1\src\code\string_array_functions.c
 	<stdio.h>
@@ -44,7 +44,7 @@
 	"../header/general.h"
 	"../header/string_array_functions.h"
 
-1509695722 source:d:\esgi\3al-s1\language c\cbdd1\src\code\directory_functions.c
+1509718804 source:d:\esgi\3al-s1\language c\cbdd1\src\code\directory_functions.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -54,7 +54,7 @@
 	"../header/string_array_functions.h"
 	"../header/directory_functions.h"
 
-1509704151 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manipulation.h
+1509713071 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manipulation.h
 
 1509532979 source:e:\git\cbdd1\src\code\db_manager.c
 	"../header/db_manager.h"
@@ -129,18 +129,32 @@
 
 1509643147 e:\git\cbdd1\src\header\table_manager.h
 
-1509696340 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manipulation.c
+1509719654 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manipulation.c
 	<stdio.h>
 	<windows.h>
+	<unistd.h>
 	"../header/db_manipulation.h"
 	"../header/general.h"
-	"../header/table_manager.h"
+	"../header/table_manipulation.h"
+	"../header/file_manager.h"
+	"../header/directory_functions.h"
+	"../header/string_array_functions.h"
 
-1509695722 d:\esgi\3al-s1\language c\cbdd1\src\header\table_manager.h
+1509712811 d:\esgi\3al-s1\language c\cbdd1\src\header\table_manager.h
 
-1509697219 source:d:\esgi\3al-s1\language c\cbdd1\src\code\table_manager.c
+1509712793 source:d:\esgi\3al-s1\language c\cbdd1\src\code\table_manager.c
 	"../header/file_manager.h"
 	"../header/general.h"
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+
+1509714868 d:\esgi\3al-s1\language c\cbdd1\src\header\table_manipulation.h
+
+1509720445 source:d:\esgi\3al-s1\language c\cbdd1\src\code\table_manipulation.c
+	"../header/file_manager.h"
+	"../header/general.h"
+	"../header/table_manipulation.h"
 	<windows.h>
 	<stdlib.h>
 	<stdio.h>

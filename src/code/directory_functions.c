@@ -158,3 +158,32 @@ void createDir(char *dirName){
 
     mkdir(name);
 }
+
+/*
+Goal : Check if a dir exist in an other dir
+Input : - dirPath (char*), path of the directory
+        - dirName (char*), name of the directory we want to check if exist
+Output : short, state of the process
+            - 0, success, subdirectory doesn't exist
+            - 1, success, subdir exist
+            - - 1, error while listing the sub-directories
+*/
+short dirExist(char *dirPath, char *dirName) {
+    short dirListLength = 0;
+    char **dirList = malloc(0);
+    short counter;
+
+    if( getDirInDirectory(&dirListLength, &dirList, dirPath) != 0) {
+        return -1;
+    }
+
+    for( counter = 0; counter < dirListLength; counter++ ) {
+        if( strcmp(dirName, dirList[counter]) == 0 ) { //Subdir exist
+            return 1;
+        }
+    }
+
+    freeStrArray(dirListLength, dirList);
+
+    return 0; //Subdir doesn't exist
+}

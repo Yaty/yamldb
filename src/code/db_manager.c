@@ -58,7 +58,7 @@ char displayDatabaseManagerMenu(void) {
     char *array[4] = {"Quitter le programme", "Creer une base de donnees", "Ouvrir une base de donnees", "Lister toutes les bases de donnees"};
 
     do{
-        displayMenu(length, array);
+        displayMenu("Base de donnees", length, array);
         printf("\nVotre choix : ");
         scanf("%hd", &choice);
 
@@ -243,6 +243,7 @@ void openDatabaseManager() {
         return;
     }
 
+    system("cls");
     strcpy(db, list[choice - 1]);
     databaseManipulationManager(db);
 }

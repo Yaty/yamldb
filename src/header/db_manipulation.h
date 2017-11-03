@@ -15,17 +15,17 @@
 /*================ PROTOTYPES ================*/
 /*
 Goal : Manage the database's manipulations
-Input : db (char*), name of the database we manipulate
+Input : dbName (char*), name of the database we manipulate
 Output : void
 */
-void databaseManipulationManager(char *db);
+void databaseManipulationManager(char *dbName);
 
 /*
 Goal : display the menu for the database manipulation
-Input : void
+Input : dbName (char*), name of the database
 Output : short, choice of the user in the menu
 */
-short databaseManipulationManagerMenu(void);
+short databaseManipulationManagerMenu(char *dbName);
 
 /*
 Goal : Remove all tables' files
@@ -113,5 +113,20 @@ Input : dirName (char*), path of the database's directory
 Output : void
 */
 void displayTablesListManager(char *dirName);
+
+/*
+Goal : Manage the table opening
+Input : void
+Output : void
+*/
+void openTableManager(char *dbName);
+
+/*
+Goal : Ask the table to open
+Input : - length (short), length of array
+        - array (char**), list of the tables' name
+Output : number of the table
+*/
+short openTableAskNumber(short length, char **array);
 
 #endif // DB_MANIPULATION_H_INCLUDED
