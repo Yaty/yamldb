@@ -105,7 +105,7 @@ char increaseStrArraySize(short strLength, short *currentLength, short lengthToA
  * @param startPosition, where to start the removal
  * @param length, the number of characters to remove
  */
-void parserRemoveChars (char *str, int startPosition, int length) {
+void removeChars (char *str, int startPosition, int length) {
     if (str && startPosition >= 0 && length > 0) {
         memmove(&str[startPosition], &str[startPosition + length], strlen(str) - startPosition);
     }
