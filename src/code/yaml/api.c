@@ -11,21 +11,6 @@
 #include "../../header/yaml/parser.h"
 
 /**
- * Parse a YAML file
- * @param path to the YAML file
- * @return a Node struct representing the YAML
- */
-Node *YAMLParseFile (char* path) {
-    FILE* file = fopen(path, "r");
-    if (file) {
-        Node *parsedFile = parserParseFile(file);
-        fclose(file);
-        return parsedFile;
-    }
-    return NULL;
-}
-
-/**
  * Print in a file arguments if defined
  * Print in console otherwise
  * @param file the file to write to if defined
@@ -51,42 +36,72 @@ static void print (FILE* file, int argv, ...) {
     va_end(list);
 }
 
+static void printSpaces (int numbers, FILE* file) {
+    int i;
+    for (i = 0; i < numbers; i++) {
+        print(file, 1, "    ");
+    }
+}
+
 /**
  * Browse a node and his childs to print them in a YAML way
  * @param node the root node to print
  * @param depth set to 0
  * @param file if specified it will print in that file
  */
-static void output (Node *node, int depth, FILE* file) {
+static void output (Node *node, int depth, FILE* file, char *prependStr) {
     int i;
 
-    for (i = 0; i < depth; i++) {
-        print(file, 1, "    ");
+    if (prependStr) {
+        if (strcmp(prependStr, "- ") == 0) {
+            print(file, 1, prependStr);
+        } else {
+            printSpaces(depth, file);
+            print(file, 1, prependStr);
+        }
+    } else {
+        printSpaces(depth, file);
     }
+
 
     if (node->type == VALUE) {
         print(file, 4, node->key, ": ", node->value, "\n");
     } else if (node->type == SEQUENCE) {
         print(file, 2, node->key, ":\n");
         for (i = 0; i < node->childrenNumber; i++) {
-            output(&(node->children[i]), depth + 1, file);
+            output(&(node->children[i]), depth + 1, file, NULL);
         }
     } else if (node->type == SEQUENCE_VALUE) {
         for (i = 0; i < node->childrenNumber; i++) {
             if (i == 0) {
-                print(file, 1, "- ");
-                output(&(node->children[i]), 0, file);
+                // print(file, 1, "- ");
+                output(&(node->children[i]), depth, file, "- ");
             } else {
-                print(file, 1, "  ");
-                output(&(node->children[i]), depth, file);
+                // print(file, 1, "  ");
+                output(&(node->children[i]), depth, file, "  ");
             }
         }
     } else if (node->type == MAP) {
         print(file, 2, node->key, ":\n");
         for (i = 0; i < node->childrenNumber; i++) {
-            output(&(node->children[i]), depth + 1, file);
+            output(&(node->children[i]), depth + 1, file, NULL);
         }
     }
+}
+
+/**
+ * Parse a YAML file
+ * @param path to the YAML file
+ * @return a Node struct representing the YAML
+ */
+Node *YAMLParseFile (char* path) {
+    FILE* file = fopen(path, "r");
+    if (file) {
+        Node *parsedFile = parserParseFile(file);
+        fclose(file);
+        return parsedFile;
+    }
+    return NULL;
 }
 
 /**
@@ -94,7 +109,7 @@ static void output (Node *node, int depth, FILE* file) {
  * @param node
  */
 void YAMLPrintNode (Node *node) {
-    output(node, 0, NULL);
+    output(node, 0, NULL, NULL);
 }
 
 /**
@@ -110,8 +125,8 @@ int YAMLSaveNode (Node *node, char *path) {
 
         fflush(file); // https://stackoverflow.com/a/14364557/6456249
         strcmp(node->key, "root") == 0 // remove root node which is added by the parser
-            ? output(&(node->children[0]), 0, file)
-            : output(node, 0, file);
+            ? output(&(node->children[0]), 0, file, NULL)
+            : output(node, 0, file, NULL);
 
         // Remove the last char (\n)
         fseeko(file, -1, SEEK_END);

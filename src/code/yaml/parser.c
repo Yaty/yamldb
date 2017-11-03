@@ -140,7 +140,7 @@ int parserIsValidMapInitializer (char *str) {
         parserGetKeyValueFromString(trimmedStr, key, value);
         strcpy(key, trim(key));
         strcpy(value, trim(value));
-        if (isAlphanumeric(key, 1) && strlen(value) > 0) {
+        if (isAlphanumeric(key, 1) && strlen(value) == 0) {
             return 1;
         }
     }
@@ -157,7 +157,7 @@ int parserIsValidMapInitializer (char *str) {
  */
 void parserGetKeyValueFromString (char *str, char *key, char *value) {
     if (str && key && value) {
-        sscanf(str, "%[^:]: %[^]", key, value);
+        sscanf(str, "%[^:]: %[^]", key, value); // [^:] everything except ':' and [^] is everything
     }
 }
 

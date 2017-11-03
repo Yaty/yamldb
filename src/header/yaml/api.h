@@ -8,21 +8,11 @@
 #include "node.h"
 
 /**
- * Print in a file arguments if defined
- * Print in console otherwise
- * @param file the file to write to if defined
- * @param argv the number of arguments
- * @param ... the agumentes
+ * Parse a YAML file
+ * @param path to the YAML file
+ * @return a Node struct representing the YAML
  */
-static void print (FILE* file, int argv, ...);
-
-/**
- * Browse a node and his childs to print them in a YAML way
- * @param node the root node to print
- * @param depth set to 0
- * @param file if specified it will print in that file
- */
-static void output (Node *node, int depth, FILE* file);
+Node *YAMLParseFile (char* path);
 
 /**
  * Print a node in the console
@@ -37,20 +27,6 @@ void YAMLPrintNode (Node *node);
  * @return 1 for succes, 0 for failure
  */
 int YAMLSaveNode (Node *node, char *path);
-
-/**
- * Parse a YAML file
- * @param path to the YAML file
- * @return a Node struct representing the YAML
- */
-Node *YAMLParseFile(char* path);
-
-/**
- * Print a Node struct
- * @param node the node to print
- * @param depth initialize with 0 or -1 this value handle indentations
- */
-void YAMLNodeToString (Node *node, int depth);
 
 /**
  * Free recursively a Node and his children
