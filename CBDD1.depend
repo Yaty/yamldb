@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1509695723 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manager.c
+1509703712 source:d:\esgi\3al-s1\language c\cbdd1\src\code\db_manager.c
 	"../header/db_manager.h"
 	"../header/general.h"
 	"../header/file_manager.h"
@@ -27,7 +27,7 @@
 	"../header/string_array_functions.h"
 	"../header/directory_functions.h"
 
-1509297318 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manager.h
+1509703738 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manager.h
 
 1509277919 d:\esgi\3al-s1\language c\cbdd1\src\header\general.h
 
@@ -54,7 +54,7 @@
 	"../header/string_array_functions.h"
 	"../header/directory_functions.h"
 
-1509702825 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manipulation.h
+1509704151 d:\esgi\3al-s1\language c\cbdd1\src\header\db_manipulation.h
 
 1509532979 source:e:\git\cbdd1\src\code\db_manager.c
 	"../header/db_manager.h"

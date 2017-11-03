@@ -75,5 +75,43 @@ Output : int
 */
 int createTableFile(char *db, char *tableName);
 
+/*
+Goal : Get the names of all tables created
+Input : - dirName (char*), path of the db directory
+        - tableNamesLength (short*), length of tableNames (char***)
+        - tableNames (char***), array to fill.
+Output : char, state of the treatment :
+            - 0, success
+            - 1, error while opening the directory
+            - 2, error while memory allocation
+Require : - tableNames (char***) needs to be free.
+          - tableNames (char***) needs to be initialized - malloc(0) works
+*/
+char getTablesList(char *dirName, short *tableNamesLength, char ***tableNames);
+
+/*
+Goal : Get the names of all tables
+Input : - dirName (char*), path of the database's directory
+        - resultArrayLength (short*), length of resultArray.
+        - resultArray (char***), at the end of the function, this array contains
+            the name of every database.
+Output : void
+Require : - resultArray char*** needs to be free.
+*/
+void getTablesListManager(char *dirName, short *resultArrayLength, char ***resultArray);
+
+/*
+Goal : Display the tables' list
+Input : dirName (char*), path of the database's directory
+Output : void
+*/
+void displayTablesList(char *dirName);
+
+/*
+Goal : Manage the tables' list display
+Input : dirName (char*), path of the database's directory
+Output : void
+*/
+void displayTablesListManager(char *dirName);
 
 #endif // DB_MANIPULATION_H_INCLUDED

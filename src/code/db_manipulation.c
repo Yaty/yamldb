@@ -45,7 +45,7 @@ void databaseManipulationManager(char *db) {
 
             break;
         case 3: //Lister toutes les tables
-
+            displayTablesListManager(db);
             break;
         case 4: //Supprimer une base de données
             dropDatabaseManager(db);
@@ -242,4 +242,106 @@ void createTable(char *db) { /* A modifier avec les fonctions de yml parsing + A
     }
     fclose(pf);
     system("pause");
+}
+
+/*
+Goal : Get the names of all tables created
+Input : - dirName (char*), path of the db directory
+        - tableNamesLength (short*), length of tableNames (char***)
+        - tableNames (char***), array to fill.
+Output : char, state of the treatment :
+            - 0, success
+            - 1, error while opening the directory
+            - 2, error while memory allocation
+Require : - tableNames (char***) needs to be free.
+          - tableNames (char***) needs to be initialized - malloc(0) works
+*/
+char getTablesList(char *dirName, short *tableNamesLength, char ***tableNames) {
+    char funcState;
+    short counter;
+    char *lastOcc;
+    char **tempArray;
+    int pos;
+
+    funcState = getFilesInDirectory(tableNamesLength, tableNames, dirName);
+    if( funcState != 0 ) {
+        return funcState;
+    }
+
+    tempArray = *tableNames;
+
+    //Pour chaque nom, on coupe le nom au dernier '.' pour récupérer juste le nom de la table
+    for( counter = 0; counter < *tableNamesLength; counter++ ) {
+        lastOcc = getLastOccInStr(tempArray[counter], '.');
+        pos = lastOcc - tempArray[counter]; //Nb de char avant le dernier '.'
+        tempArray[counter][pos] = '\0';
+    }
+
+    *tableNames = tempArray;
+    return 0;
+}
+
+/*
+Goal : Get the names of all tables
+Input : - dirName (char*), path of the database's directory
+        - resultArrayLength (short*), length of resultArray.
+        - resultArray (char***), at the end of the function, this array contains
+            the name of every database.
+Output : void
+Require : - resultArray char*** needs to be free.
+*/
+void getTablesListManager(char *dirName, short *resultArrayLength, char ***resultArray) {
+    char **array;
+    short arrayLength = 0;
+    char funcState;
+
+    array = malloc(0); //Initializing the pointer
+    funcState = getTablesList(dirName, &arrayLength, &array);
+
+    if( funcState == 1 ) { //Erreur lors de l'ouverture du répertoire
+        printf("Impossible d'ouvrir le repertoire contenant les tables.\n");
+        return;
+    }
+
+    if( funcState == 2 ) { //Erreur lors de l'allocation mémoire
+        printf("Une erreur s'est produite. Il est possible que la RAM de votre ordinateur soit insuffisante pour le traitement demande.\n");
+        return;
+    }
+
+    *resultArray = array;
+    *resultArrayLength = arrayLength;
+}
+
+/*
+Goal : Display the tables' list
+Input : dirName (char*), path of the database's directory
+Output : void
+*/
+void displayTablesList(char *dirName) {
+    char **list;
+    short length;
+    short counter;
+
+    getTablesListManager(dirName, &length, &list);
+
+    printf("Liste des tables creees :\n");
+    for( counter = 0; counter < length; counter++ ) {
+        printf("\t%s\n", list[counter]);
+    }
+}
+
+/*
+Goal : Manage the tables' list display
+Input : dbName (char*), name of the database
+Output : void
+*/
+void displayTablesListManager(char *dbName) {
+    char dirName[255];
+
+    strcpy(dirName, "resources\\");
+    strcat(dirName, dbName);
+    strcat(dirName, "\\");
+    displayTablesList(dirName);
+    system("pause");
+    system("cls");
 }

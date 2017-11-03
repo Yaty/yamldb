@@ -43,7 +43,7 @@ void createDatabaseManager(void);
 
 /*
 Goal : Get the names of all databases created
-Input : - dbNamesLength (short*), length of incomeArray (char***)
+Input : - dbNamesLength (short*), length of dbNames (char***)
         - dbNames (char***), array to fill.
 Output : char, state of the treatment :
             - 0, success
