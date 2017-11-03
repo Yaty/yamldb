@@ -1,7 +1,7 @@
 /*
 **  Filename : string_array_functions.c
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUï¿½NIN ESGI - 3AL-1
 **
 **  Description : Contains string array manipulation related functions
 */
@@ -52,5 +52,44 @@ Output : char, state of the process :
             - 1, success
 */
 char increaseStrArraySize(short strLength, short *currentLength, short lengthToAdd, char ***income_array);
+
+/**
+ * This function remove X characters at index from a string);
+ * @param str
+ * @param startPosition, where to start the removal
+ * @param length, the number of characters to remove
+ */
+void parserRemoveChars (char *str, int startPosition, int length);
+
+/**
+ * Trim a string
+ * Example : '    bla bla    ' -> 'bla bla'
+ * Remove thoses characters :
+ * ' ' (0x20) space (SPC)
+ * '\t' (0x09) horizontal tab (TAB)
+ * '\n' (0x0a) newline (LF)
+ * '\v' (0x0b) vertical tab (VT)
+ * '\f' (0x0c) feed (FF)
+ * '\r' (0x0d) carriage return (CR)
+ * @param str the string to trim
+ * @return the trimed string
+ */
+char *trim(char *str);
+
+/**
+ * Count spaces before another characters
+ * Example : "  bla" -> 2
+ * @param str the string to analyse
+ * @return the number of spaces
+ */
+int countPrefixSpaces (char *str);
+
+/**
+ * Check is a sting is alphanumeric (a-z A-Z 0-9)
+ * @param str
+ * @param bonus if 1 it will allow _ and -
+ * @return 1 if true, 0 if false
+ */
+int isAlphanumeric (char *str, int bonus);
 
 #endif // STRING_ARRAY_FUNCTIONS_H_INCLUDED

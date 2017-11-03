@@ -1,0 +1,114 @@
+//
+// Created by Hugo on 01/11/2017.
+//
+
+#ifndef CBDD1_PARSER_H
+#define CBDD1_PARSER_H
+
+#include <stdio.h>
+#include "node.h"
+
+/**
+ * Check if a node is a collection
+ * @param node
+ * @return 1 if true, 0 if false
+ */
+int isCollection (Node *node);
+
+/**
+ * Add a child to a parent node
+ * @param parent
+ * @param child
+ */
+void parserAddChild (Node *parent, Node *child);
+
+/**
+ * Make an empty node
+ * @return an empty initialized node, NULL if error
+ */
+Node* parserGetEmptyNode();
+
+/**
+ * Check if a string contains only a-z A-Z 0-9 _ -
+ * @param key
+ * @return
+ */
+int parserIsValidYamlKey (char *key);
+
+/**
+ * Set a key and a value to a node
+ * The node must be a VALUE NodeType
+ * @param node
+ * @param key
+ * @param value
+ */
+void parserSetNodeKeyValue (Node *node, char *key, char *value);
+
+/**
+ * Check if a string starts with "- ", it ignores the spaces before
+ * Example : "     - bla..." -> true, "   d  - bla..." -> false
+ * @param sequence
+ * @return 1 is it's valid, 0 otherwise
+ */
+int parserIsValidSequenceInitializer (char *sequence);
+
+/**
+ * Retrieve a key and a value from a string
+ * Example : "    aaa: bbb    " -> key = "aaa" and value = "bbb"
+ * @param str the input string
+ * @param key a string where the key will be put
+ * @param value a string where the value will be put
+ */
+void parserGetKeyValueFromString (char *str, char *key, char *value);
+
+/**
+ * This function retrieve values from a collection
+ *
+ * If the parent is a SEQUENCE_VALUE
+ * data: -> SEQUENCE
+ *   - id: 1                        } VALUE } THIS
+ *     name: Michel -> data[0][1]   } VALUE } IS
+ *     lastname: Dupont             } VALUE } A SEQUENCE
+ *     address: 8 rue de l'église   } VALUE } VALUE
+ * If it's a map it will get all map pair of key/values.
+ */
+void *parserRetrieveCollectionValues (Node *parent, FILE *file);
+
+/**
+ * This function retrieve a collection
+ * If it's a sequence :
+ * data: -> a sequence
+ *   - id: 1                        }   THIS
+ *     name: Michel -> data[0][1]   }   IS A
+ *     lastname: Dupont             }   SEQUENCE
+ *     address: 8 rue de l'église   }   VALUE
+ *   - id: 2                        }   THIS
+ *     name: Michel -> data[1][1]   }   IS ANOTHER
+ *     lastname: Dupont             }   SEQUENCE
+ *     address: 8 rue de l'église   }   VALUE
+ * If it's a map:
+ * data:
+ *   id: 1
+ *   name: Michel -> data[0][1]
+ *   lastname: Dupont
+ *   address: 8 rue de l'église
+ */
+void *parserRetrieveCollection (Node* parent, FILE *file);
+
+/**
+ * Parse a line of a YAML file
+ * @param parent the node parent
+ * @param line
+ * @param file
+ * @return a filled Node struct
+ */
+void* parserParseLine (Node *parent, char *line, FILE *file);
+
+/**
+ * Parse a YAML file
+ * @param file stream
+ * @return a filled Node
+ */
+Node *parserParseFile (FILE *file);
+
+#endif //CBDD1_PARSER_H
