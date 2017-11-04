@@ -62,26 +62,6 @@ Node* getEmptyNode() {
     return NULL;
 }
 
-/**
- * Set a key and a value to a node
- * The node must be a VALUE NodeType
- * @param node
- * @param key
- * @param value
- */
-void setNodeKeyValue (Node *node, char *key, char *value) {
-    if (node && key && value) {
-        if (node->type == VALUE) {
-            node->key = strdup(key);
-            node->value = strdup(value);
-        } else {
-            // printf("Can't set node key value to a non Value type node.\n");
-        }
-    } else {
-        // printf("Invalid node, key or value : setNodeKeyValue.\n");
-    }
-}
-
 void getKeyValueFromStringSanitized (char *str, char *key, char *value) {
     if (str && key && value) {
         getKeyValueFromString(str, key, value);
@@ -218,7 +198,7 @@ void retrieveCollection (Node* parent, FILE *file) {
                     retrieveCollectionValues(child, file);
                     addChild(parent, child);
                 }
-            } else if (isValidMapInitializer(buffer)) {
+            } else if (isValidMapInitializer(buffer) && parent->type != SEQUENCE) {
                 parent->type = MAP;
                 retrieveCollectionValues(parent, file);
                 break; // a map has only one set of values unlike a sequence
@@ -256,7 +236,8 @@ void parseLine (Node *parent, char *line, FILE *file) {
                     retrieveCollection(currentNode, file);
                 } else { // Value
                     currentNode->type = VALUE;
-                    setNodeKeyValue(currentNode, key, value);
+                    currentNode->key = strdup(key);
+                    currentNode->value = strdup(value);
                 }
                 addChild(parent, currentNode);
             }

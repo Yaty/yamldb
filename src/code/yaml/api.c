@@ -8,13 +8,14 @@
 #include <string.h>
 #include <unistd.h>
 #include "../../header/yaml/parser.h"
+#include "../../header/string_array_functions.h"
 
 /**
  * Print in a file arguments if defined
  * Print in console otherwise
  * @param file the file to write to if defined
  * @param argv the number of arguments
- * @param ... the agumentes
+ * @param ... the arguments
  */
 static void print (FILE* file, int argv, ...) {
     va_list list;
@@ -47,35 +48,36 @@ static void printSpaces (int numbers, FILE* file) {
  * @param node the root node to print
  * @param depth set to 0
  * @param file if specified it will print in that file
+ * @param prepend add a string between the spaces and the node
  */
-// TODO : Print "- " for the start of a sequence value then "  " for his childs
-// TODO : SEQUENCE are replaced by MAP ! Fix this
-static void output (Node *node, int depth, FILE* file) {
+static void output (Node *node, int depth, FILE* file, char *prepend) {
     int i;
 
     if (node->type != SEQUENCE_VALUE) {
         printSpaces(depth, file);
     }
 
-    // printf("(%d)", node->type);
+    if (prepend) {
+        print(file, 1, prepend);
+    }
 
     if (node->type == VALUE) {
         print(file, 4, node->key, ": ", node->value, "\n");
     } else if (node->type == SEQUENCE) {
         print(file, 2, node->key, ":\n");
-        printf("SEQUENCE !");
         for (i = 0; i < node->childrenNumber; i++) {
-            print(file, 1, "XXXX");
-            output(&(node->children[i]), depth + 1, file);
+            output(&(node->children[i]), depth + 1, file, NULL);
         }
     } else if (node->type == SEQUENCE_VALUE) {
         for (i = 0; i < node->childrenNumber; i++) {
-            output(&(node->children[i]), depth, file);
+            Node *child = &(node->children[i]);
+             // int childDepth = child->type == SEQUENCE ? depth + 1 : depth;
+            output(child, depth, file, i == 0 ? "- " : "  ");
         }
     } else if (node->type == MAP) {
         print(file, 2, node->key, ":\n");
         for (i = 0; i < node->childrenNumber; i++) {
-            output(&(node->children[i]), depth + 1, file);
+            output(&(node->children[i]), depth + 1, file, NULL);
         }
     }
 }
@@ -100,7 +102,7 @@ Node *YAMLParseFile (char* path) {
  * @param node
  */
 void YAMLPrintNode (Node *node) {
-    output(node, 0, NULL);
+    output(node, 0, NULL, NULL);
 }
 
 /**
@@ -116,8 +118,8 @@ int YAMLSaveNode (Node *node, char *path) {
 
         fflush(file); // https://stackoverflow.com/a/14364557/6456249
         strcmp(node->key, "root") == 0 // remove root node which is added by the parser
-            ? output(&(node->children[0]), 0, file)
-            : output(node, 0, file);
+            ? output(&(node->children[0]), 0, file, NULL)
+            : output(node, 0, file, NULL);
 
         // Remove the last char (\n)
         fseeko(file, -1, SEEK_END);

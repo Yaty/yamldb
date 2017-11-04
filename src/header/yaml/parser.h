@@ -29,15 +29,6 @@ void addChild (Node *parent, Node *child);
 Node* getEmptyNode();
 
 /**
- * Set a key and a value to a node
- * The node must be a VALUE NodeType
- * @param node
- * @param key
- * @param value
- */
-void setNodeKeyValue (Node *node, char *key, char *value);
-
-/**
  * Check if a string starts with "- ", it ignores the spaces before
  * Example : "     - bla..." -> true, "   d  - bla..." -> false
  * @param sequence

@@ -107,6 +107,14 @@ size_t getCharIndex (char *str, char c);
  * @param start index where to start
  * @param length numbers of chars to substring
  */
-void *substring (char *str, char *substr, int start, size_t length);
+void substring (char *str, char *substr, int start, size_t length);
+
+/**
+ * Concat two strings into one
+ * The generated string needs to be free
+ * @param str1 first string
+ * @param str2 second string
+ */
+char *concat (char *str1, char *str2);
 
 #endif // STRING_ARRAY_FUNCTIONS_H_INCLUDED

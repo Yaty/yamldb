@@ -223,9 +223,22 @@ size_t getCharIndex (char *str, char c) {
  * @param start index where to start
  * @param length numbers of chars to substring
  */
-void *substring (char *str, char *substr, int start, size_t length) {
+void substring (char *str, char *substr, int start, size_t length) {
     if (str && start >= 0 && length >= 1) {
         memcpy(substr, &str[start], length);
         substr[length] = '\0';
     }
+}
+
+/**
+ * Concat two strings into one
+ * The generated string needs to be free
+ * @param str1 first string
+ * @param str2 second string
+ */
+char *concat (char *str1, char *str2) {
+    char *res = malloc(strlen(str1) + strlen(str2));
+    strcpy(str1, res);
+    strcat(str2, res);
+    return res;
 }
