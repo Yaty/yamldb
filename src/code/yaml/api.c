@@ -52,7 +52,9 @@ static void printSpaces (int numbers, FILE* file) {
 static void output (Node *node, int depth, FILE* file) {
     int i;
 
-    printSpaces(depth, file);
+    if (node->type != SEQUENCE_VALUE) {
+        printSpaces(depth, file);
+    }
 
     if (node->type == VALUE) {
         print(file, 4, node->key, ": ", node->value, "\n");
@@ -63,13 +65,7 @@ static void output (Node *node, int depth, FILE* file) {
         }
     } else if (node->type == SEQUENCE_VALUE) {
         for (i = 0; i < node->childrenNumber; i++) {
-            if (i == 0) {
-                print(file, 1, "- ");
-                output(&(node->children[i]), depth, file);
-            } else {
-                print(file, 1, "  ");
-                output(&(node->children[i]), depth, file);
-            }
+            output(&(node->children[i]), depth, file);
         }
     } else if (node->type == MAP) {
         print(file, 2, node->key, ":\n");
