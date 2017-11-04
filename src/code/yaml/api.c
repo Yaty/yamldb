@@ -52,6 +52,7 @@ static void printSpaces (int numbers, FILE *file) {
  */
 static void output (Node *node, int depth, FILE *file, char *prepend) {
     int i;
+    char *pre;
 
     if (node->type != SEQUENCE_VALUE) {
         printSpaces(depth, file);
@@ -70,7 +71,7 @@ static void output (Node *node, int depth, FILE *file, char *prepend) {
         }
     } else if (node->type == SEQUENCE_VALUE) {
         for (i = 0; i < node->childrenNumber; i++) {
-            char *pre = concat(prepend, i == 0 ? "- " : "  ");
+            pre = concat(prepend, i == 0 ? "- " : "  ");
             output(&(node->children[i]), depth, file, pre);
             free(pre);
         }
@@ -115,11 +116,16 @@ int YAMLSaveNode (Node *node, char *path) {
     FILE *file = fopen(path, "w+");
     if (file) {
         off_t position;
+        int i;
 
         fflush(file); // https://stackoverflow.com/a/14364557/6456249
-        strcmp(node->key, "root") == 0 // remove root node which is added by the parser
-            ? output(&(node->children[0]), 0, file, NULL)
-            : output(node, 0, file, NULL);
+        if(strcmp(node->key, "root") == 0) { // remove root node which is added by the parser
+            for (i = 0; i < node->childrenNumber; i++) {
+                output(&(node->children[i]), 0, file, NULL);
+            }
+        } else {
+            output(node, 0, file, NULL);
+        }
 
         // Remove the last char (\n)
         fseeko(file, -1, SEEK_END);
