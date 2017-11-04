@@ -27,4 +27,5 @@ set(HEADERS
         src/header/table_manipulation.h
         )
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
 add_executable(cbdd ${SRCS} ${HEADERS})
