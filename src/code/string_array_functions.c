@@ -173,21 +173,60 @@ int countPrefixSpaces (char *str) {
  * @return 1 if true, 0 if false
  */
 int isAlphanumeric (char *str, int bonus) {
-    int i;
-    size_t strLength = strlen(str);
+    if (str) {
+        int i;
+        size_t strLength = strlen(str);
 
-    if (strLength == 0) {
-        return 0;
-    }
-
-    for (i = 0; i < strLength; i++) {
-        if ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9')) {
-            continue;
-        } else if (bonus && (str[i] == '_' || str[i] == '-')) {
-            continue;
+        if (strLength == 0) {
+            return 0;
         }
-        return 0;
+
+        for (i = 0; i < strLength; i++) {
+            if ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9')) {
+                continue;
+            } else if (bonus && (str[i] == '_' || str[i] == '-')) {
+                continue;
+            }
+            return 0;
+        }
+
+        return 1;
     }
 
-    return 1;
+    return 0;
+}
+
+/**
+ * Retrieve char index in a string
+ * @param str the string
+ * @param c the char we are looking for
+ * @return an index >= 0 or NULL if not found
+ */
+size_t getCharIndex (char *str, char c) {
+    if (str && c) {
+        char *buffer;
+        size_t charIndex;
+
+        // Get colon index
+        buffer = strchr(str, c);
+        if (buffer) {
+            return buffer - str; // substractacting the adresss give the char position
+        }
+    }
+
+    return NULL;
+}
+
+/**
+ * Substring a string
+ * @param str original string
+ * @param substr where the substring will be stored
+ * @param start index where to start
+ * @param length numbers of chars to substring
+ */
+void *substring (char *str, char *substr, int start, size_t length) {
+    if (str && start >= 0 && length >= 1) {
+        memcpy(substr, &str[start], length);
+        substr[length] = '\0';
+    }
 }

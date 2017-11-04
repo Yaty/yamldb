@@ -92,4 +92,21 @@ int countPrefixSpaces (char *str);
  */
 int isAlphanumeric (char *str, int bonus);
 
+/**
+ * Retrieve char index in a string
+ * @param str the string
+ * @param c the char we are looking for
+ * @return an index >= 0 or NULL if not found
+ */
+size_t getCharIndex (char *str, char c);
+
+/**
+ * Substring a string
+ * @param str original string
+ * @param substr where the substring will be stored
+ * @param start index where to start
+ * @param length numbers of chars to substring
+ */
+void *substring (char *str, char *substr, int start, size_t length);
+
 #endif // STRING_ARRAY_FUNCTIONS_H_INCLUDED
