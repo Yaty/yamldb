@@ -20,13 +20,13 @@ int isCollection (Node *node);
  * @param parent
  * @param child
  */
-void parserAddChild (Node *parent, Node *child);
+void addChild (Node *parent, Node *child);
 
 /**
  * Make an empty node
  * @return an empty initialized node, NULL if error
  */
-Node* parserGetEmptyNode();
+Node* getEmptyNode();
 
 /**
  * Set a key and a value to a node
@@ -35,7 +35,7 @@ Node* parserGetEmptyNode();
  * @param key
  * @param value
  */
-void parserSetNodeKeyValue (Node *node, char *key, char *value);
+void setNodeKeyValue (Node *node, char *key, char *value);
 
 /**
  * Check if a string starts with "- ", it ignores the spaces before
@@ -43,7 +43,7 @@ void parserSetNodeKeyValue (Node *node, char *key, char *value);
  * @param sequence
  * @return 1 is it's valid, 0 otherwise
  */
-int parserIsValidSequenceInitializer (char *sequence);
+int isValidSequenceInitializer (char *sequence);
 
 /**
  * Retrieve a key and a value from a string
@@ -52,7 +52,7 @@ int parserIsValidSequenceInitializer (char *sequence);
  * @param key a string where the key will be put
  * @param value a string where the value will be put
  */
-void parserGetKeyValueFromString (char *str, char *key, char *value);
+void getKeyValueFromString (char *str, char *key, char *value);
 
 /**
  * This function retrieve values from a collection
@@ -65,7 +65,7 @@ void parserGetKeyValueFromString (char *str, char *key, char *value);
  *     address: 8 rue de l'église   } VALUE } VALUE
  * If it's a map it will get all map pair of key/values.
  */
-void *parserRetrieveCollectionValues (Node *parent, FILE *file);
+void retrieveCollectionValues (Node *parent, FILE *file);
 
 /**
  * This function retrieve a collection
@@ -86,7 +86,7 @@ void *parserRetrieveCollectionValues (Node *parent, FILE *file);
  *   lastname: Dupont
  *   address: 8 rue de l'église
  */
-void *parserRetrieveCollection (Node* parent, FILE *file);
+void retrieveCollection (Node* parent, FILE *file);
 
 /**
  * Parse a line of a YAML file
@@ -95,13 +95,13 @@ void *parserRetrieveCollection (Node* parent, FILE *file);
  * @param file
  * @return a filled Node struct
  */
-void* parserParseLine (Node *parent, char *line, FILE *file);
+void parseLine (Node *parent, char *line, FILE *file);
 
 /**
  * Parse a YAML file
  * @param file stream
  * @return a filled Node
  */
-Node *parserParseFile (FILE *file);
+Node *parseFile (FILE *file);
 
 #endif //CBDD1_PARSER_H

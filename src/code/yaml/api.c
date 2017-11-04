@@ -7,7 +7,6 @@
 #include <stdarg.h>
 #include <string.h>
 #include <unistd.h>
-#include "../../header/yaml/node.h"
 #include "../../header/yaml/parser.h"
 
 /**
@@ -89,7 +88,7 @@ static void output (Node *node, int depth, FILE* file) {
 Node *YAMLParseFile (char* path) {
     FILE* file = fopen(path, "r");
     if (file) {
-        Node *parsedFile = parserParseFile(file);
+        Node *parsedFile = parseFile(file);
         fclose(file);
         return parsedFile;
     }

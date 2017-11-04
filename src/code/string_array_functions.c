@@ -205,7 +205,6 @@ int isAlphanumeric (char *str, int bonus) {
 size_t getCharIndex (char *str, char c) {
     if (str && c) {
         char *buffer;
-        size_t charIndex;
 
         // Get colon index
         buffer = strchr(str, c);

@@ -30,7 +30,7 @@ int isCollection (Node *node) {
  * @param parent
  * @param child
  */
-void parserAddChild (Node *parent, Node *child) {
+void addChild (Node *parent, Node *child) {
     if (parent && child) {
         if (isCollection(parent)) {
             parent->childrenNumber += 1;
@@ -49,7 +49,7 @@ void parserAddChild (Node *parent, Node *child) {
  * Make an empty node
  * @return an empty initialized node, NULL if error
  */
-Node* parserGetEmptyNode() {
+Node* getEmptyNode() {
     Node* node = (Node*) malloc(sizeof(Node));
     if (node) {
         node->childrenNumber = 0;
@@ -69,7 +69,7 @@ Node* parserGetEmptyNode() {
  * @param key
  * @param value
  */
-void parserSetNodeKeyValue (Node *node, char *key, char *value) {
+void setNodeKeyValue (Node *node, char *key, char *value) {
     if (node && key && value) {
         if (node->type == VALUE) {
             node->key = strdup(key);
@@ -82,9 +82,9 @@ void parserSetNodeKeyValue (Node *node, char *key, char *value) {
     }
 }
 
-void parserGetKeyValueFromStringSanitized (char *str, char *key, char *value) {
+void getKeyValueFromStringSanitized (char *str, char *key, char *value) {
     if (str && key && value) {
-        parserGetKeyValueFromString(str, key, value);
+        getKeyValueFromString(str, key, value);
         strcpy(key, trim(key));
         strcpy(value, trim(value));
     }
@@ -96,7 +96,7 @@ void parserGetKeyValueFromStringSanitized (char *str, char *key, char *value) {
  * @param sequence a string
  * @return 1 is it's valid, 0 otherwise
  */
-int parserIsValidSequenceInitializer (char *sequence) {
+int isValidSequenceInitializer (char *sequence) {
     if (sequence) {
         char* trimmedSequence = trim(sequence);
         size_t length = strlen(trimmedSequence);
@@ -116,12 +116,12 @@ int parserIsValidSequenceInitializer (char *sequence) {
     return 0;
 }
 
-int parserIsValidMapInitializer (char *str) {
+int isValidMapInitializer (char *str) {
     if (str) {
         char *trimmedStr = trim(str);
         char key[BUFFER_SIZE];
         char value[BUFFER_SIZE];
-        parserGetKeyValueFromStringSanitized(trimmedStr, key, value);
+        getKeyValueFromStringSanitized(trimmedStr, key, value);
         if (isAlphanumeric(key, 1) && strlen(value) >= 0) {
             return 1;
         }
@@ -137,7 +137,7 @@ int parserIsValidMapInitializer (char *str) {
  * @param key a string where the key will be put
  * @param value a string where the value will be put
  */
-void parserGetKeyValueFromString (char *str, char *key, char *value) {
+void getKeyValueFromString (char *str, char *key, char *value) {
     if (str && key && value) {
         sscanf(str, "%[^:]: %[^]", key, value); // [^:] everything except ':' and [^] is everything
     }
@@ -154,7 +154,7 @@ void parserGetKeyValueFromString (char *str, char *key, char *value) {
  *     address: 8 rue de l'église   } VALUE } VALUE
  * If it's a map it will get all map pair of key/values.
  */
-void *parserRetrieveCollectionValues (Node *parent, FILE *file) {
+void retrieveCollectionValues (Node *parent, FILE *file) {
     if (parent && isCollection(parent) && file) {
         char buffer[BUFFER_SIZE];
         int firstIteration = 1;
@@ -179,7 +179,7 @@ void *parserRetrieveCollectionValues (Node *parent, FILE *file) {
                 break;
             }
 
-            parserParseLine(parent, buffer, file);
+            parseLine(parent, buffer, file);
         }
     }
 }
@@ -203,24 +203,24 @@ void *parserRetrieveCollectionValues (Node *parent, FILE *file) {
  *   lastname: Dupont
  *   address: 8 rue de l'église
  */
-void *parserRetrieveCollection (Node* parent, FILE *file) {
+void retrieveCollection (Node* parent, FILE *file) {
     if (parent && file) {
         char buffer[BUFFER_SIZE];
         Node* child;
 
         while (fgets(buffer, BUFFER_SIZE, file)) { // One loop = one sequence value
             fseek(file, -strlen(buffer), SEEK_CUR); // move back to the key
-            if (parserIsValidSequenceInitializer(buffer)) {
+            if (isValidSequenceInitializer(buffer)) {
                 parent->type = SEQUENCE;
-                child = parserGetEmptyNode();
+                child = getEmptyNode();
                 if (child) {
                     child->type = SEQUENCE_VALUE;
-                    parserRetrieveCollectionValues(child, file);
-                    parserAddChild(parent, child);
+                    retrieveCollectionValues(child, file);
+                    addChild(parent, child);
                 }
-            } else if (parserIsValidMapInitializer(buffer)) {
+            } else if (isValidMapInitializer(buffer)) {
                 parent->type = MAP;
-                parserRetrieveCollectionValues(parent, file);
+                retrieveCollectionValues(parent, file);
                 break; // a map has only one set of values unlike a sequence
             } else {
                 break;
@@ -236,7 +236,7 @@ void *parserRetrieveCollection (Node* parent, FILE *file) {
  * @param file
  * @return a filled Node struct
  */
-void *parserParseLine (Node *parent, char *line, FILE *file) {
+void parseLine (Node *parent, char *line, FILE *file) {
     if (parent && line && file) {
         char key[BUFFER_SIZE];
         char value[BUFFER_SIZE];
@@ -247,18 +247,18 @@ void *parserParseLine (Node *parent, char *line, FILE *file) {
         value[0] = '\0';
 
         // Get a pair of sanitized key/value
-        parserGetKeyValueFromStringSanitized(line, key, value);
+        getKeyValueFromStringSanitized(line, key, value);
         if (isAlphanumeric(key, 1)) {
-            currentNode = parserGetEmptyNode();
+            currentNode = getEmptyNode();
             if (currentNode) {
                 if (strlen(value) == 0) { // Collection
                     currentNode->key = strdup(key);
-                    parserRetrieveCollection(currentNode, file);
+                    retrieveCollection(currentNode, file);
                 } else { // Value
                     currentNode->type = VALUE;
-                    parserSetNodeKeyValue(currentNode, key, value);
+                    setNodeKeyValue(currentNode, key, value);
                 }
-                parserAddChild(parent, currentNode);
+                addChild(parent, currentNode);
             }
         }
     }
@@ -269,9 +269,9 @@ void *parserParseLine (Node *parent, char *line, FILE *file) {
  * @param file stream
  * @return a filled Node
  */
-Node *parserParseFile (FILE *file) {
+Node *parseFile (FILE *file) {
     if (file) {
-        Node *root = parserGetEmptyNode();
+        Node *root = getEmptyNode();
         if (root) {
             char line[BUFFER_SIZE];
 
@@ -279,7 +279,7 @@ Node *parserParseFile (FILE *file) {
             root->key = "root";
 
             while(fgets(line, BUFFER_SIZE, file)) {
-                parserParseLine(root, line, file);
+               parseLine(root, line, file);
             }
 
             return root;
