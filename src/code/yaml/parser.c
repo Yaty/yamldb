@@ -83,7 +83,7 @@ void parserSetNodeKeyValue (Node *node, char *key, char *value) {
 }
 
 void parserGetKeyValueFromStringSanitized (char *str, char *key, char *value) {
-    if (str) {
+    if (str && key && value) {
         parserGetKeyValueFromString(str, key, value);
         strcpy(key, trim(key));
         strcpy(value, trim(value));
@@ -121,9 +121,7 @@ int parserIsValidMapInitializer (char *str) {
         char *trimmedStr = trim(str);
         char key[BUFFER_SIZE];
         char value[BUFFER_SIZE];
-        parserGetKeyValueFromString(trimmedStr, key, value);
-        strcpy(key, trim(key));
-        strcpy(value, trim(value));
+        parserGetKeyValueFromStringSanitized(trimmedStr, key, value);
         if (isAlphanumeric(key, 1) && strlen(value) >= 0) {
             return 1;
         }
@@ -248,14 +246,11 @@ void *parserParseLine (Node *parent, char *line, FILE *file) {
         key[0] = '\0';
         value[0] = '\0';
 
-        // Get a pair of key/value and sanitize them with trim
-        parserGetKeyValueFromString(line, key, value);
-        strcpy(key, trim(key));
-
+        // Get a pair of sanitized key/value
+        parserGetKeyValueFromStringSanitized(line, key, value);
         if (isAlphanumeric(key, 1)) {
             currentNode = parserGetEmptyNode();
             if (currentNode) {
-                strcpy(value, trim(value));
                 if (strlen(value) == 0) { // Collection
                     currentNode->key = strdup(key);
                     parserRetrieveCollection(currentNode, file);
