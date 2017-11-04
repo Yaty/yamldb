@@ -49,6 +49,8 @@ static void printSpaces (int numbers, FILE* file) {
  * @param depth set to 0
  * @param file if specified it will print in that file
  */
+// TODO : Print "- " for the start of a sequence value then "  " for his childs
+// TODO : SEQUENCE are replaced by MAP ! Fix this
 static void output (Node *node, int depth, FILE* file) {
     int i;
 
@@ -56,11 +58,15 @@ static void output (Node *node, int depth, FILE* file) {
         printSpaces(depth, file);
     }
 
+    // printf("(%d)", node->type);
+
     if (node->type == VALUE) {
         print(file, 4, node->key, ": ", node->value, "\n");
     } else if (node->type == SEQUENCE) {
         print(file, 2, node->key, ":\n");
+        printf("SEQUENCE !");
         for (i = 0; i < node->childrenNumber; i++) {
+            print(file, 1, "XXXX");
             output(&(node->children[i]), depth + 1, file);
         }
     } else if (node->type == SEQUENCE_VALUE) {

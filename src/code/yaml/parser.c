@@ -34,14 +34,14 @@ void parserAddChild (Node *parent, Node *child) {
     if (parent && child) {
         if (isCollection(parent)) {
             parent->childrenNumber += 1;
-            parent->children = realloc(parent->children, sizeof(Node) * parent->childrenNumber);
+            parent->children = (Node*) realloc(parent->children, sizeof(Node) * parent->childrenNumber);
             parent->children[parent->childrenNumber - 1] = *child;
             child->parentId = parent->id;
         } else {
-            printf("Can't add a child to a non collection typed node.\n");
+            // printf("Can't add a child to a non collection typed node.\n");
         }
     } else {
-        printf("Warn : addChild, parent or child is null.\n");
+        // printf("Warn : addChild, parent or child is null.\n");
     }
 }
 
@@ -63,39 +63,6 @@ Node* parserGetEmptyNode() {
 }
 
 /**
- * Check if a string contains only a-z A-Z 0-9 _ -
- * @param key
- * @return
- */
-int parserIsValidYamlKey (char *key) {
-    if (key) {
-        size_t keyLength = strlen(key);
-        int i;
-        int isValid = 1;
-
-        if (keyLength == 0) {
-            return 0;
-        }
-
-        for (i = 0; i < keyLength; i++) {
-            char car = key[i];
-            if ((car >= 'a' && car <= 'z')
-                || (car >= 'A' && car <= 'Z')
-                || (car >= '0' && car <= '9')
-                || car == '-' || car == '_') {
-                continue;
-            } else {
-                return 0;
-            }
-        }
-
-        return isValid;
-    }
-
-    return 0;
-}
-
-/**
  * Set a key and a value to a node
  * The node must be a VALUE NodeType
  * @param node
@@ -108,10 +75,18 @@ void parserSetNodeKeyValue (Node *node, char *key, char *value) {
             node->key = strdup(key);
             node->value = strdup(value);
         } else {
-            printf("Can't set node key value to a non Value type node.\n");
+            // printf("Can't set node key value to a non Value type node.\n");
         }
     } else {
-        printf("Invalid node, key or value : setNodeKeyValue.\n");
+        // printf("Invalid node, key or value : setNodeKeyValue.\n");
+    }
+}
+
+void parserGetKeyValueFromStringSanitized (char *str, char *key, char *value) {
+    if (str) {
+        parserGetKeyValueFromString(str, key, value);
+        strcpy(key, trim(key));
+        strcpy(value, trim(value));
     }
 }
 
@@ -124,8 +99,17 @@ void parserSetNodeKeyValue (Node *node, char *key, char *value) {
 int parserIsValidSequenceInitializer (char *sequence) {
     if (sequence) {
         char* trimmedSequence = trim(sequence);
-        if (strlen(trimmedSequence) > 1) {
-            return trimmedSequence[0] == '-' && trimmedSequence[1] == ' ';
+        size_t length = strlen(trimmedSequence);
+        if (length >= 4 && trimmedSequence[0] == '-' && trimmedSequence[1] == ' ') { // "- a:" -> at least 4
+            size_t colonIndex = getCharIndex(trimmedSequence, ':');
+            if (colonIndex >= 3) {
+                size_t keyLength = colonIndex - 2; // - 2 to not count "- "
+                char key[keyLength + 1]; // + 1 for \0
+                substring(trimmedSequence, key, 2, keyLength); // Substring to retrieve the key without "- " and ':'
+                if (strlen(key) > 0 && isAlphanumeric(key, 1)) {
+                    return 1;
+                }
+            }
         }
     }
 
@@ -268,7 +252,7 @@ void *parserParseLine (Node *parent, char *line, FILE *file) {
         parserGetKeyValueFromString(line, key, value);
         strcpy(key, trim(key));
 
-        if (parserIsValidYamlKey(key)) {
+        if (isAlphanumeric(key, 1)) {
             currentNode = parserGetEmptyNode();
             if (currentNode) {
                 strcpy(value, trim(value));

@@ -29,13 +29,6 @@ void parserAddChild (Node *parent, Node *child);
 Node* parserGetEmptyNode();
 
 /**
- * Check if a string contains only a-z A-Z 0-9 _ -
- * @param key
- * @return
- */
-int parserIsValidYamlKey (char *key);
-
-/**
  * Set a key and a value to a node
  * The node must be a VALUE NodeType
  * @param node
