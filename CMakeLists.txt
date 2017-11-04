@@ -27,5 +27,14 @@ set(HEADERS
         src/header/table_manipulation.h
         )
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
 add_executable(cbdd ${SRCS} ${HEADERS})
+
+# Tests
+
+set(TESTS_SRCS
+        tests/main.c)
+
+set(TESTS_HEADERS
+        tests/minunit.h)
+
+add_executable(cbdd_tests ${TESTS_SRCS} ${TESTS_HEADERS})
