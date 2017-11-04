@@ -235,10 +235,25 @@ void substring (char *str, char *substr, int start, size_t length) {
  * The generated string needs to be free
  * @param str1 first string
  * @param str2 second string
+ * @return NULL if error, the concatened string if it succeeded
  */
 char *concat (char *str1, char *str2) {
-    char *res = malloc(strlen(str1) + strlen(str2));
-    strcpy(str1, res);
-    strcat(str2, res);
-    return res;
+    size_t str1Length;
+    size_t str2Length;
+    char *newStr;
+
+    str1Length = str1 ? strlen(str1) : 0;
+    str2Length = str2 ? strlen(str2) : 0;
+
+    newStr = malloc(str1Length + str2Length + 1);
+
+    if (str1) {
+        memcpy(newStr, str1, str1Length);
+    }
+
+    if (str2) {
+        memcpy(newStr + str1Length, str2, str2Length + 1);
+    }
+
+    return newStr;
 }

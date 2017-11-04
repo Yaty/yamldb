@@ -114,6 +114,7 @@ void substring (char *str, char *substr, int start, size_t length);
  * The generated string needs to be free
  * @param str1 first string
  * @param str2 second string
+ * @return NULL if error, the concatened string if it succeeded
  */
 char *concat (char *str1, char *str2);
 
