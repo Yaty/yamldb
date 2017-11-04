@@ -1,0 +1,9 @@
+data:
+    - id: 1
+      name: Michel
+      lastname: Dupont
+      address: 8 rue de l'église
+    - id: 2
+      name: Dupont
+      lastname: Michel
+      address: 5 rue de l'église

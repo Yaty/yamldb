@@ -1,0 +1,7 @@
+cle: valeur
+une_map_imbriquee:
+    autre_map_imbriquee:
+        bonjour: bonjour
+    cle: valeur
+    autre_cle: autre valeur
+cle2: valeur
