@@ -143,13 +143,27 @@ int YAMLSaveNode (Node *node, char *path) {
  * @param node the node to free
  */
 void YAMLFreeNode (Node *node) {
-    int i;
-    for (i = 0; i < node->childrenNumber; i++) {
-        YAMLFreeNode(&(node->children[i]));
-    }
+    if (node) {
+        int i;
+        for (i = 0; i < node->childrenNumber; i++) {
+            YAMLFreeNode(&(node->children[i]));
+        }
 
-    free(node->key);
-    free(node->value);
-    free(node);
+        /*
+        if (node->children) {
+            free(node->children);
+        }
+         */
+
+        if (node->key) {
+            free(node->key);
+        }
+
+        if (node->value) {
+            free(node->value);
+        }
+
+        free(node);
+    }
 }
 

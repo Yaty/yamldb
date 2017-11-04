@@ -257,7 +257,7 @@ Node *parseFile (FILE *file) {
             char line[BUFFER_SIZE];
 
             root->type = MAP;
-            root->key = "root";
+            root->key = strdup("root");
 
             while(fgets(line, BUFFER_SIZE, file)) {
                parseLine(root, line, file);
