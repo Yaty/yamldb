@@ -57,7 +57,7 @@ static char *mixAreCorrectlyParsedAndPrinted() {
     Node *root = YAMLParseFile(mixSequencePath);
     YAMLSaveNode(root, outputPath);
     YAMLFreeNode(root);
-    mu_assert("error, sequences output not identical", filesEquals(mixSequencePath, outputPath));
+    mu_assert("error, mix output not identical", filesEquals(mixSequencePath, outputPath));
     return 0;
 }
 
