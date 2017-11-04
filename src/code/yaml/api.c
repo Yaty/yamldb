@@ -8,7 +8,6 @@
 #include <string.h>
 #include <unistd.h>
 #include "../../header/yaml/parser.h"
-#include "../../header/string_array_functions.h"
 
 /**
  * Print in a file arguments if defined
@@ -17,7 +16,7 @@
  * @param argv the number of arguments
  * @param ... the arguments
  */
-static void print (FILE* file, int argv, ...) {
+static void print (FILE *file, int argv, ...) {
     va_list list;
     int i;
 
@@ -36,7 +35,7 @@ static void print (FILE* file, int argv, ...) {
     va_end(list);
 }
 
-static void printSpaces (int numbers, FILE* file) {
+static void printSpaces (int numbers, FILE *file) {
     int i;
     for (i = 0; i < numbers; i++) {
         print(file, 1, "    ");
@@ -50,7 +49,7 @@ static void printSpaces (int numbers, FILE* file) {
  * @param file if specified it will print in that file
  * @param prepend add a string between the spaces and the node
  */
-static void output (Node *node, int depth, FILE* file, char *prepend) {
+static void output (Node *node, int depth, FILE *file, char *prepend) {
     int i;
 
     if (node->type != SEQUENCE_VALUE) {
@@ -71,7 +70,7 @@ static void output (Node *node, int depth, FILE* file, char *prepend) {
     } else if (node->type == SEQUENCE_VALUE) {
         for (i = 0; i < node->childrenNumber; i++) {
             Node *child = &(node->children[i]);
-             // int childDepth = child->type == SEQUENCE ? depth + 1 : depth;
+            // int childDepth = child->type == SEQUENCE ? depth + 1 : depth;
             output(child, depth, file, i == 0 ? "- " : "  ");
         }
     } else if (node->type == MAP) {
@@ -87,8 +86,8 @@ static void output (Node *node, int depth, FILE* file, char *prepend) {
  * @param path to the YAML file
  * @return a Node struct representing the YAML
  */
-Node *YAMLParseFile (char* path) {
-    FILE* file = fopen(path, "r");
+Node *YAMLParseFile (char *path) {
+    FILE *file = fopen(path, "r");
     if (file) {
         Node *parsedFile = parseFile(file);
         fclose(file);

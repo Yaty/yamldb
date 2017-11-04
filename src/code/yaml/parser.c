@@ -49,8 +49,8 @@ void addChild (Node *parent, Node *child) {
  * Make an empty node
  * @return an empty initialized node, NULL if error
  */
-Node* getEmptyNode() {
-    Node* node = (Node*) malloc(sizeof(Node));
+Node *getEmptyNode() {
+    Node *node = (Node*) malloc(sizeof(Node));
     if (node) {
         node->childrenNumber = 0;
         node->key = (char*) malloc(sizeof(char) * BUFFER_SIZE);
@@ -78,7 +78,7 @@ void getKeyValueFromStringSanitized (char *str, char *key, char *value) {
  */
 int isValidSequenceInitializer (char *sequence) {
     if (sequence) {
-        char* trimmedSequence = trim(sequence);
+        char *trimmedSequence = trim(sequence);
         size_t length = strlen(trimmedSequence);
         if (length >= 4 && trimmedSequence[0] == '-' && trimmedSequence[1] == ' ') { // "- a:" -> at least 4
             size_t colonIndex = getCharIndex(trimmedSequence, ':');
@@ -183,10 +183,10 @@ void retrieveCollectionValues (Node *parent, FILE *file) {
  *   lastname: Dupont
  *   address: 8 rue de l'église
  */
-void retrieveCollection (Node* parent, FILE *file) {
+void retrieveCollection (Node *parent, FILE *file) {
     if (parent && file) {
         char buffer[BUFFER_SIZE];
-        Node* child;
+        Node *child;
 
         while (fgets(buffer, BUFFER_SIZE, file)) { // One loop = one sequence value
             fseek(file, -strlen(buffer), SEEK_CUR); // move back to the key

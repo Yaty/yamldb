@@ -26,7 +26,7 @@ void addChild (Node *parent, Node *child);
  * Make an empty node
  * @return an empty initialized node, NULL if error
  */
-Node* getEmptyNode();
+Node *getEmptyNode();
 
 /**
  * Check if a string starts with "- ", it ignores the spaces before
@@ -77,7 +77,7 @@ void retrieveCollectionValues (Node *parent, FILE *file);
  *   lastname: Dupont
  *   address: 8 rue de l'église
  */
-void retrieveCollection (Node* parent, FILE *file);
+void retrieveCollection (Node *parent, FILE *file);
 
 /**
  * Parse a line of a YAML file

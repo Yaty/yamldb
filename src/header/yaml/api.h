@@ -12,7 +12,7 @@
  * @param path to the YAML file
  * @return a Node struct representing the YAML
  */
-Node *YAMLParseFile (char* path);
+Node *YAMLParseFile (char *path);
 
 /**
  * Print a node in the console
