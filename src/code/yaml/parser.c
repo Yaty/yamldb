@@ -91,9 +91,9 @@ void parserGetKeyValueFromStringSanitized (char *str, char *key, char *value) {
 }
 
 /**
- * Check if a string starts with "- ", it ignores the spaces before
- * Example : "     - bla..." -> true, "   d  - bla..." -> false
- * @param sequence
+ * Check if a string starts with "- ", contains an alphanumeric key which is followed by a ':'
+ * Example : "     - bla:..." -> true, "   d  - bla:..." -> false
+ * @param sequence a string
  * @return 1 is it's valid, 0 otherwise
  */
 int parserIsValidSequenceInitializer (char *sequence) {
