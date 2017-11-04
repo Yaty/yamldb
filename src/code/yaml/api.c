@@ -8,6 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "../../header/yaml/parser.h"
+#include "../../header/string_array_functions.h"
 
 /**
  * Print in a file arguments if defined
@@ -56,7 +57,7 @@ static void output (Node *node, int depth, FILE *file, char *prepend) {
         printSpaces(depth, file);
     }
 
-    if (prepend) {
+    if (prepend && node->type != SEQUENCE_VALUE) {
         print(file, 1, prepend);
     }
 
@@ -65,18 +66,18 @@ static void output (Node *node, int depth, FILE *file, char *prepend) {
     } else if (node->type == SEQUENCE) {
         print(file, 2, node->key, ":\n");
         for (i = 0; i < node->childrenNumber; i++) {
-            output(&(node->children[i]), depth + 1, file, NULL);
+            output(&(node->children[i]), depth + 1, file, prepend);
         }
     } else if (node->type == SEQUENCE_VALUE) {
         for (i = 0; i < node->childrenNumber; i++) {
-            Node *child = &(node->children[i]);
-            // int childDepth = child->type == SEQUENCE ? depth + 1 : depth;
-            output(child, depth, file, i == 0 ? "- " : "  ");
+            char *pre = concat(prepend, i == 0 ? "- " : "  ");
+            output(&(node->children[i]), depth, file, pre);
+            free(pre);
         }
     } else if (node->type == MAP) {
         print(file, 2, node->key, ":\n");
         for (i = 0; i < node->childrenNumber; i++) {
-            output(&(node->children[i]), depth + 1, file, NULL);
+            output(&(node->children[i]), depth + 1, file, prepend);
         }
     }
 }
