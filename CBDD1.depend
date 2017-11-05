@@ -159,3 +159,104 @@
 	<stdlib.h>
 	<stdio.h>
 
+1509799441 source:d:\git\cbdd1\src\code\db_manager.c
+	"../header/db_manager.h"
+	"../header/general.h"
+	"../header/file_manager.h"
+	"../header/directory_functions.h"
+	"../header/db_manipulation.h"
+	<windows.h>
+	<stdio.h>
+
+1509799441 d:\git\cbdd1\src\header\db_manager.h
+
+1509799441 d:\git\cbdd1\src\header\general.h
+
+1509799441 d:\git\cbdd1\src\header\file_manager.h
+
+1509799441 d:\git\cbdd1\src\header\directory_functions.h
+
+1509799441 d:\git\cbdd1\src\header\db_manipulation.h
+
+1509905369 source:d:\git\cbdd1\src\code\db_manipulation.c
+	<stdio.h>
+	<windows.h>
+	<unistd.h>
+	"../header/db_manipulation.h"
+	"../header/general.h"
+	"../header/table_manipulation.h"
+	"../header/file_manager.h"
+	"../header/directory_functions.h"
+	"../header/string_array_functions.h"
+
+1509905369 d:\git\cbdd1\src\header\table_manipulation.h
+
+1509808503 d:\git\cbdd1\src\header\string_array_functions.h
+
+1509799441 source:d:\git\cbdd1\src\code\directory_functions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<dirent.h>
+	<dir.h>
+	"../header/general.h"
+	"../header/string_array_functions.h"
+	"../header/directory_functions.h"
+
+1509905369 source:d:\git\cbdd1\src\code\file_manager.c
+	<stdio.h>
+	"../header/file_manager.h"
+
+1509799441 source:d:\git\cbdd1\src\code\general.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<dirent.h>
+	"../header/general.h"
+
+1509799441 source:d:\git\cbdd1\src\code\main.c
+	<stdio.h>
+	<stdlib.h>
+	"../header/db_manager.h"
+	"../header/general.h"
+	"../header/string_array_functions.h"
+	"../header/directory_functions.h"
+
+1509808503 source:d:\git\cbdd1\src\code\string_array_functions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"../header/general.h"
+	"../header/string_array_functions.h"
+
+1509905369 source:d:\git\cbdd1\src\code\table_manipulation.c
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	"../header/file_manager.h"
+	"../header/general.h"
+	"../header/table_manipulation.h"
+
+1509905369 source:d:\git\cbdd1\src\code\yaml\api.c
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<string.h>
+	<unistd.h>
+	"../../header/yaml/parser.h"
+	"../../header/string_array_functions.h"
+
+1509808503 d:\git\cbdd1\src\header\yaml\parser.h
+	<stdio.h>
+	"node.h"
+
+1509799441 d:\git\cbdd1\src\header\yaml\node.h
+
+1509905369 source:d:\git\cbdd1\src\code\yaml\parser.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"../../header/string_array_functions.h"
+	"../../header/yaml/parser.h"
+

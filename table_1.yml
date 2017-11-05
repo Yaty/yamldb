@@ -1,0 +1,4 @@
+Noms et types des colonnes
+	test:INT
+	colonne_1:INT
+	colonne_2:VARCHAR
