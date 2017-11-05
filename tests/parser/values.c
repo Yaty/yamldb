@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "../minunit.h"
-#include "../../src/code/yaml/parser.c"
+#include "../../src/code/yaml/utils/parser.c"
 #include "../../src/code/string_array_functions.c"
 #include "../../src/code/yaml/api.c"
 

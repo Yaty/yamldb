@@ -3,8 +3,13 @@ project(CBDD1)
 
 set(SRCS
         src/code/main.c
-        src/code/yaml/api.c
-        src/code/yaml/parser.c
+        src/code/yaml/utils/parser.c
+        src/code/yaml/api/children.c
+        src/code/yaml/api/data.c
+        src/code/yaml/api/free.c
+        src/code/yaml/api/output.c
+        src/code/yaml/api/parse.c
+        src/code/yaml/api/type.c
         src/code/db_manager.c
         src/code/db_manipulation.c
         src/code/directory_functions.c
@@ -16,8 +21,14 @@ set(SRCS
 
 set(HEADERS
         src/header/yaml/api.h
-        src/header/yaml/parser.h
         src/header/yaml/node.h
+        src/header/yaml/utils/parser.h
+        src/header/yaml/api/children.h
+        src/header/yaml/api/data.h
+        src/header/yaml/api/free.h
+        src/header/yaml/api/output.h
+        src/header/yaml/api/parse.h
+        src/header/yaml/api/type.h
         src/header/db_manager.h
         src/header/db_manipulation.h
         src/header/directory_functions.h

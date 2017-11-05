@@ -6,8 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "../../header/string_array_functions.h"
-#include "../../header/yaml/parser.h"
+#include "../../../header/string_array_functions.h"
+#include "../../../header/yaml/utils/parser.h"
 
 #define BUFFER_SIZE 512
 
@@ -29,20 +29,19 @@ int isCollection (Node *node) {
  * Add a child to a parent node
  * @param parent
  * @param child
+ * @return 1 if added, 0 if not
  */
-void addChild (Node *parent, Node *child) {
+int addChild (Node *parent, Node *child) {
     if (parent && child) {
         if (isCollection(parent)) {
             parent->childrenNumber += 1;
             parent->children = (Node*) realloc(parent->children, sizeof(Node) * parent->childrenNumber);
             parent->children[parent->childrenNumber - 1] = *child;
-            child->parentId = parent->id;
-        } else {
-            // printf("Can't add a child to a non collection typed node.\n");
+            return 1;
         }
-    } else {
-        // printf("Warn : addChild, parent or child is null.\n");
     }
+
+    return 0;
 }
 
 /**

@@ -1,14 +1,14 @@
 //
-// Created by Hugo on 01/11/2017.
+// Created by Hugo on 05/11/2017.
 //
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
 #include <unistd.h>
-#include "../../header/yaml/parser.h"
-#include "../../header/string_array_functions.h"
+#include <string.h>
+#include "../../../header/yaml/node.h"
+#include "../../../header/string_array_functions.h"
 
 /**
  * Print in a file arguments if defined
@@ -36,6 +36,11 @@ static void print (FILE *file, int argv, ...) {
     va_end(list);
 }
 
+/**
+ * Print 4 * numbers spaces
+ * @param numbers
+ * @param file
+ */
 static void printSpaces (int numbers, FILE *file) {
     int i;
     for (i = 0; i < numbers; i++) {
@@ -84,18 +89,38 @@ static void output (Node *node, int depth, FILE *file, char *prepend) {
 }
 
 /**
- * Parse a YAML file
- * @param path to the YAML file
- * @return a Node struct representing the YAML
+ * Save a node into a file
+ * @param node
+ * @param path
+ * @return 1 for succes, 0 otherwise
  */
-Node *YAMLParseFile (char *path) {
-    FILE *file = fopen(path, "r");
-    if (file) {
-        Node *parsedFile = parseFile(file);
-        fclose(file);
-        return parsedFile;
+int YAMLSaveNode(Node *node, char *path) {
+    if (node) {
+        FILE *file = fopen(path, "w+");
+        if (file) {
+            off_t position;
+            int i;
+
+            fflush(file); // https://stackoverflow.com/a/14364557/6456249
+            if(strcmp(node->key, "root") == 0) { // remove root node which is added by the parser
+                for (i = 0; i < node->childrenNumber; i++) {
+                    output(&(node->children[i]), 0, file, NULL);
+                }
+            } else {
+                output(node, 0, file, NULL);
+            }
+
+            // Remove the last char (\n)
+            fseeko(file, -1, SEEK_END);
+            position = ftello(file);
+            ftruncate(fileno(file), position);
+
+            fclose(file);
+            return 1;
+        }
     }
-    return NULL;
+
+    return 0;
 }
 
 /**
@@ -105,65 +130,3 @@ Node *YAMLParseFile (char *path) {
 void YAMLPrintNode (Node *node) {
     output(node, 0, NULL, NULL);
 }
-
-/**
- * Print a node in a file
- * @param node
- * @param path file path, it will overwrite
- * @return 1 for succes, 0 for failure
- */
-int YAMLSaveNode (Node *node, char *path) {
-    FILE *file = fopen(path, "w+");
-    if (file) {
-        off_t position;
-        int i;
-
-        fflush(file); // https://stackoverflow.com/a/14364557/6456249
-        if(strcmp(node->key, "root") == 0) { // remove root node which is added by the parser
-            for (i = 0; i < node->childrenNumber; i++) {
-                output(&(node->children[i]), 0, file, NULL);
-            }
-        } else {
-            output(node, 0, file, NULL);
-        }
-
-        // Remove the last char (\n)
-        fseeko(file, -1, SEEK_END);
-        position = ftello(file);
-        ftruncate(fileno(file), position);
-
-        fclose(file);
-        return 1;
-    }
-    return 0;
-}
-
-/**
- * Free recursively a Node and his children
- * @param node the node to free
- */
-void YAMLFreeNode (Node *node) {
-    if (node) {
-        int i;
-        for (i = 0; i < node->childrenNumber; i++) {
-            YAMLFreeNode(&(node->children[i]));
-        }
-
-        /*
-        if (node->children) {
-            free(node->children);
-        }
-         */
-
-        if (node->key) {
-            free(node->key);
-        }
-
-        if (node->value) {
-            free(node->value);
-        }
-
-        free(node);
-    }
-}
-

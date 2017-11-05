@@ -6,7 +6,7 @@
 #define CBDD1_PARSER_H
 
 #include <stdio.h>
-#include "node.h"
+#include "../node.h"
 
 /**
  * Check if a node is a collection
@@ -19,8 +19,9 @@ int isCollection (Node *node);
  * Add a child to a parent node
  * @param parent
  * @param child
+ * @return 1 if added, 0 if not
  */
-void addChild (Node *parent, Node *child);
+int addChild (Node *parent, Node *child);
 
 /**
  * Make an empty node
