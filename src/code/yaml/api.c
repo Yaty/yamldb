@@ -128,8 +128,8 @@ int YAMLSaveNode (Node *node, char *path) {
         }
 
         // Remove the last char (\n)
-        fseeko(file, -1, SEEK_END);
-        position = ftello(file);
+        fseek(file, -1, SEEK_END);
+        position = ftell(file);
         ftruncate(fileno(file), position);
 
         fclose(file);

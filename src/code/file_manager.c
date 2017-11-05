@@ -49,6 +49,7 @@ char createFile(char* filename) {
     if( pf == NULL ) { //Le fichier n'a pas �t� cr��
         return 1;
     }
+    fclose(pf);
     return 2;
 }
 

@@ -43,4 +43,49 @@ Output : void
 */
 void deleteTableInDb(char *dbName, char *tableName);
 
+/*
+Goal : Add columns to table
+Input : - dbName (char*), name of the database
+        - table file (FILE*)
+Output : void
+*/
+void addColumns(char *db, char *tableName);
+
+/*
+Goal : return column number in table
+Input : nothing
+Output : columns number (int)
+*/
+int columnNumber();
+
+/*
+Goal : display the menu column creation
+Input : nothing
+Output : short, choice of the user in the menu
+*/
+short columnManipulationManagerMenu();
+
+/*
+Goal : Add column name at file table
+Input : - dbName (char*), name of the database
+        - table file (FILE*)
+        - column number (int*)
+Output : void
+*/
+void columnName(char *db, int incomeColumnNumber, char *tableName);
+
+/*
+Goal : allow to select type of the current column
+Input : nothing
+Output : char type
+*/
+char *selectColumnType();
+
+/*
+Goal : display the menu type
+Input : nothing
+Output : short, choice of the user in the menu
+*/
+short typeManipulationManagerMenu();
+
 #endif // TABLE_MANAGER_H_INCLUDED

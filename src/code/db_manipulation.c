@@ -220,11 +220,15 @@ Output : void
 void createTable(char *db) { /* A modifier avec les fonctions de yml parsing + Ajouter structure de la table */
     char tableName[100];
     char filename[255];
+    char tablePath[1000];
     FILE *pf;
     short strLength = 3;
+    short strLengthTwo = 2;
     char *str[] = {"resources\\", db, ".yml"};
+    char *strTable[] = {"resources\\", db};
 
     concatenateSeveralStr(255, filename, strLength, str);
+    concatenateSeveralStr(255, tablePath, strLengthTwo, strTable);
 
     if( (pf = fopen(filename, "a")) ) { //ouverture du fichier en ajout
         fseek(pf, 0, SEEK_END);
@@ -233,15 +237,18 @@ void createTable(char *db) { /* A modifier avec les fonctions de yml parsing + A
         }
         printf("Saisir le nom de la table a creer : ");
         getInput(100, tableName);
-
         if( createTableFile(db, tableName) == 2 ){ //Si la table existe pas déjà
             fprintf(pf, "\t%s\n", tableName);
+            strcat(tablePath, "\\");
+            strcat(tablePath, tableName);
+            strcat(tablePath, ".yml");
+            fclose(pf);
+            addColumns(db, tablePath);
         }
 
     }else{
         printf("La base de donnees n'a pas ete trouvee\n");
     }
-    fclose(pf);
     system("pause");
 }
 
