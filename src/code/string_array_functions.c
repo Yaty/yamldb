@@ -200,9 +200,9 @@ int isAlphanumeric (char *str, int bonus) {
  * Retrieve char index in a string
  * @param str the string
  * @param c the char we are looking for
- * @return an index >= 0 or NULL if not found
+ * @return an index >= 0 or -1 if not found
  */
-size_t getCharIndex (char *str, char c) {
+int getCharIndex (char *str, char c) {
     if (str && c) {
         char *buffer;
 
@@ -213,7 +213,7 @@ size_t getCharIndex (char *str, char c) {
         }
     }
 
-    return NULL;
+    return -1;
 }
 
 /**
@@ -223,7 +223,7 @@ size_t getCharIndex (char *str, char c) {
  * @param start index where to start
  * @param length numbers of chars to substring
  */
-void substring (char *str, char *substr, int start, size_t length) {
+void substring (char *str, char *substr, int start, int length) {
     if (str && start >= 0 && length >= 1) {
         memcpy(substr, &str[start], length);
         substr[length] = '\0';

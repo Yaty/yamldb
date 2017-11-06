@@ -11,6 +11,12 @@
 
 #define BUFFER_SIZE 512
 
+#ifdef _WIN32
+#define MODIFIERS "%[^:]: %[^]"
+#else
+#define MODIFIERS "%[^:]: %s"
+#endif
+
 int nodes = 0;
 
 /**
@@ -61,12 +67,23 @@ Node *getEmptyNode() {
     return NULL;
 }
 
-void getKeyValueFromStringSanitized (char *str, char *key, char *value) {
+/**
+ * Get key value from a file line, the line if trimmed
+ * @param str the line
+ * @param key
+ * @param value
+ * @return 1 for success, 0 for failure
+ */
+int getKeyValueFromStringSanitized (char *str, char *key, char *value) {
     if (str && key && value) {
-        getKeyValueFromString(str, key, value);
-        strcpy(key, trim(key));
-        strcpy(value, trim(value));
+        if (getKeyValueFromString(str, key, value)) {
+            strcpy(key, trim(key));
+            strcpy(value, trim(value));
+            return 1;
+        }
     }
+
+    return 0;
 }
 
 /**
@@ -80,9 +97,9 @@ int isValidSequenceInitializer (char *sequence) {
         char *trimmedSequence = trim(sequence);
         size_t length = strlen(trimmedSequence);
         if (length >= 4 && trimmedSequence[0] == '-' && trimmedSequence[1] == ' ') { // "- a:" -> at least 4
-            size_t colonIndex = getCharIndex(trimmedSequence, ':');
+            int colonIndex = getCharIndex(trimmedSequence, ':');
             if (colonIndex >= 3) {
-                size_t keyLength = colonIndex - 2; // - 2 to not count "- "
+                int keyLength = colonIndex - 2; // - 2 to not count "- "
                 char key[keyLength + 1]; // + 1 for \0
                 substring(trimmedSequence, key, 2, keyLength); // Substring to retrieve the key without "- " and ':'
                 if (strlen(key) > 0 && isAlphanumeric(key, 1)) {
@@ -100,8 +117,7 @@ int isValidMapInitializer (char *str) {
         char *trimmedStr = trim(str);
         char key[BUFFER_SIZE];
         char value[BUFFER_SIZE];
-        getKeyValueFromStringSanitized(trimmedStr, key, value);
-        if (isAlphanumeric(key, 1) && strlen(value) >= 0) {
+        if (getKeyValueFromStringSanitized(trimmedStr, key, value) && isAlphanumeric(key, 1) && strlen(value) >= 0) {
             return 1;
         }
     }
@@ -115,10 +131,11 @@ int isValidMapInitializer (char *str) {
  * @param str the input string
  * @param key a string where the key will be put
  * @param value a string where the value will be put
+ * @return 1 for success, 0 for failure
  */
-void getKeyValueFromString (char *str, char *key, char *value) {
+int getKeyValueFromString (char *str, char *key, char *value) {
     if (str && key && value) {
-        sscanf(str, "%[^:]: %[^]", key, value); // [^:] everything except ':' and [^] is everything
+        return sscanf(str, MODIFIERS, key, value);
     }
 }
 
@@ -137,23 +154,23 @@ void retrieveCollectionValues (Node *parent, FILE *file) {
     if (parent && isCollection(parent) && file) {
         char buffer[BUFFER_SIZE];
         int firstIteration = 1;
-        int childsPrefixSpaces = 0;
+        int childrenPrefixSpaces = 0;
         int currentPrefixSpaces = 0;
 
         while (fgets(buffer, BUFFER_SIZE, file)) {
             // Init
             if (firstIteration) {
-                childsPrefixSpaces = countPrefixSpaces(buffer);
+                childrenPrefixSpaces = countPrefixSpaces(buffer);
                 if (parent->type == SEQUENCE_VALUE) {
-                    childsPrefixSpaces += 2; // count "- "
-                    buffer[childsPrefixSpaces - 2] = ' '; // remove '-'
+                    childrenPrefixSpaces += 2; // count "- "
+                    buffer[childrenPrefixSpaces - 2] = ' '; // remove '-'
                 }
                 firstIteration = 0;
             }
 
             // Breaking condition
             currentPrefixSpaces = countPrefixSpaces(buffer);
-            if (currentPrefixSpaces != childsPrefixSpaces) { // We are no longer in the sequence
+            if (currentPrefixSpaces != childrenPrefixSpaces) { // We are no longer in the sequence
                 fseek(file, -strlen(buffer), SEEK_CUR); // move back
                 break;
             }
@@ -219,16 +236,13 @@ void parseLine (Node *parent, char *line, FILE *file) {
     if (parent && line && file) {
         char key[BUFFER_SIZE];
         char value[BUFFER_SIZE];
-        Node *currentNode;
 
         // Reset
         key[0] = '\0';
         value[0] = '\0';
 
-        // Get a pair of sanitized key/value
-        getKeyValueFromStringSanitized(line, key, value);
-        if (isAlphanumeric(key, 1)) {
-            currentNode = getEmptyNode();
+        if (getKeyValueFromStringSanitized(line, key, value) && isAlphanumeric(key, 1)) {
+            Node *currentNode = getEmptyNode();
             if (currentNode) {
                 if (strlen(value) == 0) { // Collection
                     currentNode->key = strdup(key);

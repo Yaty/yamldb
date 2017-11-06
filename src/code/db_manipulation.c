@@ -1,14 +1,15 @@
 /*
 **  Filename : db_manipulation.c
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUï¿½NIN ESGI - 3AL-1
 **
 **  Description : Contains the database manipulation functions
 */
 /*================ INCLUDES ================*/
 #include <stdio.h>
-#include <windows.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
 #include "../header/db_manipulation.h"
 #include "../header/general.h"
 #include "../header/table_manipulation.h"
@@ -16,6 +17,12 @@
 #include "../header/directory_functions.h"
 #include "../header/string_array_functions.h"
 //#include "../yaml/parser.c"
+
+#ifdef _WIN32
+#define CLEAR "cls"
+#else
+#define CLEAR "clear"
+#endif
 
 /*================ FUNCTIONS ================*/
 /*
@@ -27,12 +34,12 @@ void databaseManipulationManager(char *dbName) {
     short menu;
     do{
         menu = databaseManipulationManagerMenu(dbName);
-        system("cls");
+        system(CLEAR);
 
         switch( menu ) {
         case 0: //Quitter le programme
             return;
-        case 1: //Créer une table
+        case 1: //Crï¿½er une table
             createTable(dbName);
             break;
         case 2: //Ouvrir une table
@@ -41,12 +48,12 @@ void databaseManipulationManager(char *dbName) {
         case 3: //Lister toutes les tables
             displayTablesListManager(dbName);
             break;
-        case 4: //Supprimer une base de données
+        case 4: //Supprimer une base de donnï¿½es
             dropDatabaseManager(dbName);
             return;
             break;
         }
-        system("cls");
+        system(CLEAR);
 
     }while( menu != 0 );
 }
@@ -62,7 +69,7 @@ short databaseManipulationManagerMenu(char *dbName) {
     char *array[] = {"Quitter le programme", "Creer une table", "Ouvrir une table", "Lister toutes les tables", "Supprimer une base de donnees"};
 
     do{
-        system("cls");
+        system(CLEAR);
         displayMenu(dbName, length, array);
         printf("\nVotre choix : ");
         scanf("%hd", &choice);
@@ -139,13 +146,13 @@ short dropDatabase(char *dbName) {
         return 6;
     }
 
-    if( dirExist(dirPath, dbName) == 1 ) { //Si le répertoire au nom de la base existe
+    if( dirExist(dirPath, dbName) == 1 ) { //Si le rï¿½pertoire au nom de la base existe
         funcState = deleteTableFiles(dirName); //Supprime les fichiers table
         if( funcState != 0 ) {
             return funcState;
         }
 
-        funcState = (short)rmdir(dirName); //Supprime le répertoire
+        funcState = (short)rmdir(dirName); //Supprime le rï¿½pertoire
         if( funcState != 0 ) {
             return 4;
         }
@@ -179,7 +186,7 @@ short dropDatabaseManager(char *dbName) {
         printf("Erreur lors de la suppression de la base de donnees.\n");
     }
     system("pause");
-    system("cls");
+    system(CLEAR);
 
     return funcState;
 }
@@ -197,7 +204,7 @@ int createTableFile(char *db, char *tableName){
 
     concatenateSeveralStr(255, tableFileName, strLength, str);
 
-    switch( createFile(tableFileName) ) { //création de la table dans le fichier de base de données
+    switch( createFile(tableFileName) ) { //crï¿½ation de la table dans le fichier de base de donnï¿½es
     case 0:
         printf("Cette table existe deja.\n");
         return 0;
@@ -237,7 +244,7 @@ void createTable(char *db) { /* A modifier avec les fonctions de yml parsing + A
         }
         printf("Saisir le nom de la table a creer : ");
         getInput(100, tableName);
-        if( createTableFile(db, tableName) == 2 ){ //Si la table existe pas déjà
+        if( createTableFile(db, tableName) == 2 ){ //Si la table existe pas dï¿½jï¿½
             fprintf(pf, "\t%s\n", tableName);
             strcat(tablePath, "\\");
             strcat(tablePath, tableName);
@@ -278,7 +285,7 @@ char getTablesList(char *dirName, short *tableNamesLength, char ***tableNames) {
 
     tempArray = *tableNames;
 
-    //Pour chaque nom, on coupe le nom au dernier '.' pour récupérer juste le nom de la table
+    //Pour chaque nom, on coupe le nom au dernier '.' pour rï¿½cupï¿½rer juste le nom de la table
     for( counter = 0; counter < *tableNamesLength; counter++ ) {
         lastOcc = getLastOccInStr(tempArray[counter], '.');
         pos = lastOcc - tempArray[counter]; //Nb de char avant le dernier '.'
@@ -306,12 +313,12 @@ void getTablesListManager(char *dirName, short *resultArrayLength, char ***resul
     array = malloc(0); //Initializing the pointer
     funcState = getTablesList(dirName, &arrayLength, &array);
 
-    if( funcState == 1 ) { //Erreur lors de l'ouverture du répertoire
+    if( funcState == 1 ) { //Erreur lors de l'ouverture du rï¿½pertoire
         printf("Impossible d'ouvrir le repertoire contenant les tables.\n");
         return;
     }
 
-    if( funcState == 2 ) { //Erreur lors de l'allocation mémoire
+    if( funcState == 2 ) { //Erreur lors de l'allocation mï¿½moire
         printf("Une erreur s'est produite. Il est possible que la RAM de votre ordinateur soit insuffisante pour le traitement demande.\n");
         return;
     }
@@ -352,7 +359,7 @@ void displayTablesListManager(char *dbName) {
 
     displayTablesList(dirName);
     system("pause");
-    system("cls");
+    system(CLEAR);
 }
 
 /*
@@ -370,15 +377,15 @@ void openTableManager(char *dbName) { //A tester en revenant
     char *str[] = {"resources\\", dbName, "\\"};
 
     concatenateSeveralStr(255, dirName, strLength, str);
-    getTablesListManager(dirName, &length, &list); //Récupérer la liste des noms
+    getTablesListManager(dirName, &length, &list); //Rï¿½cupï¿½rer la liste des noms
 
     choice = openTableAskNumber(length, list);
     if( choice == 0 ) {
-        system("cls");
+        system(CLEAR);
         return;
     }
 
-    system("cls");
+    system(CLEAR);
     strcpy(table, list[choice - 1]);
     tableManipulationManager(dbName, table);
 }
@@ -407,7 +414,7 @@ short openTableAskNumber(short length, char **array) {
         if( choice < 0 || choice > length ) {
             printf("Valeur non valide, Reessayer\n");
             system("pause");
-            system("cls");
+            system(CLEAR);
         }
 
     }while( choice < 0 || choice > length );

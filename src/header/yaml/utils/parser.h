@@ -43,8 +43,18 @@ int isValidSequenceInitializer (char *sequence);
  * @param str the input string
  * @param key a string where the key will be put
  * @param value a string where the value will be put
+ * @return 1 for success, 0 for failure
  */
-void getKeyValueFromString (char *str, char *key, char *value);
+int getKeyValueFromString (char *str, char *key, char *value);
+
+/**
+ * Get key value from a file line, the line if trimmed
+ * @param str the line
+ * @param key
+ * @param value
+ * @return 1 for success, 0 for failure
+ */
+int getKeyValueFromStringSanitized (char *str, char *key, char *value);
 
 /**
  * This function retrieve values from a collection

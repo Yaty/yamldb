@@ -6,12 +6,19 @@
 **  Description : Contains the table management functions
 */
 /*================ INCLUDES ================*/
-#include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "../header/file_manager.h"
 #include "../header/general.h"
 #include "../header/table_manipulation.h"
+
+#ifdef _WIN32
+#define CLEAR "cls"
+#else
+#define CLEAR "clear"
+#endif
+
 /*================ TODO ================*/
 //Drop table
 
@@ -27,7 +34,7 @@ void tableManipulationManager(char *dbName, char *tableName) {
 
     do{
         menu = tableManipulationManagerMenu(dbName, tableName);
-        system("cls");
+        system(CLEAR);
 
         switch( menu ) {
         case 0: //Quitter le programme
@@ -36,11 +43,11 @@ void tableManipulationManager(char *dbName, char *tableName) {
             dropTable(dbName, tableName);
             printf("Supprimer la table.\n");
             system("pause");
-            system("cls");
+            system(CLEAR);
             return;
         }
 
-        system("cls");
+        system(CLEAR);
 
     }while( menu != 0 );
 }
@@ -62,7 +69,7 @@ short tableManipulationManagerMenu(char *dbName, char *tableName) {
     concatenateSeveralStr(100, title, strLength, str);
 
     do{
-        system("cls");
+        system(CLEAR);
         displayMenu(title, length, array);
         printf("\nVotre choix : ");
         scanf("%hd", &choice);
@@ -93,14 +100,14 @@ short dropTable(char *dbName, char *tableName) {
 
     concatenateSeveralStr(255, tablePath, strLength, str);
 
-    if( deleteFile(tablePath) != 0 ) { //Supprime le fichier correspondant à la table
+    if( deleteFile(tablePath) != 0 ) { //Supprime le fichier correspondant ï¿½ la table
         return 1;
     }
 
-    //Supprime le fichier correspondant à la structure de la table
+    //Supprime le fichier correspondant ï¿½ la structure de la table
 
 
-    //Supprime la ligne correspondant à la table dans le fichier de la db
+    //Supprime la ligne correspondant ï¿½ la table dans le fichier de la db
     deleteTableInDb(dbName, tableName);
 
     return 0;
@@ -128,10 +135,10 @@ void addColumns(char *db, char *tableName){
     short menu;
 
     do{
-        system("cls");
+        system(CLEAR);
         printf("Avancement : %d sur %d colonnes nommee.\n\n", tempColumn, columnNumberVal);
         menu = columnManipulationManagerMenu();
-        system("cls");
+        system(CLEAR);
 
         switch( menu ) {
         case 0: //Saisir une colonne
@@ -143,7 +150,7 @@ void addColumns(char *db, char *tableName){
             break;
         }
 
-        system("cls");
+        system(CLEAR);
 
     }while( columnNumberVal != tempColumn );
 }
@@ -206,7 +213,7 @@ void columnName(char *db, int incomeColumnNumber, char *tableName){
 
     pf = fopen(tableName, "a");
 
-    system("cls");
+    system(CLEAR);
     printf("Saisir le nom de la colonne %d : ", incomeColumnNumber + 1);
 
     fseek(pf, 0, SEEK_END);
@@ -234,7 +241,7 @@ char *selectColumnType(){
     short menu;
 
     menu = typeManipulationManagerMenu();
-    system("cls");
+    system(CLEAR);
 
     switch( menu ) {
     case 0: //INT
@@ -264,7 +271,7 @@ char *selectColumnType(){
     default:
         return NULL;
     }
-    system("cls");
+    system(CLEAR);
 }
 
 /*

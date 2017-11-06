@@ -5,6 +5,7 @@
 #include "values.c"
 
 int parserTestAll() {
+    printf("Testing parser ...\n");
     char *result = values_all_tests();
     if (result != 0) {
         printf("%s\n", result);

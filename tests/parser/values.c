@@ -5,15 +5,17 @@
 #include <string.h>
 #include <stdio.h>
 #include "../minunit.h"
-#include "../../src/code/yaml/utils/parser.c"
 #include "../../src/code/string_array_functions.c"
-#include "../../src/code/yaml/api.c"
+#include "../../src/code/yaml/utils/parser.c"
+#include "../../src/code/yaml/api/parse.c"
+#include "../../src/code/yaml/api/free.c"
+#include "../../src/code/yaml/api/output.c"
 
 int tests_run = 0;
-const char *outputPath = "../resources/output.yaml";
-const char *testMapsPath = "../resources/parser_test_maps.yaml";
-const char *testSequencesPath = "../resources/parser_test_sequences.yaml";
-const char *mixSequencePath = "../resources/parser_test_mix.yaml";
+char *outputPath = "../resources/parser/output.yml";
+char *testMapsPath = "../resources/parser/maps.yml";
+char *testSequencesPath = "../resources/parser/sequences.yml";
+char *mixSequencePath = "../resources/parser/mix.yml";
 
 static int filesEquals(char *path1, char *path2) {
     if (path1 && path2) {
@@ -38,9 +40,13 @@ static int filesEquals(char *path1, char *path2) {
 }
 
 static char *mapsAreCorrectlyParsedAndPrinted() {
+    printf("MAPS\n");
     Node *root = YAMLParseFile(testMapsPath);
+    printf("PARSED\n");
     YAMLSaveNode(root, outputPath);
+    printf("SAVED.\n");
     YAMLFreeNode(root);
+    free(root);
     mu_assert("error, maps output not identical", filesEquals(testMapsPath, outputPath));
     return 0;
 }
@@ -49,6 +55,7 @@ static char *sequenceAreCorrectlyParsedAndPrinted() {
     Node *root = YAMLParseFile(testSequencesPath);
     YAMLSaveNode(root, outputPath);
     YAMLFreeNode(root);
+    free(root);
     mu_assert("error, sequences output not identical", filesEquals(testSequencesPath, outputPath));
     return 0;
 }
@@ -57,13 +64,18 @@ static char *mixAreCorrectlyParsedAndPrinted() {
     Node *root = YAMLParseFile(mixSequencePath);
     YAMLSaveNode(root, outputPath);
     YAMLFreeNode(root);
+    free(root);
     mu_assert("error, mix output not identical", filesEquals(mixSequencePath, outputPath));
     return 0;
 }
 
 char *values_all_tests() {
-    mu_run_test(mapsAreCorrectlyParsedAndPrinted);
-    mu_run_test(sequenceAreCorrectlyParsedAndPrinted);
+    printf("1\n");
+    // mu_run_test(mapsAreCorrectlyParsedAndPrinted);
+    printf("2\n");
+    // mu_run_test(sequenceAreCorrectlyParsedAndPrinted);
+    printf("3\n");
     mu_run_test(mixAreCorrectlyParsedAndPrinted);
+    printf("4\n");
     return 0;
 }

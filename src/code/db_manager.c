@@ -1,7 +1,7 @@
 /*
 **  Filename : db_manager.c
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUï¿½NIN ESGI - 3AL-1
 **
 **  Description : Contains the database management functions
 */
@@ -12,8 +12,15 @@
 #include "../header/file_manager.h"
 #include "../header/directory_functions.h"
 #include "../header/db_manipulation.h"
-#include <windows.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#ifdef _WIN32
+#define CLEAR "cls"
+#else
+#define CLEAR "clear"
+#endif
 
 /*================ FUNCTIONS ================*/
 /*
@@ -26,12 +33,12 @@ void databaseManager(void) {
     do{
         menu = displayDatabaseManagerMenu();
 
-        system("cls");
+        system(CLEAR);
 
         switch( menu ) {
         case 0: //Quitter le programme
             return;
-        case 1: //Créer une bdd
+        case 1: //Crï¿½er une bdd
             createDatabaseManager();
             break;
         case 2: //Ouvrir une bdd
@@ -42,7 +49,7 @@ void databaseManager(void) {
             break;
         }
 
-        system("cls");
+        system(CLEAR);
 
     }while( menu != 0 );
 }
@@ -100,7 +107,7 @@ void createDatabase(char* name) {
         break;
     }
     system("pause");
-    system("cls");
+    system(CLEAR);
 }
 
 /*
@@ -125,7 +132,7 @@ void createDatabaseManager(void) {
         }
     }while( length <= 0 );
 
-    //Créer la base
+    //Crï¿½er la base
     createDatabase(dbName);
 }
 
@@ -154,7 +161,7 @@ char getDatabasesList(short *dbNamesLength, char ***dbNames) {
 
     tempArray = *dbNames;
 
-    //Pour chaque nom, on coupe le nom au dernier '.' pour récupérer juste le nom de la bdd
+    //Pour chaque nom, on coupe le nom au dernier '.' pour rï¿½cupï¿½rer juste le nom de la bdd
     for( counter = 0; counter < *dbNamesLength; counter++ ) {
         lastOcc = getLastOccInStr(tempArray[counter], '.');
         pos = lastOcc - tempArray[counter]; //Nb de char avant le dernier '.'
@@ -181,12 +188,12 @@ void getDatabasesListManager(short *resultArrayLength, char ***resultArray) {
     array = malloc(0); //Initializing the pointer
     funcState = getDatabasesList(&arrayLength, &array);
 
-    if( funcState == 1 ) { //Erreur lors de l'ouverture du répertoire
+    if( funcState == 1 ) { //Erreur lors de l'ouverture du rï¿½pertoire
         printf("Impossible d'ouvrir le repertoire contenant les bases de donnees.\n");
         return;
     }
 
-    if( funcState == 2 ) { //Erreur lors de l'allocation mémoire
+    if( funcState == 2 ) { //Erreur lors de l'allocation mï¿½moire
         printf("Une erreur s'est produite. Il est possible que la RAM de votre ordinateur soit insuffisante pour le traitement demande.\n");
         return;
     }
@@ -235,7 +242,7 @@ void openDatabaseManager() {
     short choice;
     char db[70];
 
-    getDatabasesListManager(&length, &list); //Récupérer la liste des noms
+    getDatabasesListManager(&length, &list); //Rï¿½cupï¿½rer la liste des noms
 
     choice = openDatabaseAskNumber(length, list);
     if( choice == 0 ) {

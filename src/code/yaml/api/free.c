@@ -3,6 +3,7 @@
 //
 
 #include <stdlib.h>
+// #include <stdio.h>
 #include "../../../header/yaml/node.h"
 
 /**
@@ -14,6 +15,7 @@ int YAMLFreeNode (Node *node) {
     if (node) {
         int i;
         int success = 1;
+
         for (i = 0; i < node->childrenNumber; i++) {
             if (!YAMLFreeNode(&(node->children[i]))) {
                 success = 0;
@@ -21,21 +23,31 @@ int YAMLFreeNode (Node *node) {
         }
 
         /*
-        This will cause the app to crash
         if (node->children) {
             free(node->children);
+            node->children = NULL;
         }
-         */
+        */
 
         if (node->key) {
             free(node->key);
+            node->key = NULL;
         }
 
         if (node->value) {
             free(node->value);
+            node->value = NULL;
         }
 
-        free(node);
+        /*
+        if (node) {
+            printf("Freeing node\n");
+            free(node);
+            node = NULL;
+            printf("Node free.\n");
+        }
+         */
+
         return success;
     }
 
