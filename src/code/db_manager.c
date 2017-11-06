@@ -16,10 +16,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef _WIN32
+#if _WIN32 || defined __CYGWIN__
+#define OS "windows"
 #define CLEAR "cls"
 #define PAUSE "pause"
 #else
+#define OS "linux"
 #define CLEAR "clear"
 #define PAUSE "echo \"Please enter a character to continue ...\" && read _"
 #endif
@@ -31,6 +33,7 @@ Input : void
 Output : void
 */
 void databaseManager(void) {
+    printf("OS %s\n", OS);
     short menu;
     do{
         menu = displayDatabaseManagerMenu();

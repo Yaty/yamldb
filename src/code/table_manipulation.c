@@ -13,7 +13,7 @@
 #include "../header/general.h"
 #include "../header/table_manipulation.h"
 
-#ifdef _WIN32
+#if _WIN32 || defined __CYGWIN__
 #define CLEAR "cls"
 #define PAUSE "pause"
 #else
