@@ -3,7 +3,8 @@
 //
 
 #include <stdlib.h>
-// #include <stdio.h>
+#include <stdio.h>
+#include <string.h>
 #include "../../../header/yaml/node.h"
 
 /**
@@ -17,17 +18,23 @@ int YAMLFreeNode (Node *node) {
         int success = 1;
 
         for (i = 0; i < node->childrenNumber; i++) {
-            if (!YAMLFreeNode(&(node->children[i]))) {
-                success = 0;
+            if (&node->children[i]) {
+                if (!YAMLFreeNode(&node->children[i])) {
+                    success = 0;
+                }
             }
+
         }
 
-        /*
+        printf("%s %s\n", node->key, node->value);
+        if (strcmp(node->key, "map2") == 0) {
+            printf("BOOM ? \n");
+        }
+
         if (node->children) {
             free(node->children);
             node->children = NULL;
         }
-        */
 
         if (node->key) {
             free(node->key);
@@ -39,8 +46,12 @@ int YAMLFreeNode (Node *node) {
             node->value = NULL;
         }
 
-        free(node);
-        node = NULL;
+        if (node) {
+            free(node);
+            node = NULL;
+        }
+
+        printf(" is free.\n");
 
         return success;
     }

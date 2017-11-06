@@ -66,8 +66,9 @@ int getKeyValueFromStringSanitized (char *str, char *key, char *value);
  *     lastname: Dupont             } VALUE } A SEQUENCE
  *     address: 8 rue de l'église   } VALUE } VALUE
  * If it's a map it will get all map pair of key/values.
+ * @return 1 for success, 0 for failure
  */
-void retrieveCollectionValues (Node *parent, FILE *file);
+int retrieveCollectionValues (Node *parent, FILE *file);
 
 /**
  * This function retrieve a collection
@@ -87,17 +88,18 @@ void retrieveCollectionValues (Node *parent, FILE *file);
  *   name: Michel -> data[0][1]
  *   lastname: Dupont
  *   address: 8 rue de l'église
+ * @return 1 for success, 0 for failure
  */
-void retrieveCollection (Node *parent, FILE *file);
+int retrieveCollection (Node *parent, FILE *file);
 
 /**
  * Parse a line of a YAML file
  * @param parent the node parent
  * @param line
  * @param file
- * @return a filled Node struct
+ * @return 1 for success, 0 for failure
  */
-void parseLine (Node *parent, char *line, FILE *file);
+int parseLine (Node *parent, char *line, FILE *file);
 
 /**
  * Parse a YAML file

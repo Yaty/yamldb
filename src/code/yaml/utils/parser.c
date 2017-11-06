@@ -40,10 +40,13 @@ int isCollection (Node *node) {
 int addChild (Node *parent, Node *child) {
     if (parent && child) {
         if (isCollection(parent)) {
-            parent->childrenNumber += 1;
-            parent->children = (Node*) realloc(parent->children, sizeof(Node) * parent->childrenNumber);
-            parent->children[parent->childrenNumber - 1] = *child;
-            return 1;
+            Node *newChildren = (Node*) realloc(parent->children, sizeof(Node) * (parent->childrenNumber + 1));
+            if (newChildren) {
+                parent->childrenNumber += 1;
+                parent->children = newChildren;
+                parent->children[parent->childrenNumber - 1] = *child;
+                return 1;
+            }
         }
     }
 
@@ -60,6 +63,7 @@ Node *getEmptyNode() {
         node->childrenNumber = 0;
         node->key = (char*) malloc(sizeof(char) * BUFFER_SIZE);
         node->value = (char*) malloc(sizeof(char) * BUFFER_SIZE);
+        node->children = (Node*) malloc(0);
         node->type = UNDEFINED;
         node->id = nodes++;
         return node;
@@ -149,8 +153,9 @@ int getKeyValueFromString (char *str, char *key, char *value) {
  *     lastname: Dupont             } VALUE } A SEQUENCE
  *     address: 8 rue de l'église   } VALUE } VALUE
  * If it's a map it will get all map pair of key/values.
+ * @return 1 for success, 0 for failure
  */
-void retrieveCollectionValues (Node *parent, FILE *file) {
+int retrieveCollectionValues (Node *parent, FILE *file) {
     if (parent && isCollection(parent) && file) {
         char buffer[BUFFER_SIZE];
         int firstIteration = 1;
@@ -175,9 +180,15 @@ void retrieveCollectionValues (Node *parent, FILE *file) {
                 break;
             }
 
-            parseLine(parent, buffer, file);
+            if (!parseLine(parent, buffer, file)) {
+                return 0;
+            }
         }
+
+        return 1;
     }
+
+    return 0;
 }
 
 /**
@@ -198,8 +209,9 @@ void retrieveCollectionValues (Node *parent, FILE *file) {
  *   name: Michel -> data[0][1]
  *   lastname: Dupont
  *   address: 8 rue de l'église
+ * @return 1 for success, 0 for failure
  */
-void retrieveCollection (Node *parent, FILE *file) {
+int retrieveCollection (Node *parent, FILE *file) {
     if (parent && file) {
         char buffer[BUFFER_SIZE];
         Node *child;
@@ -211,18 +223,28 @@ void retrieveCollection (Node *parent, FILE *file) {
                 child = getEmptyNode();
                 if (child) {
                     child->type = SEQUENCE_VALUE;
-                    retrieveCollectionValues(child, file);
-                    addChild(parent, child);
+                    if (!retrieveCollectionValues(child, file)) {
+                        return 0;
+                    }
+                    if (!addChild(parent, child)) {
+                        return 0;
+                    }
                 }
             } else if (isValidMapInitializer(buffer) && parent->type != SEQUENCE) {
                 parent->type = MAP;
-                retrieveCollectionValues(parent, file);
+                if (!retrieveCollectionValues(parent, file)) {
+                    return 0;
+                }
                 break; // a map has only one set of values unlike a sequence
             } else {
                 break;
             }
         }
+
+        return 1;
     }
+
+    return 0;
 }
 
 /**
@@ -230,9 +252,9 @@ void retrieveCollection (Node *parent, FILE *file) {
  * @param parent the node parent
  * @param line
  * @param file
- * @return a filled Node struct
+ * @return 1 for success, 0 for failure
  */
-void parseLine (Node *parent, char *line, FILE *file) {
+int parseLine (Node *parent, char *line, FILE *file) {
     if (parent && line && file) {
         char key[BUFFER_SIZE];
         char value[BUFFER_SIZE];
@@ -246,16 +268,21 @@ void parseLine (Node *parent, char *line, FILE *file) {
             if (currentNode) {
                 if (strlen(value) == 0) { // Collection
                     currentNode->key = strdup(key);
-                    retrieveCollection(currentNode, file);
+                    if (!retrieveCollection(currentNode, file)) {
+                        return 0;
+                    }
                 } else { // Value
                     currentNode->type = VALUE;
                     currentNode->key = strdup(key);
                     currentNode->value = strdup(value);
                 }
-                addChild(parent, currentNode);
+
+                return addChild(parent, currentNode);
             }
         }
     }
+
+    return 0;
 }
 
 /**
@@ -273,7 +300,9 @@ Node *parseFile (FILE *file) {
             root->key = strdup("root");
 
             while(fgets(line, BUFFER_SIZE, file)) {
-               parseLine(root, line, file);
+               if (!parseLine(root, line, file)) {
+                   break; // error
+               }
             }
 
             return root;
