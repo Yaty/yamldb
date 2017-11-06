@@ -132,7 +132,7 @@ void createDatabaseManager(void) {
         if( length <= 0 ) { //Y a-t'il d'autres conditions d'erreur ?
             printf("Le nom entre n'est pas valide.\n");
             system(PAUSE);
-            system("cls");
+            system(CLEAR);
         }
     }while( length <= 0 );
 
