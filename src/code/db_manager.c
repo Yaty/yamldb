@@ -16,7 +16,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#if _WIN32 || defined __CYGWIN__
+#if _WIN32
 #define OS "windows"
 #define CLEAR "cls"
 #define PAUSE "pause"
@@ -33,7 +33,6 @@ Input : void
 Output : void
 */
 void databaseManager(void) {
-    printf("OS %s\n", OS);
     short menu;
     do{
         menu = displayDatabaseManagerMenu();

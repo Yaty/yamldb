@@ -18,9 +18,9 @@
 #include "../header/string_array_functions.h"
 //#include "../yaml/parser.c"
 
-#if _WIN32 || defined __CYGWIN__
+#if _WIN32
 #define CLEAR "cls"
-#define PAUSE "pause
+#define PAUSE "pause"
 #else
 #define CLEAR "clear"
 #define PAUSE "echo \"Please enter a character to continue ...\ && read _"
