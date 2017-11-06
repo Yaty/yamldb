@@ -21,7 +21,7 @@ struct Node {
 ```
 
 Description :
-- NodeType (enum) : VALUE, SEQUENCE, SEQUENCE_VALUE, MAP, UNDEFINED
+- NodeType (enum) : `VALUE`, `SEQUENCE`, `SEQUENCE_VALUE`, `MAP`, `UNDEFINED`
 - key : la clé
 - value : la valeur
 - children : tableau de Node, utilisé par les séquences et les maps qui sont des collections
@@ -32,7 +32,7 @@ Un noeud correspond globalement à une paire de clé/valeur dans une fichier YAM
 
 ## Les différents types de noeud
 
-### VALUE
+### `VALUE`
 
 Tout simplement une clé et une valeur.
 
@@ -41,13 +41,13 @@ key: value
 ```
 
 Description :
-- NodeType : VALUE
+- NodeType : `VALUE`
 - key : "key"
 - value : "value"
 - children : NULL
 - childrenNumber : 0
 
-### SEQUENCE
+### `SEQUENCE`
 
 Une liste de liste.
 
@@ -60,15 +60,15 @@ sequence:
 ```
 
 Description :
-- NodeType : SEQUENCE
+- NodeType : `SEQUENCE`
 - key : "sequence"
 - value : ""
-- children : 2 noeuds de type SEQUENCE_VALUE
+- children : 2 noeuds de type `SEQUENCE_VALUE`
 - childrenNumber : 2
 
-### SEQUENCE_VALUE
+### `SEQUENCE_VALUE`
 
-Les SEQUENCE_VALUE sont les éléments d'une séquence, ils contiennent eux même des noeuds de nimporte quel type.
+Les `SEQUENCE_VALUE` sont les éléments d'une séquence, ils contiennent eux même des noeuds de nimporte quel type.
 
 ``` yaml
 - key: value
@@ -78,15 +78,15 @@ Les SEQUENCE_VALUE sont les éléments d'une séquence, ils contiennent eux mêm
 ```
 
 Description :
-- NodeType : SEQUENCE_VALUE
+- NodeType : `SEQUENCE_VALUE`
 - key : ""
 - value : ""
 - children : 3 noeuds
 - childrenNumber : 3
 
-### MAP
+### `MAP`
 
-Un noeud de type MAP contient une liste de nimporte quel type de noeud.
+Un noeud de type `MAP` contient une liste de nimporte quel type de noeud.
 
 ``` yaml
 map:
@@ -97,13 +97,13 @@ map:
 ```
 
 Description :
-- NodeType : MAP
+- NodeType : `MAP`
 - key : "map"
 - value : ""
 - children : 3 noeuds
 - childrenNumber : 3
 
-### UNDEFINED
+### `UNDEFINED`
 
 Valeur par défaut d'un noeud avant d'être rempli.
 
@@ -121,26 +121,57 @@ Il faut inclure `api.h`.
 
 Ci-dessous une liste de toutes les fonctions présente dans l'API.
 Le but est d'utiliser le plus possible les fonctions fournit et de ne pas manipuler soit même la structure.
+Lire les fichiers sources ou headers pour avoir une description détaillée des fonctions.
 
 #### Parse
 
 Lit un fichier et retourne la structure correspondante.
+
 `Node *YAMLParseFile (char *path)`
 
 #### Output
 
-Transforme une structure au format YAML dans un fichier.
 `int YAMLSaveNode(Node *node, char *path)`
 
-Imprime une structure au format YAML dans la console.
+Transforme une structure au format YAML dans un fichier.
+
 `void YAMLPrintNode (Node *node)`
+
+Imprime une structure au format YAML dans la console.
 
 #### Type
 
-Vérifie si un noeud est une collection, càd de type `SEQUENCE`, `SEQUENCE_VALUE` ou `MAP`.
 `int YAMLIsCollection(Node *node)`
 
-TODO
+Vérifie si un noeud est une collection, càd de type `SEQUENCE`, `SEQUENCE_VALUE` ou `MAP`.
+
+`int YAMLIsSequence(Node *node)`
+
+Vérifie si un noeud est de type `SEQUENCE`.
+
+`int YAMLIsSequenceValue(Node *node)`
+
+Vérifie si un noeud est de type `SEQUENCE_VALUE`.
+
+`int YAMLIsMap(Node *node)`
+
+Vérifie si un noeud est de type `MAP`.
+
+`int YAMLIsUndefined(Node *node)`
+
+Vérifie si un noeud est de type `UNDEFINED`.
+
+`int YAMLIsValue(Node *node)`
+
+Vérifie si un noeud est de type `VALUE`.
+
+`NodeType YAMLGetType(Node *node)`
+
+Récupérer le type d'un noeud.
+
+`int YAMLSetType(Node *node, NodeType type)`
+
+Fixer le type d'un noeud.
 
 #### Free
 
