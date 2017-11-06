@@ -15,8 +15,10 @@
 
 #ifdef _WIN32
 #define CLEAR "cls"
+#define PAUSE "pause"
 #else
 #define CLEAR "clear"
+#define PAUSE "echo \"Please enter a character to continue ...\" && read _"
 #endif
 
 /*================ TODO ================*/
@@ -42,7 +44,7 @@ void tableManipulationManager(char *dbName, char *tableName) {
         case 1: //Supprimer la table
             dropTable(dbName, tableName);
             printf("Supprimer la table.\n");
-            system("pause");
+            system(PAUSE);
             system(CLEAR);
             return;
         }
@@ -76,7 +78,7 @@ short tableManipulationManagerMenu(char *dbName, char *tableName) {
 
         if( choice < 0 || choice > length ) {
             printf("Valeur non valide, Reessayer\n");
-            system("pause");
+            system(PAUSE);
         }
 
     }while( choice < 0 || choice > length );
@@ -190,7 +192,7 @@ short columnManipulationManagerMenu() {
 
         if( choice < 0 || choice > length ) {
             printf("Valeur non valide, Reessayer\n");
-            system("pause");
+            system(PAUSE);
         }
 
     }while( choice < 0 || choice > length );
@@ -293,7 +295,7 @@ short typeManipulationManagerMenu(){
 
         if( choice < 0 || choice > length ) {
             printf("Valeur non valide, Reessayer\n");
-            system("pause");
+            system(PAUSE);
         }
 
     }while( choice < 0 || choice > length );

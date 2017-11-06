@@ -20,8 +20,10 @@
 
 #ifdef _WIN32
 #define CLEAR "cls"
+#define PAUSE "pause
 #else
 #define CLEAR "clear"
+#define PAUSE "echo \"Please enter a character to continue ...\ && read _"
 #endif
 
 /*================ FUNCTIONS ================*/
@@ -76,7 +78,7 @@ short databaseManipulationManagerMenu(char *dbName) {
 
         if( choice < 0 || choice > length ) {
             printf("Valeur non valide, Reessayer\n");
-            system("pause");
+            system(PAUSE);
         }
 
     }while( choice < 0 || choice > length );
@@ -185,7 +187,7 @@ short dropDatabaseManager(char *dbName) {
     }else{
         printf("Erreur lors de la suppression de la base de donnees.\n");
     }
-    system("pause");
+    system(PAUSE);
     system(CLEAR);
 
     return funcState;
@@ -256,7 +258,7 @@ void createTable(char *db) { /* A modifier avec les fonctions de yml parsing + A
     }else{
         printf("La base de donnees n'a pas ete trouvee\n");
     }
-    system("pause");
+    system(PAUSE);
 }
 
 /*
@@ -358,7 +360,7 @@ void displayTablesListManager(char *dbName) {
     concatenateSeveralStr(255, dirName, strLength, str);
 
     displayTablesList(dirName);
-    system("pause");
+    system(PAUSE);
     system(CLEAR);
 }
 
@@ -413,7 +415,7 @@ short openTableAskNumber(short length, char **array) {
 
         if( choice < 0 || choice > length ) {
             printf("Valeur non valide, Reessayer\n");
-            system("pause");
+            system(PAUSE);
             system(CLEAR);
         }
 

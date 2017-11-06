@@ -18,8 +18,10 @@
 
 #ifdef _WIN32
 #define CLEAR "cls"
+#define PAUSE "pause"
 #else
 #define CLEAR "clear"
+#define PAUSE "echo \"Please enter a character to continue ...\" && read _"
 #endif
 
 /*================ FUNCTIONS ================*/
@@ -71,8 +73,8 @@ char displayDatabaseManagerMenu(void) {
 
         if( choice < 0 || choice > length ) {
             printf("Valeur non valide, Reessayer\n");
-            system("pause");
-            system("cls");
+            system(PAUSE);
+            system(CLEAR);
         }
 
     }while( choice < 0 || choice > length );
@@ -106,7 +108,7 @@ void createDatabase(char* name) {
         printf("La base de donnee a ete creee avec succes.\n");
         break;
     }
-    system("pause");
+    system(PAUSE);
     system(CLEAR);
 }
 
@@ -127,7 +129,7 @@ void createDatabaseManager(void) {
 
         if( length <= 0 ) { //Y a-t'il d'autres conditions d'erreur ?
             printf("Le nom entre n'est pas valide.\n");
-            system("pause");
+            system(PAUSE);
             system("cls");
         }
     }while( length <= 0 );
@@ -227,8 +229,8 @@ Output : void
 */
 void displayDatabasesListManager(void) {
     displayDatabasesList();
-    system("pause");
-    system("cls");
+    system(PAUSE);
+    system(CLEAR);
 }
 
 /*
@@ -246,11 +248,11 @@ void openDatabaseManager() {
 
     choice = openDatabaseAskNumber(length, list);
     if( choice == 0 ) {
-        system("cls");
+        system(CLEAR);
         return;
     }
 
-    system("cls");
+    system(CLEAR);
     strcpy(db, list[choice - 1]);
     databaseManipulationManager(db);
 }
@@ -278,8 +280,8 @@ short openDatabaseAskNumber(short length, char **array) {
 
         if( choice < 0 || choice > length ) {
             printf("Valeur non valide, Reessayer\n");
-            system("pause");
-            system("cls");
+            system(PAUSE);
+            system(CLEAR);
         }
 
     }while( choice < 0 || choice > length );

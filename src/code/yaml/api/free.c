@@ -39,14 +39,8 @@ int YAMLFreeNode (Node *node) {
             node->value = NULL;
         }
 
-        /*
-        if (node) {
-            printf("Freeing node\n");
-            free(node);
-            node = NULL;
-            printf("Node free.\n");
-        }
-         */
+        free(node);
+        node = NULL;
 
         return success;
     }
