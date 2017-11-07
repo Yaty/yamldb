@@ -63,7 +63,7 @@ Node *getEmptyNode() {
         node->childrenNumber = 0;
         node->key = (char*) malloc(sizeof(char) * BUFFER_SIZE);
         node->value = (char*) malloc(sizeof(char) * BUFFER_SIZE);
-        node->children = (Node*) malloc(0);
+        node->children = (Node*) malloc(sizeof(Node));
         node->type = UNDEFINED;
         node->id = nodes++;
         return node;

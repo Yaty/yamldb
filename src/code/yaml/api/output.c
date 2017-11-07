@@ -56,34 +56,36 @@ static void printSpaces (int numbers, FILE *file) {
  * @param prepend add a string between the spaces and the node
  */
 static void output (Node *node, int depth, FILE *file, char *prepend) {
-    int i;
-    char *pre;
+    if (node) {
+        int i;
+        char *pre;
 
-    if (node->type != SEQUENCE_VALUE) {
-        printSpaces(depth, file);
-    }
-
-    if (prepend && node->type != SEQUENCE_VALUE) {
-        print(file, 1, prepend);
-    }
-
-    if (node->type == VALUE) {
-        print(file, 4, node->key, ": ", node->value, "\n");
-    } else if (node->type == SEQUENCE) {
-        print(file, 2, node->key, ":\n");
-        for (i = 0; i < node->childrenNumber; i++) {
-            output(&(node->children[i]), depth + 1, file, prepend);
+        if (node->type != SEQUENCE_VALUE) {
+            printSpaces(depth, file);
         }
-    } else if (node->type == SEQUENCE_VALUE) {
-        for (i = 0; i < node->childrenNumber; i++) {
-            pre = concat(prepend, i == 0 ? "- " : "  ");
-            output(&(node->children[i]), depth, file, pre);
-            free(pre);
+
+        if (prepend && node->type != SEQUENCE_VALUE) {
+            print(file, 1, prepend);
         }
-    } else if (node->type == MAP) {
-        print(file, 2, node->key, ":\n");
-        for (i = 0; i < node->childrenNumber; i++) {
-            output(&(node->children[i]), depth + 1, file, prepend);
+
+        if (node->type == VALUE) {
+            print(file, 4, node->key, ": ", node->value, "\n");
+        } else if (node->type == SEQUENCE) {
+            print(file, 2, node->key, ":\n");
+            for (i = 0; i < node->childrenNumber; i++) {
+                output(&(node->children[i]), depth + 1, file, prepend);
+            }
+        } else if (node->type == SEQUENCE_VALUE) {
+            for (i = 0; i < node->childrenNumber; i++) {
+                pre = concat(prepend, i == 0 ? "- " : "  ");
+                output(&(node->children[i]), depth, file, pre);
+                free(pre);
+            }
+        } else if (node->type == MAP) {
+            print(file, 2, node->key, ":\n");
+            for (i = 0; i < node->childrenNumber; i++) {
+                output(&(node->children[i]), depth + 1, file, prepend);
+            }
         }
     }
 }
@@ -95,7 +97,7 @@ static void output (Node *node, int depth, FILE *file, char *prepend) {
  * @return 1 for succes, 0 otherwise
  */
 int YAMLSaveNode(Node *node, char *path) {
-    if (node) {
+    if (node && path) {
         FILE *file = fopen(path, "w+");
         if (file) {
             off_t position;
@@ -128,5 +130,7 @@ int YAMLSaveNode(Node *node, char *path) {
  * @param node
  */
 void YAMLPrintNode (Node *node) {
-    output(node, 0, NULL, NULL);
+    if (node) {
+        output(node, 0, NULL, NULL);
+    }
 }

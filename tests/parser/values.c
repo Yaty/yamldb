@@ -48,13 +48,9 @@ static char *mapsAreCorrectlyParsedAndPrinted() {
 }
 
 static char *sequenceAreCorrectlyParsedAndPrinted() {
-    printf("A\n");
     Node *root = YAMLParseFile(testSequencesPath);
-    printf("B\n");
     YAMLSaveNode(root, outputPath);
-    printf("C\n");
     YAMLFreeNode(root);
-    printf("D\n");
     mu_assert("error, sequences output not identical", filesEquals(testSequencesPath, outputPath));
     return 0;
 }
@@ -68,12 +64,8 @@ static char *mixAreCorrectlyParsedAndPrinted() {
 }
 
 char *values_all_tests() {
-    printf("1\n");
     mu_run_test(mapsAreCorrectlyParsedAndPrinted);
-    printf("2\n");
     mu_run_test(sequenceAreCorrectlyParsedAndPrinted);
-    printf("3\n");
     mu_run_test(mixAreCorrectlyParsedAndPrinted);
-    printf("4\n");
     return 0;
 }
