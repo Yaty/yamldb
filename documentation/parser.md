@@ -16,7 +16,6 @@ struct Node {
     char *value;
     Node *children;
     int childrenNumber;
-    int id;
 };
 ```
 
@@ -26,7 +25,6 @@ Description :
 - value : la valeur
 - children : tableau de Node, utilisé par les séquences et les maps qui sont des collections
 - childrenNumber : nombre d'enfants du noeud
-- id : un identifiant unique attribué à chaque noeud
 
 Un noeud correspond globalement à une paire de clé/valeur dans une fichier YAML.
 
@@ -127,60 +125,118 @@ Lire les fichiers sources ou headers pour avoir une description détaillée des 
 
 Lit un fichier et retourne la structure correspondante.
 
-`Node *YAMLParseFile (char *path)`
+##### `Node *YAMLParseFile (char *path)`
 
 #### Output
 
-`int YAMLSaveNode(Node *node, char *path)`
+##### `int YAMLSaveNode(Node *node, char *path)`
 
 Transforme une structure au format YAML dans un fichier.
 
-`void YAMLPrintNode (Node *node)`
+##### `void YAMLPrintNode (Node *node)`
 
 Imprime une structure au format YAML dans la console.
 
 #### Type
 
-`int YAMLIsCollection(Node *node)`
+##### `int YAMLIsCollection(Node *node)`
 
 Vérifie si un noeud est une collection, càd de type `SEQUENCE`, `SEQUENCE_VALUE` ou `MAP`.
 
-`int YAMLIsSequence(Node *node)`
+##### `int YAMLIsSequence(Node *node)`
 
 Vérifie si un noeud est de type `SEQUENCE`.
 
-`int YAMLIsSequenceValue(Node *node)`
+##### `int YAMLIsSequenceValue(Node *node)`
 
 Vérifie si un noeud est de type `SEQUENCE_VALUE`.
 
-`int YAMLIsMap(Node *node)`
+##### `int YAMLIsMap(Node *node)`
 
 Vérifie si un noeud est de type `MAP`.
 
-`int YAMLIsUndefined(Node *node)`
+##### `int YAMLIsUndefined(Node *node)`
 
 Vérifie si un noeud est de type `UNDEFINED`.
 
-`int YAMLIsValue(Node *node)`
+##### `int YAMLIsValue(Node *node)`
 
 Vérifie si un noeud est de type `VALUE`.
 
-`NodeType YAMLGetType(Node *node)`
+##### `NodeType YAMLGetType(Node *node)`
 
-Récupérer le type d'un noeud.
+Récupére le type d'un noeud.
 
-`int YAMLSetType(Node *node, NodeType type)`
+##### `int YAMLSetType(Node *node, NodeType type)`
 
-Fixer le type d'un noeud.
+Fixe le type d'un noeud.
 
 #### Free
 
-TODO
+##### `int YAMLFreeNode (Node *node)`
+
+Libère la mémoire utilisée par le noeud. Fonction à executer avant de ne plus se servir de ce noeud.
 
 #### Data
 
-TODO
+##### `char *YAMLGetValue(Node *node)`
+
+Récupére la valeur du noeud.
+
+##### `int YAMLSetValue(Node *node, char *value)`
+
+Fixe la valeur du noeud.
+
+##### `char *YAMLGetKey(Node *node)`
+
+Récupére la valeur de la clé.
+
+##### `int YAMLSetKey(Node *node, char *key)`
+
+Fixe la valeur de la clé.
 
 #### Children
 
-TODO
+##### `int YAMLGetSize(Node *node)`
+
+Récupère la nombre d'enfants du noeud.
+
+##### `Node *YAMLGetChildren(Node *node)`
+
+Récupère un tableau de noeuds enfants du noeud.
+
+##### `Node *YAMLGetChildAtIndex(Node *node, int index)`
+
+Récupère un noeud enfant d'un noeud à un index.
+
+##### `int YAMLAddChild(Node *parent, Node *child)`
+
+Ajoute un noeud enfant à un noeud parent en dernière position.
+
+##### `int YAMLRemoveChildAtIndex(Node *parent, int index)`
+
+Retire un enfant d'un noeud à un index.
+
+##### `int YAMLAddChildAtIndex(Node *parent, Node *child, int index)`
+
+Ajoute un noeud enfant à un noeud parent à un index.
+
+##### `int YAMLRemoveChildren(Node *parent)`
+
+Retire et free les enfants d'un noeud parent.
+
+##### `int YAMLSetChildren(Node *parent, Node *children, int childrenNumber)`
+
+Ajoute des noeuds enfants à un noeud parent.
+
+## Todo
+
+### Améliorations
+
+1. Free
+
+### A faire
+
+1.
+2.
+3;
