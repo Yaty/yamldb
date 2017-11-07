@@ -179,9 +179,13 @@ Libère la mémoire utilisée par le noeud. Fonction à executer avant de ne plu
 
 #### Data
 
+##### `Node *getNode()`
+
+Récupère un noeud prêt à être utilisé.
+
 ##### `char *YAMLGetValue(Node *node)`
 
-Récupére la valeur du noeud.
+Récupère la valeur du noeud.
 
 ##### `int YAMLSetValue(Node *node, char *value)`
 

@@ -6,6 +6,12 @@
 #define CBDD1_DATA_H
 
 /**
+ * Return an empty node
+ * @return a node
+ */
+Node *getNode();
+
+/**
  * Get Node Value
  * @param node
  * @return the value if she exists, NULL otherwise

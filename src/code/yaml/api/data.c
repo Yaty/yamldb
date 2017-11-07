@@ -5,10 +5,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../../../header/yaml/node.h"
+#include "../../../header/yaml/utils/parser.h"
 
 /**
  * NODE DATA
  */
+
+/**
+ * Return an empty node
+ * @return a node
+ */
+Node *getNode() {
+    return getEmptyNode();
+}
 
 /**
  * Get Node Value
