@@ -17,8 +17,6 @@
 #define MODIFIERS "%[^:]: %s"
 #endif
 
-int nodes = 0;
-
 /**
  * Check if a node is a collection
  * @param node
@@ -65,7 +63,6 @@ Node *getEmptyNode() {
         node->value = (char*) malloc(sizeof(char) * BUFFER_SIZE);
         node->children = (Node*) malloc(sizeof(Node));
         node->type = UNDEFINED;
-        node->id = nodes++;
         return node;
     }
     return NULL;

@@ -71,16 +71,3 @@ int YAMLSetKey(Node *node, char *key) {
 
     return 0;
 }
-
-/**
- * Get Node ID
- * @param node
- * @return an ID, -1 if there is none
- */
-int YAMLGetId(Node *node) {
-    if (node) {
-        return node->id;
-    }
-
-    return -1;
-}

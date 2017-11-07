@@ -35,11 +35,4 @@ char *YAMLGetKey(Node *node);
  */
 int YAMLSetKey(Node *node, char *key);
 
-/**
- * Get Node ID
- * @param node
- * @return an ID, -1 if there is none
- */
-int YAMLGetId(Node *node);
-
 #endif //CBDD1_DATA_H

@@ -36,7 +36,6 @@ struct Node {
     char *value;
     Node *children;
     int childrenNumber;
-    int id;
 };
 
 #endif //CBDD1_NODE_H
