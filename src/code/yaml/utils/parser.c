@@ -28,7 +28,6 @@ int isCollection (Node *node) {
     }
     return 0;
 }
-
 /**
  * Add a child to a parent node
  * @param parent

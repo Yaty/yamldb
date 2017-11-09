@@ -1,54 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="src\code\string_array_functions.c" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\header\yaml\api.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="5600" topLine="199" />
+			<Cursor1 position="82" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\code\yaml\parser.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\header\table_manipulation.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3416" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\code\yaml\api.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2796" topLine="82" />
-		</Cursor>
-	</File>
-	<File name="src\code\table_manipulation.c" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="5567" topLine="197" />
-		</Cursor>
-	</File>
-	<File name="src\header\yaml\api.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="213" topLine="5" />
-		</Cursor>
-	</File>
-	<File name="src\code\file_manager.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1250" topLine="18" />
-		</Cursor>
-	</File>
-	<File name="src\header\yaml\node.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="172" topLine="11" />
-		</Cursor>
-	</File>
-	<File name="src\code\db_manipulation.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="6935" topLine="208" />
-		</Cursor>
-	</File>
-	<File name="src\header\db_manipulation.h" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="100" />
-		</Cursor>
-	</File>
-	<File name="src\code\general.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="5443" topLine="202" />
+			<Cursor1 position="2001" topLine="42" />
 		</Cursor>
 	</File>
 	<File name="src\code\db_manager.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -56,9 +16,49 @@
 			<Cursor1 position="2292" topLine="21" />
 		</Cursor>
 	</File>
-	<File name="src\header\table_manipulation.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\code\yaml\parser.c" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2001" topLine="42" />
+			<Cursor1 position="109" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\header\db_manipulation.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="100" />
+		</Cursor>
+	</File>
+	<File name="src\code\general.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5443" topLine="202" />
+		</Cursor>
+	</File>
+	<File name="src\code\db_manipulation.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6935" topLine="208" />
+		</Cursor>
+	</File>
+	<File name="src\code\yaml\api.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2796" topLine="82" />
+		</Cursor>
+	</File>
+	<File name="src\code\string_array_functions.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5600" topLine="199" />
+		</Cursor>
+	</File>
+	<File name="src\code\file_manager.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1250" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="src\code\table_manipulation.c" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="685" topLine="208" />
+		</Cursor>
+	</File>
+	<File name="src\header\yaml\node.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="172" topLine="9" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

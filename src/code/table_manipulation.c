@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "../header/yaml/api.h"
 #include "../header/file_manager.h"
 #include "../header/general.h"
 #include "../header/table_manipulation.h"
@@ -135,6 +136,7 @@ void addColumns(char *db, char *tableName){
     int columnNumberVal = columnNumber();
     int tempColumn = 0;
     short menu;
+    Node * columnsNode;
 
     do{
         system(CLEAR);
@@ -144,14 +146,14 @@ void addColumns(char *db, char *tableName){
 
         switch( menu ) {
         case 0: //Saisir une colonne
-            columnName(db, tempColumn, tableName);
+            columnName(tempColumn, columnsNode);
             tempColumn++;
             break;
         case 1: //Ajouter une colonne
             columnNumberVal++;
             break;
         }
-
+        YAMLSaveNode(columnsNode, tableName);
         system(CLEAR);
 
     }while( columnNumberVal != tempColumn );
@@ -207,31 +209,27 @@ Input : - dbName (char*), name of the database
         - column number (int*)
 Output : void
 */
-void columnName(char *db, int incomeColumnNumber, char *tableName){
-    FILE * pf = NULL;
+void columnName(int incomeColumnNumber, Node *columnsNode){
     char columnNameStr[255];
     char columnType[50];
-    char columnTypeAndName[305];
-
-    pf = fopen(tableName, "a");
+    int length = 0;
 
     system(CLEAR);
     printf("Saisir le nom de la colonne %d : ", incomeColumnNumber + 1);
+    fflush(stdin);
+    do{
+        getInput(255, columnNameStr);
+        length = strlen(columnNameStr);
 
-    fseek(pf, 0, SEEK_END);
-    if( ftell(pf) == 0 ){
-        fputs("Noms_et_types_des_colonnes\n", pf);
-    }
-
-    getInput(255, columnNameStr);
+        if( length <= 0 ) { //Y a-t'il d'autres conditions d'erreur ?
+            printf("Le nom entre n'est pas valide.\n");
+            system(PAUSE);
+            system(CLEAR);
+        }
+    }while( length <= 0 );
     strcpy(columnType, selectColumnType());
-
-    strcpy(columnTypeAndName, columnNameStr);
-    strcat(columnTypeAndName, ":");
-    strcat(columnTypeAndName, columnType);
-
-    fprintf(pf, "\t%s\n", columnTypeAndName);
-    fclose(pf);
+    columnsNode = YAMLGetMapNode("Structure");
+    YAMLAddValueChild(columnsNode, columnNameStr, columnType);
 }
 
 /*

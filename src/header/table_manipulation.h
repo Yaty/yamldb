@@ -7,6 +7,7 @@
 */
 
 #ifndef TABLE_MANAGER_H_INCLUDED
+#include "../header/yaml/api.h"
 #define TABLE_MANAGER_H_INCLUDED
 
 /*
@@ -72,7 +73,7 @@ Input : - dbName (char*), name of the database
         - column number (int*)
 Output : void
 */
-void columnName(char *db, int incomeColumnNumber, char *tableName);
+void columnName(int incomeColumnNumber, Node *columnsNode);
 
 /*
 Goal : allow to select type of the current column

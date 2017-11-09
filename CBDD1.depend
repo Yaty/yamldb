@@ -159,29 +159,31 @@
 	<stdlib.h>
 	<stdio.h>
 
-1509799441 source:d:\git\cbdd1\src\code\db_manager.c
+1510229104 source:d:\git\cbdd1\src\code\db_manager.c
 	"../header/db_manager.h"
 	"../header/general.h"
 	"../header/file_manager.h"
 	"../header/directory_functions.h"
 	"../header/db_manipulation.h"
-	<windows.h>
 	<stdio.h>
+	<string.h>
+	<stdlib.h>
 
-1509799441 d:\git\cbdd1\src\header\db_manager.h
+1509906019 d:\git\cbdd1\src\header\db_manager.h
 
-1509799441 d:\git\cbdd1\src\header\general.h
+1509906019 d:\git\cbdd1\src\header\general.h
 
-1509799441 d:\git\cbdd1\src\header\file_manager.h
+1509906019 d:\git\cbdd1\src\header\file_manager.h
 
-1509799441 d:\git\cbdd1\src\header\directory_functions.h
+1509906019 d:\git\cbdd1\src\header\directory_functions.h
 
-1509799441 d:\git\cbdd1\src\header\db_manipulation.h
+1509906019 d:\git\cbdd1\src\header\db_manipulation.h
 
-1509905369 source:d:\git\cbdd1\src\code\db_manipulation.c
+1510229730 source:d:\git\cbdd1\src\code\db_manipulation.c
 	<stdio.h>
-	<windows.h>
 	<unistd.h>
+	<stdlib.h>
+	<string.h>
 	"../header/db_manipulation.h"
 	"../header/general.h"
 	"../header/table_manipulation.h"
@@ -189,32 +191,31 @@
 	"../header/directory_functions.h"
 	"../header/string_array_functions.h"
 
-1509905369 d:\git\cbdd1\src\header\table_manipulation.h
+1509906019 d:\git\cbdd1\src\header\table_manipulation.h
 
-1509808503 d:\git\cbdd1\src\header\string_array_functions.h
+1510059604 d:\git\cbdd1\src\header\string_array_functions.h
 
-1509799441 source:d:\git\cbdd1\src\code\directory_functions.c
+1510059445 source:d:\git\cbdd1\src\code\directory_functions.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<dirent.h>
-	<dir.h>
 	"../header/general.h"
 	"../header/string_array_functions.h"
 	"../header/directory_functions.h"
 
-1509905369 source:d:\git\cbdd1\src\code\file_manager.c
+1509906019 source:d:\git\cbdd1\src\code\file_manager.c
 	<stdio.h>
 	"../header/file_manager.h"
 
-1509799441 source:d:\git\cbdd1\src\code\general.c
+1509906019 source:d:\git\cbdd1\src\code\general.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<dirent.h>
 	"../header/general.h"
 
-1509799441 source:d:\git\cbdd1\src\code\main.c
+1509906019 source:d:\git\cbdd1\src\code\main.c
 	<stdio.h>
 	<stdlib.h>
 	"../header/db_manager.h"
@@ -222,7 +223,7 @@
 	"../header/string_array_functions.h"
 	"../header/directory_functions.h"
 
-1509808503 source:d:\git\cbdd1\src\code\string_array_functions.c
+1510059604 source:d:\git\cbdd1\src\code\string_array_functions.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -230,13 +231,15 @@
 	"../header/general.h"
 	"../header/string_array_functions.h"
 
-1509905369 source:d:\git\cbdd1\src\code\table_manipulation.c
-	<windows.h>
+1510229262 source:d:\git\cbdd1\src\code\table_manipulation.c
 	<stdlib.h>
 	<stdio.h>
+	<string.h>
+	"../header/yaml/utils/parser.h"
 	"../header/file_manager.h"
 	"../header/general.h"
 	"../header/table_manipulation.h"
+	"../header/yaml/api.h"
 
 1509905369 source:d:\git\cbdd1\src\code\yaml\api.c
 	<stdio.h>
@@ -251,7 +254,7 @@
 	<stdio.h>
 	"node.h"
 
-1509799441 d:\git\cbdd1\src\header\yaml\node.h
+1510072269 d:\git\cbdd1\src\header\yaml\node.h
 
 1509905369 source:d:\git\cbdd1\src\code\yaml\parser.c
 	<stdio.h>
@@ -259,4 +262,71 @@
 	<stdlib.h>
 	"../../header/string_array_functions.h"
 	"../../header/yaml/parser.h"
+
+1510059604 d:\git\cbdd1\src\header\yaml\utils\parser.h
+	<stdio.h>
+	"../node.h"
+
+1509957336 d:\git\cbdd1\src\header\yaml\api.h
+	"node.h"
+	"api/children.h"
+	"api/data.h"
+	"api/free.h"
+	"api/output.h"
+	"api/parse.h"
+	"api/type.h"
+
+1509957336 d:\git\cbdd1\src\header\yaml\api\children.h
+
+1510223420 d:\git\cbdd1\src\header\yaml\api\data.h
+
+1509957336 d:\git\cbdd1\src\header\yaml\api\free.h
+
+1509957336 d:\git\cbdd1\src\header\yaml\api\output.h
+
+1509957336 d:\git\cbdd1\src\header\yaml\api\parse.h
+
+1509957336 d:\git\cbdd1\src\header\yaml\api\type.h
+
+1510059604 source:d:\git\cbdd1\src\code\yaml\api\children.c
+	<stdlib.h>
+	"../../../header/yaml/node.h"
+	"../../../header/yaml/utils/parser.h"
+	"../../../header/yaml/api/free.h"
+	"../../../header/yaml/api/children.h"
+	"../../../header/yaml/api/type.h"
+
+1510223420 source:d:\git\cbdd1\src\code\yaml\api\data.c
+	<stdlib.h>
+	<string.h>
+	"../../../header/yaml/node.h"
+	"../../../header/yaml/utils/parser.h"
+
+1510072269 source:d:\git\cbdd1\src\code\yaml\api\free.c
+	<stdlib.h>
+	"../../../header/yaml/node.h"
+
+1509957336 source:d:\git\cbdd1\src\code\yaml\api\parse.c
+	"../../../header/yaml/node.h"
+	"../../../header/yaml/utils/parser.h"
+
+1509957336 source:d:\git\cbdd1\src\code\yaml\api\type.c
+	"../../../header/yaml/node.h"
+	"../../../header/yaml/utils/parser.h"
+
+1510225555 source:d:\git\cbdd1\src\code\yaml\utils\parser.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"../../../header/string_array_functions.h"
+	"../../../header/yaml/utils/parser.h"
+
+1510230108 source:d:\git\cbdd1\src\code\yaml\api\output.c
+	<stdarg.h>
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<string.h>
+	"../../../header/yaml/node.h"
+	"../../../header/string_array_functions.h"
 

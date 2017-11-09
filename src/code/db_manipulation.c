@@ -233,6 +233,7 @@ void createTable(char *db) { /* A modifier avec les fonctions de yml parsing + A
     FILE *pf;
     short strLength = 3;
     short strLengthTwo = 2;
+    int length = 0;
     char *str[] = {"resources\\", db, ".yml"};
     char *strTable[] = {"resources\\", db};
 
@@ -244,8 +245,17 @@ void createTable(char *db) { /* A modifier avec les fonctions de yml parsing + A
         if( ftell(pf) == 0 ){
             fputs("Tables :\n", pf);
         }
-        printf("Saisir le nom de la table a creer : ");
-        getInput(100, tableName);
+        do{
+            printf("Saisir le nom de la table a creer : ");
+            getInput(100, tableName);
+            length = strlen(tableName);
+
+            if( length <= 0 ) { //Y a-t'il d'autres conditions d'erreur ?
+                printf("Le nom entre n'est pas valide.\n");
+                system(PAUSE);
+                system(CLEAR);
+            }
+        }while( length <= 0 );
         if( createTableFile(db, tableName) == 2 ){ //Si la table existe pas d�j�
             fprintf(pf, "\t%s\n", tableName);
             strcat(tablePath, "\\");
