@@ -6,10 +6,28 @@
 #define CBDD1_DATA_H
 
 /**
- * Return an empty node
+ * Return an empty map node
  * @return a node
  */
-Node *YAMLGetNode();
+Node *YAMLGetMapNode();
+
+/**
+ * Return an empty sequence node
+ * @return a node
+ */
+Node *YAMLGetSequenceNode();
+
+/**
+ * Return an empty sequence value node
+ * @return a node
+ */
+Node *YAMLGetSequenceValueNode();
+
+/**
+ * Return an empty value node
+ * @return a node
+ */
+Node *YAMLGetValueNode();
 
 /**
  * Get Node Value

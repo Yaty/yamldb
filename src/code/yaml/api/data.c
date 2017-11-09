@@ -12,11 +12,55 @@
  */
 
 /**
- * Return an empty node
+ * Return an empty map node
  * @return a node
  */
-Node *YAMLGetNode() {
-    return getEmptyNode();
+Node *YAMLGetMapNode() {
+    Node *node = getEmptyNode();
+    if (node) {
+        node->type = MAP;
+        return node;
+    }
+    return NULL;
+}
+
+/**
+ * Return an empty sequence node
+ * @return a node
+ */
+Node *YAMLGetSequenceNode() {
+    Node *node = getEmptyNode();
+    if (node) {
+        node->type = SEQUENCE;
+        return node;
+    }
+    return NULL;
+}
+
+/**
+ * Return an empty sequence value node
+ * @return a node
+ */
+Node *YAMLGetSequenceValueNode() {
+    Node *node = getEmptyNode();
+    if (node) {
+        node->type = SEQUENCE_VALUE;
+        return node;
+    }
+    return NULL;
+}
+
+/**
+ * Return an empty value node
+ * @return a node
+ */
+Node *YAMLGetValueNode() {
+    Node *node = getEmptyNode();
+    if (node) {
+        node->type = VALUE;
+        return node;
+    }
+    return NULL;
 }
 
 /**
