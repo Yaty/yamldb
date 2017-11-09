@@ -9,7 +9,7 @@
  * Return an empty node
  * @return a node
  */
-Node *getNode();
+Node *YAMLGetNode();
 
 /**
  * Get Node Value
