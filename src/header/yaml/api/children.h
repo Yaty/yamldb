@@ -36,6 +36,15 @@ Node *YAMLGetChildAtIndex(Node *node, int index);
 int YAMLAddChild(Node *parent, Node *child);
 
 /**
+ * Add value child to parent from strings
+ * @param parent
+ * @param key
+ * @param value
+ * @return 1 for success, 0 for failure
+ */
+int YAMLAddValueChild(Node *parent, char *key, char *value);
+
+/**
  * Remove a child from a Node at index
  * It will move all other children and resize the array
  * @param parent

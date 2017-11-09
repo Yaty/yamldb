@@ -229,6 +229,10 @@ Récupère un noeud enfant d'un noeud à un index.
 
 Ajoute un noeud enfant à un noeud parent en dernière position.
 
+##### `int YAMLAddValueChild(Node *parent, char *key, char *value)`
+
+Ajoute un noeud value à un parent avec des strings key/value.
+
 ##### `int YAMLRemoveChildAtIndex(Node *parent, int index)`
 
 Retire un enfant d'un noeud à un index.

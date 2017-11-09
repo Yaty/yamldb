@@ -8,6 +8,7 @@
 #include "../../../header/yaml/api/free.h"
 #include "../../../header/yaml/api/children.h"
 #include "../../../header/yaml/api/type.h"
+#include "../../../header/yaml/api.h"
 
 /**
  * NODE CHILDREN FUNCTIONS
@@ -64,6 +65,27 @@ Node *YAMLGetChildAtIndex(Node *node, int index) {
 int YAMLAddChild(Node *parent, Node *child) {
     if (parent && child) {
         return addChild(parent, child);
+    }
+
+    return 0;
+}
+
+/**
+ * Add value child to parent from strings
+ * @param parent
+ * @param key
+ * @param value
+ * @return 1 for success, 0 for failure
+ */
+int YAMLAddValueChild(Node *parent, char *key, char *value) {
+    if (parent && key && value) {
+        if (YAMLIsCollection(parent)) {
+            Node *child = getEmptyNode();
+            child->type = VALUE;
+            if (YAMLSetKey(child, key) && YAMLSetValue(child, value)) {
+                return YAMLAddChild(parent, child);
+            }
+        }
     }
 
     return 0;
