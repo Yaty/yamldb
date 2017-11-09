@@ -7,15 +7,17 @@
 
 /**
  * Return an empty map node
+ * @param the map key
  * @return a node
  */
-Node *YAMLGetMapNode();
+Node *YAMLGetMapNode(char *key);
 
 /**
  * Return an empty sequence node
+ * @param key sequence key
  * @return a node
  */
-Node *YAMLGetSequenceNode();
+Node *YAMLGetSequenceNode(char *key);
 
 /**
  * Return an empty sequence value node
@@ -25,9 +27,11 @@ Node *YAMLGetSequenceValueNode();
 
 /**
  * Return an empty value node
+ * @param key
+ * @param value
  * @return a node
  */
-Node *YAMLGetValueNode();
+Node *YAMLGetValueNode(char *key, char *value);
 
 /**
  * Get Node Value

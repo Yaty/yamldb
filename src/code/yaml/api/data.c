@@ -6,6 +6,7 @@
 #include <string.h>
 #include "../../../header/yaml/node.h"
 #include "../../../header/yaml/utils/parser.h"
+#include "../../../header/yaml/api/data.h"
 
 /**
  * NODE DATA
@@ -13,26 +14,34 @@
 
 /**
  * Return an empty map node
+ * @param the map key
  * @return a node
  */
-Node *YAMLGetMapNode() {
-    Node *node = getEmptyNode();
-    if (node) {
-        node->type = MAP;
-        return node;
+Node *YAMLGetMapNode(char *key) {
+    if (key) {
+        Node *node = getEmptyNode();
+        if (node) {
+            node->type = MAP;
+            YAMLSetKey(node, key);
+            return node;
+        }
     }
     return NULL;
 }
 
 /**
  * Return an empty sequence node
+ * @param key sequence key
  * @return a node
  */
-Node *YAMLGetSequenceNode() {
-    Node *node = getEmptyNode();
-    if (node) {
-        node->type = SEQUENCE;
-        return node;
+Node *YAMLGetSequenceNode(char *key) {
+    if (key) {
+        Node *node = getEmptyNode();
+        if (node) {
+            node->type = SEQUENCE;
+            YAMLSetKey(node, key);
+            return node;
+        }
     }
     return NULL;
 }
@@ -52,14 +61,21 @@ Node *YAMLGetSequenceValueNode() {
 
 /**
  * Return an empty value node
+ * @param key
+ * @param value
  * @return a node
  */
-Node *YAMLGetValueNode() {
-    Node *node = getEmptyNode();
-    if (node) {
-        node->type = VALUE;
-        return node;
+Node *YAMLGetValueNode(char *key, char *value) {
+    if (key && value) {
+        Node *node = getEmptyNode();
+        if (node) {
+            node->type = VALUE;
+            if (YAMLSetKey(node, key) && YAMLSetValue(node, value)) {
+                return node;
+            }
+        }
     }
+
     return NULL;
 }
 

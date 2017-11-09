@@ -179,11 +179,11 @@ Libère la mémoire utilisée par le noeud. Fonction à executer avant de ne plu
 
 #### Data
 
-##### `Node *YAMLGetMapNode()`
+##### `Node *YAMLGetMapNode(char *key)`
 
 Récupère un noeud map prêt à être utilisé.
 
-##### `Node *YAMLGetSequenceNode()`
+##### `Node *YAMLGetSequenceNode(char *key)`
 
 Récupère un noeud sequence prêt à être utilisé.
 
@@ -191,7 +191,7 @@ Récupère un noeud sequence prêt à être utilisé.
 
 Récupère un noeud sequence value prêt à être utilisé.
 
-##### `Node *YAMLGetValueNode()`
+##### `Node *YAMLGetValueNode(char *key, char *value)`
 
 Récupère un noeud value prêt à être utilisé.
 
