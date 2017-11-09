@@ -23,7 +23,7 @@
 #define PAUSE "pause"
 #else
 #define CLEAR "clear"
-#define PAUSE "echo \"Please enter a character to continue ...\ && read _"
+#define PAUSE "echo \"Please enter a character to continue ...\" && read _"
 #endif
 
 /*================ FUNCTIONS ================*/
@@ -39,21 +39,22 @@ void databaseManipulationManager(char *dbName) {
         system(CLEAR);
 
         switch( menu ) {
-        case 0: //Quitter le programme
-            return;
-        case 1: //Cr�er une table
-            createTable(dbName);
-            break;
-        case 2: //Ouvrir une table
-            openTableManager(dbName);
-            break;
-        case 3: //Lister toutes les tables
-            displayTablesListManager(dbName);
-            break;
-        case 4: //Supprimer une base de donn�es
-            dropDatabaseManager(dbName);
-            return;
-            break;
+            case 0: //Quitter le programme
+                return;
+            case 1: //Cr�er une table
+                createTable(dbName);
+                break;
+            case 2: //Ouvrir une table
+                openTableManager(dbName);
+                break;
+            case 3: //Lister toutes les tables
+                displayTablesListManager(dbName);
+                break;
+            case 4: //Supprimer une base de donn�es
+                dropDatabaseManager(dbName);
+                return;
+            default:
+                break;
         }
         system(CLEAR);
 
