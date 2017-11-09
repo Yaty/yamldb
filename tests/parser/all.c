@@ -2,16 +2,16 @@
 // Created by Hugo on 04/11/2017.
 //
 
-#include "values.c"
+#include "end2end.c"
 
 int parserTestAll() {
-    printf("Testing parser ...\n");
-    char *result = values_all_tests();
+    printf("Testing parser ... ");
+    char *result = end2end_all_tests();
     if (result != 0) {
-        printf("%s\n", result);
+        printf("Error : %s\n", result);
     }
     else {
-        printf("ALL PARSER TESTS PASSED\n");
+        printf("OK !\n");
     }
 
     return result != 0;

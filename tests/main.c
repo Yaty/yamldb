@@ -4,10 +4,12 @@
 
 #include <stdlib.h>
 #include "./parser/all.c"
+#include "./api/all.c"
 
 int main(int argc, char **argv) {
     printf("Launching tests.\n");
     parserTestAll();
+    apiTestAll();
     printf("Tests run: %d\n", tests_run);
     printf("TESTS DONE.\n");
     return EXIT_SUCCESS;
