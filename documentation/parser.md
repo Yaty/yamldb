@@ -179,7 +179,7 @@ Libère la mémoire utilisée par le noeud. Fonction à executer avant de ne plu
 
 #### Data
 
-##### `Node *getNode()`
+##### `Node *YAMLgetNode()`
 
 Récupère un noeud prêt à être utilisé.
 
