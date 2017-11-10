@@ -56,10 +56,12 @@ set(TESTS_SRCS
         tests/main.c
         tests/utils.c
         tests/src/code/parser/allParser.c
-        tests/src/code/parser/end2end.c
         tests/src/code/api/data.c
         tests/src/code/api/children.c
-        tests/src/code/api/allApi.c)
+        tests/src/code/api/allApi.c
+        tests/src/code/api/free.c
+        tests/src/code/api/output.c
+        tests/src/code/api/type.c)
 
 set(TESTS_HEADERS
 
@@ -77,9 +79,11 @@ set(TESTS_HEADERS
         tests/src/header/minunit.h
         tests/src/header/utils.h
         tests/src/header/parser/allParser.h
-        tests/src/header/parser/end2end.h
         tests/src/header/api/data.h
         tests/src/header/api/children.h
-        tests/src/header/api/allApi.h)
+        tests/src/header/api/allApi.h
+        tests/src/header/api/free.h
+        tests/src/header/api/output.h
+        tests/src/header/api/type.h)
 
 add_executable(cbdd_tests ${TESTS_SRCS} ${TESTS_HEADERS})

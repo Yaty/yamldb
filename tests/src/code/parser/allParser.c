@@ -3,11 +3,14 @@
 //
 
 #include <stdio.h>
-#include "../../header/parser/end2end.h"
+
+static char *allTests() {
+    return 0;
+}
 
 int parserTestAll() {
     printf("Testing parser ... ");
-    char *result = end2endAllTests();
+    char *result = allTests();
     if (result != NULL) {
         printf("Error : %s\n", result);
     } else {

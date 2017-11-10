@@ -1,5 +1,5 @@
 //
-// Created by Hugo on 04/11/2017.
+// Created by Hugo on 10/11/2017.
 //
 
 #include "../../header/minunit.h"
@@ -35,7 +35,7 @@ static char *mixAreCorrectlyParsedAndPrinted() {
     return 0;
 }
 
-char *end2endAllTests() {
+char *outputAllTests() {
     mu_run_test(mapsAreCorrectlyParsedAndPrinted);
     mu_run_test(sequenceAreCorrectlyParsedAndPrinted);
     mu_run_test(mixAreCorrectlyParsedAndPrinted);
