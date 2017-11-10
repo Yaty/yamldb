@@ -2,17 +2,10 @@
 // Created by Hugo on 04/11/2017.
 //
 
-#include <string.h>
-#include <stdio.h>
-#include "../minunit.h"
-#include "../utils.c"
-#include "../../src/code/string_array_functions.c"
-#include "../../src/code/yaml/utils/parser.c"
-#include "../../src/code/yaml/api/parse.c"
-#include "../../src/code/yaml/api/free.c"
-#include "../../src/code/yaml/api/output.c"
+#include "../../header/minunit.h"
+#include "../../header/utils.h"
+#include "../../../../src/header/yaml/api.h"
 
-int tests_run = 0;
 char *outputPath = "../resources/parser/output.yml";
 char *testMapsPath = "../resources/parser/maps.yml";
 char *testSequencesPath = "../resources/parser/sequences.yml";
@@ -42,7 +35,7 @@ static char *mixAreCorrectlyParsedAndPrinted() {
     return 0;
 }
 
-char *end2end_all_tests() {
+char *end2endAllTests() {
     mu_run_test(mapsAreCorrectlyParsedAndPrinted);
     mu_run_test(sequenceAreCorrectlyParsedAndPrinted);
     mu_run_test(mixAreCorrectlyParsedAndPrinted);

@@ -43,9 +43,43 @@ add_executable(cbdd ${SRCS} ${HEADERS})
 # Tests
 
 set(TESTS_SRCS
-        tests/main.c)
+
+        src/code/string_array_functions.c
+        src/code/yaml/utils/parser.c
+        src/code/yaml/api/children.c
+        src/code/yaml/api/data.c
+        src/code/yaml/api/free.c
+        src/code/yaml/api/output.c
+        src/code/yaml/api/parse.c
+        src/code/yaml/api/type.c
+
+        tests/main.c
+        tests/utils.c
+        tests/src/code/parser/allParser.c
+        tests/src/code/parser/end2end.c
+        tests/src/code/api/data.c
+        tests/src/code/api/children.c
+        tests/src/code/api/allApi.c)
 
 set(TESTS_HEADERS
-        tests/minunit.h)
+
+        src/header/yaml/api.h
+        src/header/yaml/node.h
+        src/header/yaml/utils/parser.h
+        src/header/yaml/api/children.h
+        src/header/yaml/api/data.h
+        src/header/yaml/api/free.h
+        src/header/yaml/api/output.h
+        src/header/yaml/api/parse.h
+        src/header/yaml/api/type.h
+
+        src/header/string_array_functions.h
+        tests/src/header/minunit.h
+        tests/src/header/utils.h
+        tests/src/header/parser/allParser.h
+        tests/src/header/parser/end2end.h
+        tests/src/header/api/data.h
+        tests/src/header/api/children.h
+        tests/src/header/api/allApi.h)
 
 add_executable(cbdd_tests ${TESTS_SRCS} ${TESTS_HEADERS})

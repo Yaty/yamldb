@@ -3,7 +3,8 @@
 //
 
 #include <string.h>
-#include "../src/header/yaml/node.h"
+#include <stdio.h>
+#include "../src/header/yaml/api.h"
 
 int areNodeEquals(Node *n1, Node *n2) {
     int i;
@@ -36,12 +37,12 @@ int filesEquals(char *path1, char *path2) {
         FILE *file1 = fopen(path1, "r");
         FILE *file2 = fopen(path2, "r");
         if (file1 && file2) {
-            char char1 = getc(file1);
-            char char2 = getc(file2);
+            char char1 = (char) getc(file1);
+            char char2 = (char) getc(file2);
 
             while ((char1 != EOF) && (char2 != EOF) && (char1 == char2)) {
-                char1 = getc(file1);
-                char2 = getc(file2);
+                char1 = (char) getc(file1);
+                char2 = (char) getc(file2);
             }
 
             fclose(file1);
