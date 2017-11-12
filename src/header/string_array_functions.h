@@ -62,7 +62,7 @@ char increaseStrArraySize(short strLength, short *currentLength, short lengthToA
 void removeChars (char *str, int startPosition, int length);
 
 /**
- * Trim a string
+ * Trim a string, the string needs to be allocated dynamically
  * Example : '    bla bla    ' -> 'bla bla'
  * Remove thoses characters :
  * ' ' (0x20) space (SPC)
@@ -117,5 +117,37 @@ void substring (char *str, char *substr, int start, int length);
  * @return NULL if error, the concatened string if it succeeded
  */
 char *concat (char *str1, char *str2);
+
+/**
+ * Uppercase a string
+ * Example : "bla" -> "BLA"
+ * @param str
+ * @return the uppercase string or null for error
+ */
+char *toUpperCase(char *str);
+
+/**
+ * Check if a string starts with another string
+ * @param str
+ * @param prefix
+ * @return 1 for true, 0 for false
+ */
+int startsWith(char *str, char *prefix);
+
+/**
+ * Check if a string ends with another string
+ * @param str
+ * @param suffix
+ * @return 1 for true, 0 for false
+ */
+int endsWith(char *str, char *suffix);
+
+/**
+ * Get index where a substring is in a string
+ * @param str
+ * @param substr
+ * @return an index
+ */
+size_t getSubstringIndex(char *str, char *substr);
 
 #endif // STRING_ARRAY_FUNCTIONS_H_INCLUDED

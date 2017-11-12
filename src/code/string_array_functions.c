@@ -112,7 +112,7 @@ void removeChars (char *str, int startPosition, int length) {
 }
 
 /**
- * Trim a string
+ * Trim a string, the string needs to be allocated dynamically
  * Example : '    bla bla    ' -> 'bla bla'
  * Remove thoses characters :
  * ' ' (0x20) space (SPC)
@@ -126,9 +126,6 @@ void removeChars (char *str, int startPosition, int length) {
  */
 char *trim(char *str) {
     if (str) {
-        size_t strLength = strlen(str);
-        char *end;
-
         // Trim left
         while(isspace((unsigned char)*str)) str++;
 
@@ -137,9 +134,10 @@ char *trim(char *str) {
         }
 
         // Trim right
-        end = str + strLength - 1;
+        size_t strLength = strlen(str);
+        char *end = str + strLength - 1;
         while(end > str && isspace((unsigned char)*end)) end--;
-        *(end+1) = 0; // \0
+        *(end+1) = '\0';
         return str;
     }
 
@@ -256,4 +254,60 @@ char *concat (char *str1, char *str2) {
     }
 
     return newStr;
+}
+/**
+ * Uppercase a string
+ * Example : "bla" -> "BLA"
+ * @param str
+ * @return the uppercase string or null for error
+ */
+char *toUpperCase(char *str) {
+    if (str) {
+        size_t length = strlen(str);
+        int i;
+        for (i = 0; i < length; i++) {
+            str[i] = toupper(str[i]);
+        }
+        return str;
+    }
+
+    return NULL;
+}
+
+/**
+ * Check if a string starts with another string
+ * @param str
+ * @param prefix
+ * @return 1 for true, 0 for false
+ */
+int startsWith(char *str, char *prefix) {
+    return strncmp(prefix, str, strlen(prefix)) == 0;
+}
+
+/**
+ * Check if a string ends with another string
+ * @param str
+ * @param suffix
+ * @return 1 for true, 0 for false
+ */
+int endsWith(char *str, char *suffix) {
+    if (str, suffix) {
+        size_t strLength = strlen(str);
+        size_t suffixLength = strlen(suffix);
+        if (suffixLength <= strLength) {
+            return strncmp(str + strLength - suffixLength, suffix, suffixLength) == 0;
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * Get index where a substring is in a string
+ * @param str
+ * @param substr
+ * @return an index
+ */
+size_t getSubstringIndex(char *str, char *substr) {
+    return strstr(str, substr) - str;
 }

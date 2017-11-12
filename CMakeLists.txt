@@ -17,7 +17,7 @@ set(SRCS
         src/code/general.c
         src/code/string_array_functions.c
         src/code/table_manipulation.c
-        )
+        src/code/sql/query.c src/code/sql/select.c src/code/sql/utils.c src/code/sql/insert.c)
 
 set(HEADERS
         src/header/yaml/api.h
@@ -36,7 +36,7 @@ set(HEADERS
         src/header/general.h
         src/header/string_array_functions.h
         src/header/table_manipulation.h
-        )
+        src/header/sql/query.h src/header/sql/utils.h src/header/sql/select.h src/header/sql/structs.h src/header/sql/insert.h)
 
 add_executable(cbdd ${SRCS} ${HEADERS})
 
@@ -61,7 +61,7 @@ set(TESTS_SRCS
         tests/src/code/api/allApi.c
         tests/src/code/api/free.c
         tests/src/code/api/output.c
-        tests/src/code/api/type.c)
+        tests/src/code/api/type.c tests/src/code/utils/string.c)
 
 set(TESTS_HEADERS
 
@@ -84,6 +84,6 @@ set(TESTS_HEADERS
         tests/src/header/api/allApi.h
         tests/src/header/api/free.h
         tests/src/header/api/output.h
-        tests/src/header/api/type.h)
+        tests/src/header/api/type.h tests/src/header/utils/string.h)
 
 add_executable(cbdd_tests ${TESTS_SRCS} ${TESTS_HEADERS})
