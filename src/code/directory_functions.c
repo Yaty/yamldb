@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
-//#include <dir.h>
+#include <sys/stat.h>
 #include "../header/general.h"
 #include "../header/string_array_functions.h"
 #include "../header/directory_functions.h"
@@ -156,7 +156,7 @@ void createDir(char *dirName){
     strcpy(name, "resources\\");
     strcat(name, dirName);
 
-    mkdir(name);
+    mkdir(name, 0700);
 }
 
 /*

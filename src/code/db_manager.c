@@ -278,6 +278,7 @@ short openDatabaseAskNumber(short length, char **array) {
         }
 
         printf("Entrer le numero de la base a ouvrir : ");
+        fflush(stdin);
         scanf("%hd", &choice);
 
         if( choice < 0 || choice > length ) {

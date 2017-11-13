@@ -132,11 +132,11 @@ Input : - dbName (char*), name of the database
         - table file (FILE*)
 Output : void
 */
-void addColumns(char *db, char *tableName){
+void addColumns(char *tableName){
     int columnNumberVal = columnNumber();
     int tempColumn = 0;
     short menu;
-    Node * columnsNode;
+    Node * columnsNode = YAMLGetMapNode("Structure");
 
     do{
         system(CLEAR);
@@ -153,10 +153,10 @@ void addColumns(char *db, char *tableName){
             columnNumberVal++;
             break;
         }
-        YAMLSaveNode(columnsNode, tableName);
         system(CLEAR);
 
     }while( columnNumberVal != tempColumn );
+    YAMLSaveNode(columnsNode, tableName);
 }
 
 /*
@@ -214,10 +214,10 @@ void columnName(int incomeColumnNumber, Node *columnsNode){
     char columnType[50];
     int length = 0;
 
-    system(CLEAR);
-    printf("Saisir le nom de la colonne %d : ", incomeColumnNumber + 1);
-    fflush(stdin);
     do{
+        system(CLEAR);
+        printf("Saisir le nom de la colonne %d : ", incomeColumnNumber + 1);
+        fflush(stdin);
         getInput(255, columnNameStr);
         length = strlen(columnNameStr);
 
@@ -228,7 +228,6 @@ void columnName(int incomeColumnNumber, Node *columnsNode){
         }
     }while( length <= 0 );
     strcpy(columnType, selectColumnType());
-    columnsNode = YAMLGetMapNode("Structure");
     YAMLAddValueChild(columnsNode, columnNameStr, columnType);
 }
 
@@ -246,32 +245,19 @@ char *selectColumnType(){
     switch( menu ) {
     case 0: //INT
         return "INT";
-        break;
-    case 1: //CHAR
+    case 1: //VARCHAR
         return "VARCHAR";
-        break;
-    case 2: //DATE
-        return "DATE";
-        break;
+    case 2: //CHAR
+        return "CHAR";
     case 3: //FLOAT
         return "FLOAT";
-        break;
     case 4: //DOUBLE
         return "DOUBLE";
-        break;
-    case 5: //DATE
-        return "DATE";
-        break;
-    case 6: //CHAR
-        return "CHAR";
-        break;
-    case 7: //TIMESTAMP
-        return "TIMESTAMP";
-        break;
+    case 5: //TEXT
+        return "TEXT";
     default:
         return NULL;
     }
-    system(CLEAR);
 }
 
 /*
@@ -280,8 +266,8 @@ Input : nothing
 Output : short, choice of the user in the menu
 */
 short typeManipulationManagerMenu(){
-    char *array[] = {"INT", "VARCHAR", "DATE", "FLOAT", "DOUBLE", "DATE", "CHAR", "TIMESTAMP"};
-    short length = 8;
+    char *array[] = {"INT", "VARCHAR", "CHAR", "FLOAT", "DOUBLE", "TEXT"};
+    short length = 6;
     char title[100] = "Type de la colonne";
     short choice;
 

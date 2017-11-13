@@ -1,12 +1,13 @@
 /*
 **  Filename : db_manipulation.h
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUï¿½NIN ESGI - 3AL-1
 **
 **  Description : Contains the database manipulation functions prototypes & struct declarations
 */
 
 #ifndef DB_MANIPULATION_H_INCLUDED
+#include "../header/yaml/api.h"
 #define DB_MANIPULATION_H_INCLUDED
 
 /*================ STRUCT DECLARATION ================*/
@@ -65,7 +66,7 @@ Goal : Create a table
 Input : db (char*), name of the db we manipulate
 Output : void
 */
-void createTable(char *db);
+void createTable(char *db, Node * tableNameNode, char * path);
 
 /*
 Goal : Create a table in database folder
