@@ -3,12 +3,17 @@
 //
 
 #include <stdlib.h>
-#include "./parser/all.c"
+#include <stdio.h>
+
+#include "./src/header/api/allApi.h"
+#include "./src/header/parser/allParser.h"
+#include "./src/header/utils/string.h"
 
 int main(int argc, char **argv) {
     printf("Launching tests.\n");
-    parserTestAll();
-    printf("Tests run: %d\n", tests_run);
-    printf("TESTS DONE.\n");
+    int res = parserTestAll();
+    res += apiTestAll();
+    res += stringTestAll();
+    printf(res == 3 ? "Success.\n" : "Failure.\n");
     return EXIT_SUCCESS;
 }

@@ -16,7 +16,7 @@
  * @return 1 if true, 0 otherwise
  */
 static int nodeIs(Node *node, NodeType type) {
-    if (node && type) {
+    if (node) {
         return node->type == type;
     }
 
@@ -83,7 +83,7 @@ int YAMLIsValue(Node *node) {
  * @return a type, UNDEFINED if he don't have one
  */
 NodeType YAMLGetType(Node *node) {
-    if (node && node->type) {
+    if (node) {
         return node->type;
     }
 
@@ -97,7 +97,7 @@ NodeType YAMLGetType(Node *node) {
  * @return 1 for sucess, 0 for failure
  */
 int YAMLSetType(Node *node, NodeType type) {
-    if (node && type) {
+    if (node) {
         node->type = type;
         return 1;
     }

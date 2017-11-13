@@ -128,22 +128,24 @@ int YAMLRemoveChildAtIndex(Node *parent, int index) {
  * @return 1 if the child was added, 0 otherwise
  */
 int YAMLAddChildAtIndex(Node *parent, Node *child, int index) {
-    if (parent && child && YAMLIsCollection(parent)) {
-        int childrenNumber = YAMLGetSize(parent);
-        if (index <= childrenNumber) {
-            int i;
+    if (parent && child) {
+        if (YAMLIsCollection(parent) == 1 && index >= 0) {
+            int childrenNumber = YAMLGetSize(parent);
+            if (index <= childrenNumber) {
+                int i;
 
-            parent->children = (Node*) realloc(parent->children, sizeof(Node) * (parent->childrenNumber + 1));
+                parent->children = (Node*) realloc(parent->children, sizeof(Node) * (parent->childrenNumber + 1));
 
-            if (parent->children) {
-                for (i = childrenNumber; i > index; i++) {
-                    parent->children[i] =  parent->children[i - 1];
+                if (parent->children) {
+                    for (i = childrenNumber; i > index; i--) {
+                        parent->children[i] =  parent->children[i - 1];
+                    }
+
+                    parent->childrenNumber += 1;
+                    parent->children[index] = *child;
+
+                    return 1;
                 }
-
-                parent->childrenNumber += 1;
-                parent->children[index] = *child;
-
-                return 1;
             }
         }
     }
@@ -186,7 +188,7 @@ int YAMLRemoveChildren(Node *parent) {
  * @return 1 for success, 0 otherwise
  */
 int YAMLSetChildren(Node *parent, Node *children, int childrenNumber) {
-    if (parent && children) {
+    if (parent && children && childrenNumber >= 0) {
         int i;
         int success = 1;
 
@@ -200,6 +202,7 @@ int YAMLSetChildren(Node *parent, Node *children, int childrenNumber) {
 
         if (parent->children) {
             parent->children = children;
+            parent->childrenNumber = childrenNumber;
             return success;
         }
     }
