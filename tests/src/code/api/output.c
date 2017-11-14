@@ -16,7 +16,6 @@ static char *mapsAreCorrectlyParsedAndPrinted() {
     YAMLSaveNode(root, outputPath);
     YAMLFreeNode(root);
     mu_assert("mapsAreCorrectlyParsedAndPrinted", filesEquals(testMapsPath, outputPath));
-    return 0;
 }
 
 static char *sequenceAreCorrectlyParsedAndPrinted() {
@@ -24,7 +23,6 @@ static char *sequenceAreCorrectlyParsedAndPrinted() {
     YAMLSaveNode(root, outputPath);
     YAMLFreeNode(root);
     mu_assert("sequenceAreCorrectlyParsedAndPrinted", filesEquals(testSequencesPath, outputPath));
-    return 0;
 }
 
 static char *mixAreCorrectlyParsedAndPrinted() {
@@ -32,7 +30,6 @@ static char *mixAreCorrectlyParsedAndPrinted() {
     YAMLSaveNode(root, outputPath);
     YAMLFreeNode(root);
     mu_assert("mixAreCorrectlyParsedAndPrinted", filesEquals(mixSequencePath, outputPath));
-    return 0;
 }
 
 char *outputAllTests() {
