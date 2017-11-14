@@ -6,10 +6,10 @@
 #include "../../header/utils.h"
 #include "../../../../src/header/yaml/api.h"
 
-char *outputPath = "../resources/parser/output.yml";
-char *testMapsPath = "../resources/parser/maps.yml";
-char *testSequencesPath = "../resources/parser/sequences.yml";
-char *mixSequencePath = "../resources/parser/mix.yml";
+char *outputPath = "./resources/tests/parser/output.yml";
+char *testMapsPath = "./resources/tests/parser/maps.yml";
+char *testSequencesPath = "./resources/tests/parser/sequences.yml";
+char *mixSequencePath = "./resources/tests/parser/mix.yml";
 
 static char *mapsAreCorrectlyParsedAndPrinted() {
     Node *root = YAMLParseFile(testMapsPath);
