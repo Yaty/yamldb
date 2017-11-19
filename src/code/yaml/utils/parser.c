@@ -97,14 +97,12 @@ int isValidSequenceInitializer (char *sequence) {
         char *trimmedSequence = trim(sequence);
         size_t length = strlen(trimmedSequence);
         if (length >= 4 && trimmedSequence[0] == '-' && trimmedSequence[1] == ' ') { // "- a:" -> at least 4
-            int colonIndex = getCharIndex(trimmedSequence, ':');
+            long colonIndex = getCharIndex(trimmedSequence, ':');
             if (colonIndex >= 3) {
-                int keyLength = colonIndex - 2; // - 2 to not count "- "
+                long keyLength = colonIndex - 2; // - 2 to not count "- "
                 char key[keyLength + 1]; // + 1 for \0
-                substring(trimmedSequence, key, 2, keyLength); // Substring to retrieve the key without "- " and ':'
-                if (strlen(key) > 0 && isAlphanumeric(key, 1)) {
-                    return 1;
-                }
+                substring(trimmedSequence, key, 2, (size_t) keyLength); // Substring to retrieve the key without "- " and ':'
+                return strlen(key) > 0 && isAlphanumeric(key, 1);
             }
         }
     }
@@ -112,14 +110,18 @@ int isValidSequenceInitializer (char *sequence) {
     return 0;
 }
 
+/**
+ * Check if it's a valid map initializer, it checks if it's a key/value
+ * Example : "map : bla" -> OK, "map:" -> KO
+ * @param str
+ * @return 1 for success, 0 for failure
+ */
 int isValidMapInitializer (char *str) {
     if (str) {
         char *trimmedStr = trim(str);
         char key[BUFFER_SIZE];
         char value[BUFFER_SIZE];
-        if (getKeyValueFromStringSanitized(trimmedStr, key, value) && isAlphanumeric(key, 1) && strlen(value) >= 0) {
-            return 1;
-        }
+        return getKeyValueFromStringSanitized(trimmedStr, key, value) && isAlphanumeric(key, 1) && strlen(value) >= 0;
     }
 
     return 0;
@@ -137,6 +139,8 @@ int getKeyValueFromString (char *str, char *key, char *value) {
     if (str && key && value) {
         return sscanf(str, MODIFIERS, key, value);
     }
+
+    return 0;
 }
 
 /**
@@ -297,7 +301,8 @@ Node *parseFile (FILE *file) {
 
             while(fgets(line, BUFFER_SIZE, file)) {
                if (!parseLine(root, line, file)) {
-                   break; // error
+                   // TODO FREE
+                   return NULL;
                }
             }
 

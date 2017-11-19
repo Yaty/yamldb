@@ -38,6 +38,14 @@ Node *getEmptyNode();
 int isValidSequenceInitializer (char *sequence);
 
 /**
+ * Check if it's a valid map initializer
+ * Example : "map :" -> OK, "" -> KO
+ * @param str
+ * @return 1 for success, 0 for failure
+ */
+int isValidMapInitializer (char *str);
+
+/**
  * Retrieve a key and a value from a string
  * Example : "    aaa: bbb    " -> key = "aaa" and value = "bbb"
  * @param str the input string
