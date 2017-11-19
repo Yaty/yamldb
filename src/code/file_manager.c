@@ -72,3 +72,26 @@ short deleteFile(char* filename) {
 
     return 0;
 }
+
+/*
+Goal : file is empty or nor
+Input : path (char*), path to the file
+Output : short, state of the process
+            - sizeOfFile
+*/
+int fileIsEmpty(char * path) {
+    FILE * pf;
+    int sizeOfFile;
+
+    if( fileExist(path)){
+        pf = fopen(path, "a");
+        if(pf){
+            fseek(pf, 0, SEEK_END);
+            sizeOfFile = ftell(pf);
+            fclose(pf);
+            return sizeOfFile;
+        }
+        return NULL;
+    }
+    return NULL;
+}

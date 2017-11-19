@@ -1,7 +1,7 @@
 /*
 **  Filename : file_manager.h
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUï¿½NIN ESGI - 3AL-1
 **
 **  Description : Contains the functions' prototypes for files using
 */
@@ -41,5 +41,14 @@ Output : short, state of the process
             - 2, error while deleting the file
 */
 short deleteFile(char* filename);
+
+/*
+Goal : file is empty or nor
+Input : path (char*), path to the file
+Output : short, state of the process
+            - 1, empty
+            - 0, not empty
+*/
+int fileIsEmpty(char * path);
 
 #endif // FILE_MANAGER_H_INCLUDED

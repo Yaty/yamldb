@@ -34,12 +34,18 @@ Output : void
 */
 void databaseManipulationManager(char *dbName) {
     short menu;
-    Node * tableNameNode = YAMLGetMapNode("Tables");
+    Node * tableNameNode;
     char path[1000];
     short strLengthTwo = 3;
     char *str[] = {"resources\\", dbName, ".yml"};
 
     concatenateSeveralStr(255, path, strLengthTwo, str);
+
+    if( fileIsEmpty(path) != 0 && fileIsEmpty(path) != NULL ){
+        tableNameNode = YAMLParseFile(path);
+    }else{
+        tableNameNode = YAMLGetMapNode("Tables");
+    }
 
     do{
         menu = databaseManipulationManagerMenu(dbName);
