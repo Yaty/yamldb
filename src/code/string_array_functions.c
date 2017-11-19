@@ -100,15 +100,22 @@ char increaseStrArraySize(short strLength, short *currentLength, short lengthToA
 }
 
 /**
- * This function remove X characters at index from a string);
+ * This function remove X characters at index from a string
+ * The string needs to be allocated dynamically
  * @param str
  * @param startPosition, where to start the removal
  * @param length, the number of characters to remove
  */
-void removeChars (char *str, int startPosition, int length) {
+int removeChars (char *str, int startPosition, int length) {
     if (str && startPosition >= 0 && length > 0) {
-        memmove(&str[startPosition], &str[startPosition + length], strlen(str) - startPosition);
+        size_t strLength = strlen(str);
+        if (length - startPosition <= strLength) {
+            memmove(&str[startPosition], &str[startPosition + length], strLength - startPosition);
+            return 1;
+        }
     }
+
+    return 0;
 }
 
 /**
@@ -200,7 +207,7 @@ int isAlphanumeric (char *str, int bonus) {
  * @param c the char we are looking for
  * @return an index >= 0 or -1 if not found
  */
-int getCharIndex (char *str, char c) {
+long getCharIndex (char *str, char c) {
     if (str && c) {
         char *buffer;
 
@@ -220,12 +227,19 @@ int getCharIndex (char *str, char c) {
  * @param substr where the substring will be stored
  * @param start index where to start
  * @param length numbers of chars to substring
+ * @return 1 for success, 0 for failure
  */
-void substring (char *str, char *substr, int start, int length) {
-    if (str && start >= 0 && length >= 1) {
-        memcpy(substr, &str[start], length);
-        substr[length] = '\0';
+int substring (char *str, char *substr, int start, size_t length) {
+    if (str && substr && start >= 0 && length >= 1) {
+        size_t strLength = strlen(str);
+        if (start < strLength && length < strLength) {
+            memcpy(substr, &str[start], length);
+            substr[length] = '\0';
+            return 1;
+        }
     }
+
+    return 0;
 }
 
 /**
@@ -236,27 +250,31 @@ void substring (char *str, char *substr, int start, int length) {
  * @return NULL if error, the concatened string if it succeeded
  */
 char *concat (char *str1, char *str2) {
-    size_t str1Length;
-    size_t str2Length;
-    char *newStr;
+    if (str1 || str2) {
+        size_t str1Length;
+        size_t str2Length;
+        char *newStr;
 
-    str1Length = str1 ? strlen(str1) : 0;
-    str2Length = str2 ? strlen(str2) : 0;
+        str1Length = str1 ? strlen(str1) : 0;
+        str2Length = str2 ? strlen(str2) : 0;
 
-    newStr = malloc(str1Length + str2Length + 1);
+        newStr = malloc(str1Length + str2Length + 1);
 
-    if (str1) {
-        memcpy(newStr, str1, str1Length);
+        if (str1) {
+            memcpy(newStr, str1, str1Length);
+        }
+
+        if (str2) {
+            memcpy(newStr + str1Length, str2, str2Length + 1);
+        }
+
+        return newStr;
     }
 
-    if (str2) {
-        memcpy(newStr + str1Length, str2, str2Length + 1);
-    }
-
-    return newStr;
+    return NULL;
 }
 /**
- * Uppercase a string
+ * Uppercase a string, the string needs to be allocated dynamically
  * Example : "bla" -> "BLA"
  * @param str
  * @return the uppercase string or null for error
@@ -281,7 +299,13 @@ char *toUpperCase(char *str) {
  * @return 1 for true, 0 for false
  */
 int startsWith(char *str, char *prefix) {
-    return strncmp(prefix, str, strlen(prefix)) == 0;
+    if (str && prefix) {
+        size_t prefixLength = strlen(prefix);
+        if (prefixLength == 0) return 0;
+        return strncmp(prefix, str, strlen(prefix)) == 0;
+    }
+
+    return 0;
 }
 
 /**
@@ -291,10 +315,10 @@ int startsWith(char *str, char *prefix) {
  * @return 1 for true, 0 for false
  */
 int endsWith(char *str, char *suffix) {
-    if (str, suffix) {
+    if (str && suffix) {
         size_t strLength = strlen(str);
         size_t suffixLength = strlen(suffix);
-        if (suffixLength <= strLength) {
+        if (suffixLength <= strLength && suffixLength > 0) {
             return strncmp(str + strLength - suffixLength, suffix, suffixLength) == 0;
         }
     }
@@ -308,6 +332,13 @@ int endsWith(char *str, char *suffix) {
  * @param substr
  * @return an index
  */
-size_t getSubstringIndex(char *str, char *substr) {
-    return strstr(str, substr) - str;
+long getSubstringIndex(char *str, char *substr) {
+    if (str && substr) {
+        char *buffer = strstr(str, substr);
+        if (buffer) {
+            return buffer - str;
+        }
+    }
+
+    return -1;
 }

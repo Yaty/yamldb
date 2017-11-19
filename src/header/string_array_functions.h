@@ -54,12 +54,14 @@ Output : char, state of the process :
 char increaseStrArraySize(short strLength, short *currentLength, short lengthToAdd, char ***income_array);
 
 /**
- * This function remove X characters at index from a string);
+ * This function remove X characters at index from a string
+ * The string needs to be allocated dynamically
  * @param str
  * @param startPosition, where to start the removal
  * @param length, the number of characters to remove
+ * @return 1 for success, 0 for failure
  */
-void removeChars (char *str, int startPosition, int length);
+int removeChars (char *str, int startPosition, int length);
 
 /**
  * Trim a string, the string needs to be allocated dynamically
@@ -98,7 +100,7 @@ int isAlphanumeric (char *str, int bonus);
  * @param c the char we are looking for
  * @return an index >= 0 or -1 if not found
  */
-int getCharIndex (char *str, char c);
+long getCharIndex (char *str, char c);
 
 /**
  * Substring a string
@@ -106,8 +108,9 @@ int getCharIndex (char *str, char c);
  * @param substr where the substring will be stored
  * @param start index where to start
  * @param length numbers of chars to substring
+ * @return 1 for success, 0 for failure
  */
-void substring (char *str, char *substr, int start, int length);
+int substring (char *str, char *substr, int start, size_t length);
 
 /**
  * Concat two strings into one
@@ -119,7 +122,7 @@ void substring (char *str, char *substr, int start, int length);
 char *concat (char *str1, char *str2);
 
 /**
- * Uppercase a string
+ * Uppercase a string, the string needs to be allocated dynamically
  * Example : "bla" -> "BLA"
  * @param str
  * @return the uppercase string or null for error
@@ -148,6 +151,6 @@ int endsWith(char *str, char *suffix);
  * @param substr
  * @return an index
  */
-size_t getSubstringIndex(char *str, char *substr);
+long getSubstringIndex(char *str, char *substr);
 
 #endif // STRING_ARRAY_FUNCTIONS_H_INCLUDED
