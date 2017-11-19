@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdarg.h>
 #include "../header/general.h"
 #include "../header/string_array_functions.h"
 
@@ -243,32 +244,61 @@ int substring (char *str, char *substr, int start, size_t length) {
 }
 
 /**
- * Concat two strings into one
+ * Count the total length of all strings
+ * @param strings
+ * @param a varargs list, this list needs to be started before
+ * @return the length
+ */
+size_t countStringsLength(int strings, va_list list) {
+    if (strings > 0 && list) {
+        size_t length = 0;
+        int i;
+        char *tmp;
+
+        for (i = 0; i < strings; i++) {
+            tmp = va_arg(list, char *);
+            if (tmp) {
+                length += strlen(tmp);
+            }
+        }
+
+        return length;
+    }
+
+    return 0;
+}
+
+/**
+ * Concat strings into one
  * The generated string needs to be free
- * @param str1 first string
+ * @param numbers of string to concat
  * @param str2 second string
  * @return NULL if error, the concatened string if it succeeded
  */
-char *concat (char *str1, char *str2) {
-    if (str1 || str2) {
-        size_t str1Length;
-        size_t str2Length;
-        char *newStr;
+char *concat (int strings, ...) {
+    if (strings > 0) {
+        va_list list;
+        int i;
+        char *res = NULL;
+        char *currentStr = NULL;
 
-        str1Length = str1 ? strlen(str1) : 0;
-        str2Length = str2 ? strlen(str2) : 0;
+        va_start(list, strings);
+        size_t resLength = countStringsLength(strings, list);
 
-        newStr = malloc(str1Length + str2Length + 1);
+        if (resLength > 0) {
+            res = malloc(sizeof(char) * resLength);
+            res[0] = '\0';
 
-        if (str1) {
-            memcpy(newStr, str1, str1Length);
+            for (i = 0; i < strings; i++) {
+                currentStr = va_arg(list, char *);
+                if (currentStr) {
+                    strcat(res, currentStr);
+                }
+            }
         }
 
-        if (str2) {
-            memcpy(newStr + str1Length, str2, str2Length + 1);
-        }
-
-        return newStr;
+        va_end(list);
+        return res;
     }
 
     return NULL;

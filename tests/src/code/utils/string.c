@@ -75,25 +75,25 @@ static char *substring7() {
 static char *concat1() {
     char *str1 = "foo";
     char *str2 = "bar";
-    mu_assert("concat1", strcmp(concat(str1, str2), "foobar") == 0);
+    mu_assert("concat1", strcmp(concat(2, str1, str2), "foobar") == 0);
 }
 
 
 static char *concat2() {
     char *str1 = "foo";
     char *str2 = NULL;
-    mu_assert("concat2", strcmp(concat(str1, str2), str1) == 0);
+    mu_assert("concat2", strcmp(concat(2, str1, str2), str1) == 0);
 }
 
 
 static char *concat3() {
     char *str1 = NULL;
     char *str2 = "bar";
-    mu_assert("concat3", strcmp(concat(str1, str2), str2) == 0);
+    mu_assert("concat3", strcmp(concat(2, str1, str2), str2) == 0);
 }
 
 static char *concat4() {
-    mu_assert("concat4", concat(NULL, NULL) == NULL);
+    mu_assert("concat4", concat(2, NULL, NULL) == NULL);
 }
 
 static char *toUppercase1() {

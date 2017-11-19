@@ -77,7 +77,7 @@ static void output (Node *node, int depth, FILE *file, char *prepend) {
             }
         } else if (node->type == SEQUENCE_VALUE) {
             for (i = 0; i < node->childrenNumber; i++) {
-                pre = concat(prepend, i == 0 ? "- " : "  ");
+                pre = concat(2, prepend, i == 0 ? "- " : "  ");
                 output(&(node->children[i]), depth, file, pre);
                 free(pre);
             }

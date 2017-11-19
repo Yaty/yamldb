@@ -113,13 +113,20 @@ long getCharIndex (char *str, char c);
 int substring (char *str, char *substr, int start, size_t length);
 
 /**
- * Concat two strings into one
+ * Count the total length of all strings
+ * @param strings
+ * @param a varargs list, this list needs to be started before
+ * @return the length
+ */
+size_t countStringsLength(int strings, va_list list);
+
+/**
+ * Concat strings into one
  * The generated string needs to be free
- * @param str1 first string
- * @param str2 second string
+ * @params number of strings to concat
  * @return NULL if error, the concatened string if it succeeded
  */
-char *concat (char *str1, char *str2);
+char *concat (int strings, ...);
 
 /**
  * Uppercase a string, the string needs to be allocated dynamically
