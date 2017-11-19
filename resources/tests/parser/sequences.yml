@@ -1,0 +1,24 @@
+name: nomTable
+description: blabla
+columns:
+    - id: integer
+      name: string
+      lastname: string
+      address:
+          - id: integer
+            name: string
+            lastname: string
+            address:
+                - id: integer
+                  name: string
+                  lastname: string
+                  address:
+                      - id: integer
+                        name: string
+                        lastname: string
+                  bonjour: test
+            bonjour: test
+      bonjour: test
+    - id: 2
+prenom: patrick
+bouteille: evian

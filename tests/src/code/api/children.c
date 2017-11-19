@@ -13,19 +13,16 @@ static char *getSize() {
     Node *node = YAMLGetMapNode("map");
     node->childrenNumber = size;
     mu_assert("getSize", YAMLGetSize(node) == size);
-    return 0;
 }
 
 static char *getChildren1() {
     Node *node = YAMLGetMapNode("map");
     mu_assert("getChildren1", YAMLGetChildren(node) == node->children);
-    return 0;
 }
 
 static char *getChildren2() {
     Node *node = NULL;
     mu_assert("getChildren2", YAMLGetChildren(node) == NULL);
-    return 0;
 }
 
 static char *getChildAtIndex1() {
@@ -33,7 +30,6 @@ static char *getChildAtIndex1() {
     Node *child1 = YAMLGetValueNode("child", "value");
     YAMLAddChild(node, child1);
     mu_assert("getChildAtIndex1", areNodeEquals(child1, YAMLGetChildAtIndex(node, 0)));
-    return 0;
 }
 
 static char *getChildAtIndex2() {
@@ -41,14 +37,12 @@ static char *getChildAtIndex2() {
     Node *child1 = YAMLGetValueNode("child", "value");
     YAMLAddChild(node, child1);
     mu_assert("getChildAtIndex2", YAMLGetChildAtIndex(node, -1) == NULL);
-    return 0;
 }
 
 static char *getChildAtIndex3() {
     Node *node = YAMLGetMapNode("node");
     Node *child2 = YAMLGetChildAtIndex(node, 0);
     mu_assert("getChildAtIndex3", child2 == NULL);
-    return 0;
 }
 
 static char *addValueChild1() {
@@ -56,26 +50,22 @@ static char *addValueChild1() {
     char value[] = "value";
     Node *node = YAMLGetMapNode("node");
     mu_assert("addValueChild1", YAMLAddValueChild(node, key, value) == 1 && strcmp(node->children[0].key, key) == 0 && strcmp(node->children[0].value, value) == 0);
-    return 0;
 }
 
 static char *addValueChild2() {
     Node *node = YAMLGetMapNode("node");
     mu_assert("addValueChild2", YAMLAddValueChild(node, NULL, NULL) == 0);
-    return 0;
 }
 
 static char *removeChildAtIndex1() {
     Node *node = YAMLGetMapNode("map");
     YAMLAddValueChild(node, "key", "value");
     mu_assert("removeChildAtIndex1" , YAMLRemoveChildAtIndex(node, 0));
-    return 0;
 }
 
 static char *removeChildAtIndex2() {
     Node *node = YAMLGetMapNode("map");
     mu_assert("removeChildAtIndex2" , YAMLRemoveChildAtIndex(node, 0) == 0);
-    return 0;
 }
 
 static char *removeChildAtIndex3() {
@@ -84,7 +74,6 @@ static char *removeChildAtIndex3() {
     YAMLAddValueChild(node, "key2", "value");
     int res = YAMLRemoveChildAtIndex(node, 0);
     mu_assert("removeChildAtIndex3" , res && strcmp(YAMLGetKey(YAMLGetChildAtIndex(node, 0)), "key2") == 0 && YAMLGetSize(node) == 1);
-    return 0;
 }
 
 static char *addChildAtIndex1() {
@@ -92,7 +81,6 @@ static char *addChildAtIndex1() {
     Node *child = YAMLGetValueNode("key", "value");
     int res = YAMLAddChildAtIndex(node, child, 0);
     mu_assert("addChildAtIndex1", res && areNodeEquals(YAMLGetChildAtIndex(node, 0), child));
-    return 0;
 }
 
 static char *addChildAtIndex2() {
@@ -100,7 +88,6 @@ static char *addChildAtIndex2() {
     Node *child = YAMLGetValueNode("key", "value");
     int res = YAMLAddChildAtIndex(node, child, 50);
     mu_assert("addChildAtIndex2", res == 0);
-    return 0;
 }
 
 static char *addChildAtIndex3() {
@@ -108,14 +95,12 @@ static char *addChildAtIndex3() {
     Node *child = YAMLGetValueNode("key", "value");
     int res = YAMLAddChildAtIndex(node, child, -1);
     mu_assert("addChildAtIndex3", res == 0);
-    return 0;
 }
 
 static char *removeChildren() {
     Node *node = YAMLGetMapNode("map");
     YAMLAddValueChild(node, "key", "value");
     mu_assert("removeChildren", YAMLRemoveChildren(node) && YAMLGetSize(node) == 0);
-    return 0;
 }
 
 static char *setChildren() {
@@ -124,7 +109,6 @@ static char *setChildren() {
     children[0] = *YAMLGetValueNode("k", "v");
     int res = YAMLSetChildren(node, children, 1);
     mu_assert("setChildren", res && areNodeEquals(children, YAMLGetChildren(node)) && YAMLGetSize(node) == 1);
-    return 0;
 }
 
 char *childrenAllTests() {

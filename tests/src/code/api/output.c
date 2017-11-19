@@ -6,17 +6,16 @@
 #include "../../header/utils.h"
 #include "../../../../src/header/yaml/api.h"
 
-char *outputPath = "../resources/parser/output.yml";
-char *testMapsPath = "../resources/parser/maps.yml";
-char *testSequencesPath = "../resources/parser/sequences.yml";
-char *mixSequencePath = "../resources/parser/mix.yml";
+char *outputPath = "./resources/tests/parser/output.yml";
+char *testMapsPath = "./resources/tests/parser/maps.yml";
+char *testSequencesPath = "./resources/tests/parser/sequences.yml";
+char *mixSequencePath = "./resources/tests/parser/mix.yml";
 
 static char *mapsAreCorrectlyParsedAndPrinted() {
     Node *root = YAMLParseFile(testMapsPath);
     YAMLSaveNode(root, outputPath);
     YAMLFreeNode(root);
     mu_assert("mapsAreCorrectlyParsedAndPrinted", filesEquals(testMapsPath, outputPath));
-    return 0;
 }
 
 static char *sequenceAreCorrectlyParsedAndPrinted() {
@@ -24,7 +23,6 @@ static char *sequenceAreCorrectlyParsedAndPrinted() {
     YAMLSaveNode(root, outputPath);
     YAMLFreeNode(root);
     mu_assert("sequenceAreCorrectlyParsedAndPrinted", filesEquals(testSequencesPath, outputPath));
-    return 0;
 }
 
 static char *mixAreCorrectlyParsedAndPrinted() {
@@ -32,7 +30,6 @@ static char *mixAreCorrectlyParsedAndPrinted() {
     YAMLSaveNode(root, outputPath);
     YAMLFreeNode(root);
     mu_assert("mixAreCorrectlyParsedAndPrinted", filesEquals(mixSequencePath, outputPath));
-    return 0;
 }
 
 char *outputAllTests() {

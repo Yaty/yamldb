@@ -1,0 +1,6 @@
+map1:
+    key: value
+    map2:
+        key2: value
+    key3: value
+key4: value
