@@ -6,14 +6,14 @@
 
 ```
 data/
-├─ bases.yaml
-├─ base1/
-│    ├─ ...
-├─ base2/
+├─ bases.yml
+├─ bases/
+│    ├─ base1/
+│    ├─ base2/
 │    ├─ ...
 ```
 
-Contenu de bases.yaml :
+Contenu de bases.yml :
 
 ``` yaml
 base1:
@@ -23,19 +23,20 @@ base2:
     ...
 ```
 
-### Description de la base : tables.yaml
+### Description de la base : tables.yml
 
 ```
 data/
-├─ bases.yaml
-├─ base1/
-│    ├─ tables.yaml
-│    ├─ tables/
-│    |    ├─ table1/
-│    |    ├─ table2/
+├─ bases.yml
+├─ bases/
+│    ├─ base1/
+│    │    ├─ tables.yml
+│    │    ├─ tables/
+│    │    |    ├─ table1/
+│    │    |    ├─ table2/
 ```
 
-Contenu de tables.yaml :
+Contenu de tables.yml :
 
 ``` yaml
 table1:
@@ -49,19 +50,18 @@ table2:
 
 ```
 data/
-├─ bases.yaml
-├─ base1/
-│    ├─ tables.yaml
-│    ├─ tables/
-│    |    ├─ table1/
-│    |    |    ├─ metadata.yaml
+├─ bases.yml
+├─ bases/
+│    ├─ base1/
+│    │    ├─ tables.yml
+│    │    ├─ tables/
+│    │    |    ├─ table1/
+│    │    |    |    ├─ metadata.yml
 ```
 
-Contenu de metadata.yaml :
+Contenu de metadata.yml :
 
 ``` yaml
-name: nomTable
-description: blabla
 columns:
     id: integer
     name: string
@@ -74,16 +74,17 @@ columns:
 
 ```
 data/
-├─ bases.yaml
-├─ base1/
-│    ├─ tables.yaml
-│    ├─ tables/
-│    |    ├─ table1/
-│    |    |    ├─ metadata.yaml
-│    |    |    ├─ data.yaml
+├─ bases.yml
+├─ bases/
+│    ├─ base1/
+│    │    ├─ tables.yml
+│    │    ├─ tables/
+│    │    |    ├─ table1/
+│    │    |    |    ├─ metadata.yml
+│    │    |    |    ├─ data.yml
 ```
 
-Contenu de data.yaml :
+Contenu de data.yml :
 
 ``` yaml
 data:
@@ -96,60 +97,3 @@ data:
       lastname: Michel
       address: 5 rue de l'église
 ```
-
-
-~~~
-## Version allégée : pas choisit
-
-### Bases
-
-```
-data/
-├─ base1/
-│    ├─ ...
-├─ base2/
-│    ├─ ...
-```
-
-### Tables
-
-```
-data/
-├─ base1/
-│    ├─ table1/
-│    ├─ table2/
-```
-
-### Stockage et description d'une table
-
-```
-data/
-├─ base1/
-│    ├─ table1/
-│    |    ├─ data.yaml
-```
-
-Contenu de data.yaml :
-
-``` yaml
-metadatas:
-    name: nomTable
-    description: blabla
-    columns:
-        id: integer
-        name: string
-        lastname: string
-        address: string
-        ...
-data:
-    - id: 1
-      name: Michel
-      lastname: Dupont
-      address: 8 rue de l'église
-    - id: 2
-      name: Dupont
-      lastname: Michel
-      address: 5 rue de l'église
-    - ...
-```
-~~~
