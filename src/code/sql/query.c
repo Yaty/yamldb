@@ -9,21 +9,30 @@
 #include "../../header/sql/select.h"
 #include "../../header/sql/insert.h"
 
-QueryResult SQLExecuteQuery(char *queryString) {
+/**
+ * Execute a sql query on a db
+ * @param queryString the query in sql
+ * @param dbPath path to the db yaml file
+ * @return a query result
+ */
+QueryResult SQLExecuteQuery(char *queryString, char *dbPath) {
      if (queryString) {
          char *queryCpy = toUpperCase(trim(strdup(queryString)));
          if (queryCpy) {
              QueryResult res;
+             short prependIndex = 0;
 
              if (startsWith(queryCpy, "SELECT")) {
-                 res = executeSelect(queryCpy + 7); // 7 is the length of SELECT + 1
+                 prependIndex = 7; // length of "SELECT "
+                 res = executeSelect(queryCpy + prependIndex, dbPath);
              } else if (startsWith(queryCpy, "INSERT")) {
-                 res = executeInsert(queryCpy + 7);
+                 prependIndex = 7;
+                 res = executeInsert(queryCpy + prependIndex, dbPath);
              } else {
                  res = getFailedResult("Error 2 : Invalid query. Please use a valid keyword like SELECT, INSERT ...");
              }
 
-             free(queryCpy);
+             free(queryCpy - prependIndex);
              return res;
          } else {
              return getFailedResult("Error 3 : error while executing query.");

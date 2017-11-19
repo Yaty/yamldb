@@ -12,6 +12,6 @@
  * @param query  a string
  * @return a filled query result
  */
-QueryResult executeSelect(char *query);
+QueryResult executeSelect(char *query, char *dbPath);
 
 #endif //CBDD1_SELECT_H

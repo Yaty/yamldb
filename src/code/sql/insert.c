@@ -10,9 +10,10 @@
 /**
  * Execute a insert SQL query
  * @param query
+ * @param dbPath path to the db yaml file
  * @return a query result
  */
-QueryResult executeInsert(char *query) {
+QueryResult executeInsert(char *query, char *dbPath) {
     QueryResult res = getEmptyResult();
     res.lines = malloc(sizeof(char **));
     res.lines[0] = malloc(sizeof(char *));

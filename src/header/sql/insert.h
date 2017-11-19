@@ -12,6 +12,6 @@
  * @param query
  * @return a query result
  */
-QueryResult executeInsert(char *query);
+QueryResult executeInsert(char *query, char *dbPath);
 
 #endif //CBDD1_INSERT_H

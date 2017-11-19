@@ -7,7 +7,13 @@
 
 #include "structs.h"
 
-QueryResult SQLExecuteQuery(char *query);
+/**
+ * Execute a sql query on a db
+ * @param queryString the query in sql
+ * @param dbPath path to the db yaml file
+ * @return a query result
+ */
+QueryResult SQLExecuteQuery(char *queryString, char *dbPath);
 
 void SQLFreeQueryResult(QueryResult *res);
 

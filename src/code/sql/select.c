@@ -28,27 +28,57 @@ static char **getTables(char *query, int *tablesCounter) {
 
     if (queryCpy) {
         char *queryCpy2 = trim(queryCpy + getSubstringIndex(queryCpy, "FROM") + 5);
-        return getParams(queryCpy2, tablesCounter);
+        char **res = getParams(queryCpy2, tablesCounter);
+        free(queryCpy);
+        return res;
     }
 
     return NULL;
 }
 
-static char *parseSelectQuery(char *query, char ***columns, int *columnsCounter, char ***tables, int *tablesCounter) {
+static char **getConditions(char *query, int *conditionsCounter) {
+    char *queryCpy = trim(toUpperCase(strdup(query)));
+
+    if (queryCpy) {
+        long whereIndex = getSubstringIndex(queryCpy, "WHERE");
+
+        if (whereIndex > 0) {
+            char *queryCpy2 = trim(queryCpy + whereIndex + 5);
+            free(queryCpy);
+            return NULL; // TODO
+        }
+    }
+
+    return NULL;
+}
+
+static char **getOrders(char *query, int *ordersCounter) {
+    return NULL; // TODO
+}
+
+/**
+ * This function receive a SQL query starting after the SELECT keyword
+ * @return fill data into variables passes in parameters, NULL for success, char * for an error msg
+ */
+static char *parseSelectQuery(char *query, char ***columns, int *columnsCounter, char ***tables, int *tablesCounter, char ***conditions, int *conditionsCounter, char ***orders, int *ordersCounter) {
     if (strlen(query) >= 8) { // c FROM d, the least chars to have a valid query
         int i = 0;
+
         *columns = getColumns(query, columnsCounter);
-        if (*columnsCounter > 0 && *columns != NULL) {
-            *tables = getTables(query, tablesCounter);
-            if (*tablesCounter > 0 && *tables != NULL) {
-                return NULL; // success
-            } else {
-                for (i = 0; i < *columnsCounter; i++) free(*columns[i]);
-                return "Error 8 : invalid query, please add one or more tables.";
-            }
-        } else {
+        if (*columnsCounter < 1 || *columns == NULL) {
             return "Error 9 : invalid query, please add one or more columns to select.";
         }
+
+        *tables = getTables(query, tablesCounter);
+        if (*tablesCounter < 1 || *tables == NULL) {
+            for (i = 0; i < *columnsCounter; i++) free(*columns[i]);
+            return "Error 8 : invalid query, please add one or more tables.";
+        }
+
+        // *conditions = getConditions(query, conditionsCounter); // TODO
+        // *orders = getOrders(query, ordersCounter); // TODO
+
+        return NULL; // success
     } else {
         return "Error 11 : invalid query, please respect the given schema in the documentation.";
     }
@@ -57,19 +87,27 @@ static char *parseSelectQuery(char *query, char ***columns, int *columnsCounter,
 /**
  * Execute a SQL select from a string which is the query
  * @param query  a string
+ * @param dbPath path to the db yaml file
  * @return a filled query result
  */
-QueryResult executeSelect(char *query) {
+QueryResult executeSelect(char *query, char *dbPath) {
     int i = 0;
     int columnsCounter = 0;
     int tablesCounter = 0;
+    int conditionsCounter = 0;
+    int ordersCounter = 0;
     char **columns;
     char **tables;
-    char *parseQuery = parseSelectQuery(query, &columns, &columnsCounter, &tables, &tablesCounter);
+    char **conditions;
+    char **orders;
+    char *parseQuery = parseSelectQuery(query, &columns, &columnsCounter, &tables, &tablesCounter, &conditions, &conditionsCounter, &orders, &ordersCounter);
+
     if (parseQuery == NULL && columnsCounter > 0 && tablesCounter > 0) {
         QueryResult res = getEmptyResult();
 
-        // TODO : Execute select here, add where clause, order by too
+
+
+        // TODO : Execute select here, then do conditions then order if there is
         for (i = 0; i < columnsCounter; i++) printf("Column : %s\n", columns[i]);
         for (i = 0; i < tablesCounter; i++) printf("Table : %s\n", tables[i]);
 
