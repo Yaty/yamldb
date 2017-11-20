@@ -16,8 +16,8 @@ Contenu des fichiers base.yml :
 
 ``` yaml
 tables:
-    value: table_name_1
-    value: table_name_2
+    1: table_name_1
+    2: table_name_2
 ```
 ### Description des tables
 
