@@ -15,7 +15,7 @@ data/
 Contenu des fichiers base.yml :
 
 ``` yaml
-Tables:
+tables:
     value: table_name_1
     value: table_name_2
 ```
@@ -42,12 +42,12 @@ data/
 Contenu des fichiers table.yml :
 
 ``` yaml
-Structure:
-    Colum_name: Type
+structure:
+    column_name: Type
     ...
 ```
 ``` yaml - table1
-Structure:
+structure:
     id: integer
     name: string
     lastname: string
