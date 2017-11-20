@@ -61,7 +61,7 @@ Structure:
     ...
 ```
 
-### Description d'une colonne
+### Les données
 ```
 data/
 ├─ base_1.yml
