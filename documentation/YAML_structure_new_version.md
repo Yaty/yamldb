@@ -19,12 +19,6 @@ Tables:
     value: table_name_1
     value: table_name_2
 ```
-``` yaml - base_1
-Tables:
-    value: table1
-    value: table2
-```
-
 ### Description des tables
 
 ```
