@@ -9,6 +9,8 @@
 #ifndef STRING_ARRAY_FUNCTIONS_H_INCLUDED
 #define STRING_ARRAY_FUNCTIONS_H_INCLUDED
 
+#include <stdarg.h>
+
 /*================ STRUCT DECLARATION ================*/
 
 
@@ -124,6 +126,7 @@ size_t countStringsLength(int strings, va_list list);
  * Concat strings into one
  * The generated string needs to be free
  * @params number of strings to concat
+ * @param a list of strings
  * @return NULL if error, the concatened string if it succeeded
  */
 char *concat (int strings, ...);

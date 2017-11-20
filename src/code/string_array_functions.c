@@ -272,7 +272,7 @@ size_t countStringsLength(int strings, va_list list) {
  * Concat strings into one
  * The generated string needs to be free
  * @param numbers of string to concat
- * @param str2 second string
+ * @param a list of strings
  * @return NULL if error, the concatened string if it succeeded
  */
 char *concat (int strings, ...) {
