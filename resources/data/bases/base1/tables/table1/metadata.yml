@@ -1,4 +1,0 @@
-columns:
-    nom: string
-    prenom: string
-    age: integer

@@ -1,0 +1,3 @@
+structure:
+    age: integer
+    nom: string
