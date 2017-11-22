@@ -15,16 +15,6 @@ static char *getSize() {
     mu_assert("getSize", YAMLGetSize(node) == size);
 }
 
-static char *getChildren1() {
-    Node *node = YAMLGetMapNode("map");
-    mu_assert("getChildren1", YAMLGetChildren(node) == node->children);
-}
-
-static char *getChildren2() {
-    Node *node = NULL;
-    mu_assert("getChildren2", YAMLGetChildren(node) == NULL);
-}
-
 static char *getChildAtIndex1() {
     Node *node = YAMLGetMapNode("node");
     Node *child1 = YAMLGetValueNode("child", "value");
@@ -108,13 +98,37 @@ static char *setChildren() {
     Node *children = (Node*) malloc(sizeof(Node));
     children[0] = *YAMLGetValueNode("k", "v");
     int res = YAMLSetChildren(node, children, 1);
-    mu_assert("setChildren", res && areNodeEquals(children, YAMLGetChildren(node)) && YAMLGetSize(node) == 1);
+    mu_assert("setChildren", res && areNodeEquals(children, node->children) && YAMLGetSize(node) == 1);
+}
+
+static char *getNodeByKey1() {
+    Node *node = YAMLGetMapNode("map");
+    Node *children = (Node*) malloc(sizeof(Node));
+    children[0] = *YAMLGetValueNode("k", "v");
+    YAMLSetChildren(node, children, 1);
+    mu_assert("getNodeByKey1", YAMLGetChildByKey(node, "k") == &children[0]);
+}
+
+static char *getNodeByKey2() {
+    Node *node = YAMLGetMapNode("map");
+    mu_assert("getNodeByKey2", YAMLGetChildByKey(node, "k") == NULL);
+}
+
+static char *getNodeByValue1() {
+    Node *node = YAMLGetMapNode("map");
+    Node *children = (Node*) malloc(sizeof(Node));
+    children[0] = *YAMLGetValueNode("k", "v");
+    YAMLSetChildren(node, children, 1);
+    mu_assert("getNodeByKey1", YAMLGetChildByValue(node, "v") == &children[0]);
+}
+
+static char *getNodeByValue2() {
+    Node *node = YAMLGetMapNode("map");
+    mu_assert("getNodeByKey2", YAMLGetChildByValue(node, "v") == NULL);
 }
 
 char *childrenAllTests() {
     mu_run_test(getSize);
-    mu_run_test(getChildren1);
-    mu_run_test(getChildren2);
     mu_run_test(getChildAtIndex1);
     mu_run_test(getChildAtIndex2);
     mu_run_test(getChildAtIndex3);
@@ -128,5 +142,9 @@ char *childrenAllTests() {
     mu_run_test(addChildAtIndex3);
     mu_run_test(removeChildren);
     mu_run_test(setChildren);
+    mu_run_test(getNodeByKey1);
+    mu_run_test(getNodeByKey2);
+    mu_run_test(getNodeByValue1);
+    mu_run_test(getNodeByValue2);
     return 0;
 }

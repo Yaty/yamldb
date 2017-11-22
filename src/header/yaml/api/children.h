@@ -21,6 +21,22 @@ int YAMLGetSize(Node *node);
 Node *YAMLGetChildAtIndex(Node *node, int index);
 
 /**
+ * Get child by it's key
+ * @param node
+ * @param key
+ * @return the child, or NULL if not found
+ */
+Node *YAMLGetChildByKey(Node *node, char *key);
+
+/**
+ * Get child by it's value
+ * @param node
+ * @param value
+ * @return the child, or NULL if not found
+ */
+Node *YAMLGetChildByValue(Node *node, char *value);
+
+/**
  * Add a child to a Node
  * @param parent
  * @param child

@@ -3,6 +3,7 @@
 //
 
 #include <stdlib.h>
+#include <string.h>
 #include "../../../header/yaml/node.h"
 #include "../../../header/yaml/utils/parser.h"
 #include "../../../header/yaml/api/free.h"
@@ -41,6 +42,52 @@ Node *YAMLGetChildAtIndex(Node *node, int index) {
     }
 
     return NULL;
+}
+/**
+ * Private function, used to get a child by it's key or value
+ * @param node
+ * @param search
+ * @param key
+ * @return NULL if not found, the node if found
+ */
+static Node *getChildByKeyOrValue(Node *node, char *search, int key) {
+    if (node && search) {
+        Node *currentChild = NULL;
+        size_t nameLength = strlen(search);
+        int size = YAMLGetSize(node);
+        int i;
+
+        if (YAMLIsCollection(node) && size > 0 && nameLength > 0) {
+            for (i = 0; i < size; i++) {
+                currentChild = YAMLGetChildAtIndex(node, i);
+                if (strcmp(key ? currentChild->key : currentChild->value, search) == 0) {
+                    return currentChild;
+                }
+            }
+        }
+    }
+
+    return NULL;
+}
+
+/**
+ * Get child by it's key
+ * @param node
+ * @param key
+ * @return the child, or NULL if not found
+ */
+Node *YAMLGetChildByKey(Node *node, char *key) {
+    return getChildByKeyOrValue(node, key, 1);
+}
+
+/**
+ * Get child by it's value
+ * @param node
+ * @param value
+ * @return the child, or NULL if not found
+ */
+Node *YAMLGetChildByValue(Node *node, char *value) {
+    return getChildByKeyOrValue(node, value, 0);
 }
 
 /**

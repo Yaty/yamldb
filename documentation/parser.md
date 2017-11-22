@@ -221,6 +221,14 @@ Récupère la nombre d'enfants du noeud.
 
 Récupère un noeud enfant d'un noeud à un index.
 
+##### `Node *YAMLGetChildByKey(Node *node, char *key)`
+
+Récupère un noeud enfant par sa clé.
+
+##### `Node *YAMLGetChildByValue(Node *node, char *value)`
+
+Récupère un noeud enfant par sa valeur.
+
 ##### `int YAMLAddChild(Node *parent, Node *child)`
 
 Ajoute un noeud enfant à un noeud parent en dernière position.
