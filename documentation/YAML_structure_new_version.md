@@ -16,9 +16,13 @@ Contenu des fichiers base.yml :
 
 ``` yaml
 tables:
-    1: table_name_1
-    2: table_name_2
+    - name : table_name_1
+      empty : no
+    - name : table_name_2
+      empty : yes
 ```
+empty définit si la table contient des enregistrements ou non
+
 ### Description des tables
 
 ```
@@ -26,20 +30,41 @@ data/
 ├─ base_1.yml
 ├─ base_2.yml
 ├─ base_1/
-│    ├─ table1.yml
 │    ├─ table1/
-│    ├─ table2.yml
 │    ├─ table2/
 │    ├─ ...
 ├─ base_2/
-│    ├─ table1.yml
 │    ├─ table1/
-│    ├─ table2.yml
 │    ├─ table2/
 │    ├─ ...
 ```
+Chaque base contient 0 à n tables. Les tables sont définies par un répertoire dans l'arborescence.
 
-Contenu des fichiers table.yml :
+### Les données
+Arborescence de stockage
+```
+data/
+├─ base_1.yml
+├─ base_2.yml
+├─ base_1/
+│    ├─ table1/
+│    │    ├─ metadata.yml
+│    │    ├─ data.yml
+│    ├─ table2/
+│    │    ├─ metadata.yml
+│    │    ├─ data.yml
+│    ├─ ...
+├─ base_2/
+│    ├─ table1/
+│    │    ├─ metadata.yml
+│    │    ├─ data.yml
+│    ├─ table2/
+│    │    ├─ metadata.yml
+│    │    ├─ data.yml
+│    ├─ ...
+```
+
+Contenu des fichiers metadata.yml :
 
 ``` yaml
 structure:
@@ -53,29 +78,6 @@ structure:
     lastname: string
     address: string
     ...
-```
-
-### Les données
-```
-data/
-├─ base_1.yml
-├─ base_2.yml
-├─ base_1/
-│    ├─ table1.yml
-│    ├─ table1/
-│    │    ├─ data.yml
-│    ├─ table2.yml
-│    ├─ table2/
-│    │    ├─ data.yml
-│    ├─ ...
-├─ base_2/
-│    ├─ table1.yml
-│    ├─ table1/
-│    │    ├─ data.yml
-│    ├─ table2.yml
-│    ├─ table2/
-│    │    ├─ data.yml
-│    ├─ ...
 ```
 
 Contenu de data.yml :
