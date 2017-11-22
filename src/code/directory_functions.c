@@ -146,17 +146,12 @@ char getFilesInDirectory(short *incomeArrayLength, char ***incomeArray, char* pa
 }
 
 /*
-Goal : Create a folder
-Input : - folder name
+Goal : Create a directory
+Input : dirPath (char*), path of the directory to create
 Output : (void)
 */
-void createDir(char *dirName){
-    char name[255];
-
-    strcpy(name, "resources\\");
-    strcat(name, dirName);
-
-    mkdir(name, 0700);
+void createDir(char *dirPath){
+    mkdir(dirPath, 0700);
 }
 
 /*

@@ -1,7 +1,7 @@
 /*
 **  Filename : directory_functions.c
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUï¿½NIN ESGI - 3AL-1
 **
 **  Description : Contains directory manipulation related functions
 */
@@ -57,11 +57,11 @@ Require : - income_array (char***) needs to be free.
 char getFilesInDirectory(short *incomeArrayLength, char ***incomeArray, char* path);
 
 /*
-Goal : Create a folder
-Input : - folder name
+Goal : Create a directory
+Input : dirPath (char*), path of the directory to create
 Output : (void)
 */
-void createDir(char *dirName);
+void createDir(char *dirPath);
 
 /*
 Goal : Check if a dir exist in an other dir
