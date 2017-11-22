@@ -63,10 +63,10 @@ short dropDatabaseManager(char *dbName);
 
 /*
 Goal : Create a table
-Input : db (char*), name of the db we manipulate
+Input : db (char*), name of the database we manipulate
 Output : void
 */
-void createTable(char *db, Node * tableNameNode, char * path);
+void createTable(char *db);
 
 /*
  * Goal : Init the created table file with the root node

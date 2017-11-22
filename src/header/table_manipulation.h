@@ -32,7 +32,8 @@ Input : - dbName (char*), name of the database
         - tableName (char*), name of the table we want to suppress
 Input : short, state of the process
             - 0, success
-            - 1, error while deleting the table's file
+            - 1, error while deleting the table's struct file
+            - 2, error while deleting the table's file
 */
 short dropTable(char *dbName, char *tableName);
 

@@ -74,7 +74,7 @@ short deleteFile(char* filename) {
 }
 
 /*
-Goal : file is empty or nor
+Goal : Check if a file is empty
 Input : path (char*), path to the file
 Output : short, state of the process
             - sizeOfFile

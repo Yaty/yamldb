@@ -34,19 +34,6 @@ Output : void
 */
 void databaseManipulationManager(char *dbName) {
     short menu;
-    Node * tableNameNode;
-    char path[255];
-    short strLengthTwo = 3;
-    char *str[] = {"resources\\", dbName, ".yml"};
-
-    concatenateSeveralStr(255, path, strLengthTwo, str);
-
-    /* Non utile */
-    if( fileIsEmpty(path) != 0 && fileIsEmpty(path) != NULL ){
-        tableNameNode = YAMLParseFile(path);
-    }else{
-        tableNameNode = YAMLGetMapNode("Tables");
-    }
 
     do{
         menu = databaseManipulationManagerMenu(dbName);
@@ -56,8 +43,7 @@ void databaseManipulationManager(char *dbName) {
             case 0: //Quitter le programme
                 return;
             case 1: //Cr�er une table
-                createTable(dbName, tableNameNode, path); //Pas besoin du node
-                YAMLSaveNode(tableNameNode, path);
+                createTable(dbName);
                 break;
             case 2: //Ouvrir une table
                 openTableManager(dbName);
@@ -307,12 +293,10 @@ Goal : Create a table
 Input : db (char*), name of the database we manipulate
 Output : void
 */
-void createTable(char *db, Node * tableNameNode, char * path) { /* pas besoin de tableNameNode */
+void createTable(char *db) {
     char tableName[100];
     char tablePath[255];
     char tableDirPath[255];
-    FILE *pf;
-    int length = 0;
 
     //Saisir le nom de la table
     askTableName(tableName);
@@ -332,37 +316,6 @@ void createTable(char *db, Node * tableNameNode, char * path) { /* pas besoin de
         addTableToDbFile(db, tableName);
     }
     system(PAUSE);
-
-/*
-    do{
-        printf("Saisir le nom de la table a creer : ");
-        fflush(stdin);
-        getInput(100, tableName);
-        length = strlen(tableName);
-
-        if( length <= 0 ) { //Y a-t'il d'autres conditions d'erreur ?
-            printf("Le nom entre n'est pas valide.\n");
-            system(PAUSE);
-            system(CLEAR);
-        }
-    }while( length <= 0 );
-*/
-    /*
-    if( (pf = fopen(path, "a")) ) { //ouverture du fichier en ajout
-        if( createTableFile(db, tableName) == 2 ){ //Si la table existe pas déjà
-            YAMLAddValueChild(tableNameNode, "value", tableName);
-            strcat(tablePath, "\\");
-            strcat(tablePath, tableName);
-            strcat(tablePath, ".yml");
-            fclose(pf);
-            addColumns(tablePath);
-        }
-
-    }else{
-        printf("La base de donnees n'a pas ete trouvee\n");
-    }
-    system(PAUSE);
-     */
 }
 
 /*
@@ -384,21 +337,11 @@ char getTablesList(char *dirName, short *tableNamesLength, char ***tableNames) {
     char **tempArray;
     int pos;
 
-    funcState = getFilesInDirectory(tableNamesLength, tableNames, dirName);
+    funcState = getDirInDirectory(tableNamesLength, tableNames, dirName);
     if( funcState != 0 ) {
         return funcState;
     }
 
-    tempArray = *tableNames;
-
-    //Pour chaque nom, on coupe le nom au dernier '.' pour r�cup�rer juste le nom de la table
-    for( counter = 0; counter < *tableNamesLength; counter++ ) {
-        lastOcc = getLastOccInStr(tempArray[counter], '.');
-        pos = lastOcc - tempArray[counter]; //Nb de char avant le dernier '.'
-        tempArray[counter][pos] = '\0';
-    }
-
-    *tableNames = tempArray;
     return 0;
 }
 

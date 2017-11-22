@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "../header/yaml/api.h"
 #include "../header/file_manager.h"
 #include "../header/general.h"
@@ -43,7 +44,7 @@ void tableManipulationManager(char *dbName, char *tableName) {
         case 0: //Quitter le programme
             return;
         case 1: //Supprimer la table
-            dropTable(dbName, tableName);
+            printf("%d\n", dropTable(dbName, tableName)); //TEST
             printf("Supprimer la table.\n");
             system(PAUSE);
             system(CLEAR);
@@ -93,24 +94,35 @@ Input : - dbName (char*), name of the database
         - tableName (char*), name of the table we want to suppress
 Input : short, state of the process
             - 0, success
-            - 1, error while deleting the table's file
+            - 1, error while deleting the table's struct file
+            - 2, error while deleting the table's file
 */
 short dropTable(char *dbName, char *tableName) {
     char path[15] = "resources\\";
-    short strLength = 5;
-    char *str[] = {path, dbName, "\\", tableName, ".yml"};
-    char tablePath[255];
+    short strLength = 4;
+    char *str[] = {path, dbName, "\\", tableName};
+    char metadataPath[255];
+    char dataPath[255];
+    char dirPath[255];
 
-    concatenateSeveralStr(255, tablePath, strLength, str);
+    concatenateSeveralStr(255, dirPath, strLength, str);
+    concatenateSeveralStr(255, metadataPath, strLength, str);
+    concatenateSeveralStr(255, dataPath, strLength, str);
+    strcat(metadataPath, "\\metadata.yml");
+    strcat(dataPath, "\\data.yml");
 
-    /*
-    if( deleteFile(tablePath) != 0 ) { //Supprime le fichier correspondant à la table
+    if( deleteFile(metadataPath) == 2 ) { //Supprime le fichier correspondant à la structure de la table
         return 1;
     }
-     */
 
-    //Supprime le fichier correspondant à la structure de la table
+    //Supprime le fichier correspondant à la table
+    if( deleteFile(dataPath) == 2 ) {
+        return 2;
+    }
 
+    //Supprime le répertoire correspondant à la table
+    //deleteDirectory(dirPath);
+    printf("%d\n", rmdir(dirPath));
 
     //Supprime la ligne correspondant à la table dans le fichier de la db
     deleteTableInDb(dbName, tableName);
@@ -125,7 +137,28 @@ Input : - dbName (char*), name of the database
 Output : void
 */
 void deleteTableInDb(char *dbName, char *tableName) {
+    char* str[] = {"resources\\", dbName, ".yml"};
+    char dbPath[255];
+    int counter;
 
+    concatenateSeveralStr(255, dbPath, 3, str);
+
+    Node *root = YAMLGetChildAtIndex( YAMLParseFile(dbPath), 0 );
+    Node *currentTable, *name;
+
+    for( counter = 0; counter < YAMLGetSize(root); counter++ ) { //Pour chaque table
+        currentTable = YAMLGetChildAtIndex(root, counter);
+        name = YAMLGetChildAtIndex(currentTable, 0);
+        if( strcmp( YAMLGetValue(name), tableName ) ) { //Si on est sur la table
+            //On supprime le noeud dans root
+            YAMLRemoveChildAtIndex(root, counter);
+            YAMLSaveNode(root, dbPath);
+            YAMLFreeNode(name);
+            YAMLFreeNode(currentTable);
+            YAMLFreeNode(root);
+            return;
+        }
+    }
 }
 
 /*
@@ -210,7 +243,7 @@ Input : - dbName (char*), name of the database
         - table file (FILE*)
         - column number (int*)
 Output : void
-TODO : Interdir de rentrer un nom de colonne déjà existant
+TODO : Interdire de rentrer un nom de colonne déjà existant
 */
 void columnName(int incomeColumnNumber, Node *columnsNode){
     char columnNameStr[255];
