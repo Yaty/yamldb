@@ -13,13 +13,6 @@
 int YAMLGetSize(Node *node);
 
 /**
- * Get Node children
- * @param node
- * @return
- */
-Node *YAMLGetChildren(Node *node);
-
-/**
  * Get child from a Node at index
  * @param node
  * @param index

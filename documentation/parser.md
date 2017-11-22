@@ -217,10 +217,6 @@ Fixe la valeur de la clé.
 
 Récupère la nombre d'enfants du noeud.
 
-##### `Node *YAMLGetChildren(Node *node)`
-
-Récupère un tableau de noeuds enfants du noeud.
-
 ##### `Node *YAMLGetChildAtIndex(Node *node, int index)`
 
 Récupère un noeud enfant d'un noeud à un index.
