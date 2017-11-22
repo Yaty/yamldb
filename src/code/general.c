@@ -1,7 +1,7 @@
 /*
 **  Filename : general.c
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUï¿½NIN ESGI - 3AL-1
 **
 **  Description : Contains varied easy functions
 */
@@ -65,14 +65,14 @@ void displayMenuTitle(short maxLength, char *title, char leftChar, char rightCha
     gap = (totalLength - titleLength) / 2;
 
     printf("%c", leftChar);
-    for( counter = 0; counter < gap; counter++ ) { //Affiche les espaces à gauche
+    for( counter = 0; counter < gap; counter++ ) { //Affiche les espaces ï¿½ gauche
         printf(" ");
     }
 
     printf("%s", title); //Affiche le titre
 
     gap = totalLength - (gap + titleLength) + 1;
-    for( counter = 0; counter < gap; counter++ ) { //Affiche les espaces à droite
+    for( counter = 0; counter < gap; counter++ ) { //Affiche les espaces ï¿½ droite
         printf(" ");
     }
     printf("%c\n", rightChar);
@@ -170,10 +170,21 @@ Input : - length (short), max length of the input
 Output : void
 */
 void getInput(short length, char *input) {
-    fflush(stdin);
+    flush();
     fgets(input, (int)length, stdin);
-
     clearInput(input);
+}
+
+/*
+ * Goal : Flush the stdin buffer
+ * Input : void
+ * Output : void
+ */
+void flush() {
+    int c;
+    while ((c = getchar ()) != '\n'  &&  c != EOF){
+        continue;
+    }
 }
 
 /*
@@ -219,7 +230,7 @@ short concatenateSeveralStr(short resSize, char res[resSize], short length, char
         strLength += strlen(strings[counter]);
     }
 
-    if( resSize < strLength ) { //Si la chaine de résultat n'est pas assez grande
+    if( resSize < strLength ) { //Si la chaine de rï¿½sultat n'est pas assez grande
         return 2;
     }
 
