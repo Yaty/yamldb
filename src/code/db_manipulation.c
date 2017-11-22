@@ -35,12 +35,13 @@ Output : void
 void databaseManipulationManager(char *dbName) {
     short menu;
     Node * tableNameNode;
-    char path[1000];
+    char path[255];
     short strLengthTwo = 3;
     char *str[] = {"resources\\", dbName, ".yml"};
 
     concatenateSeveralStr(255, path, strLengthTwo, str);
 
+    /* Non utile */
     if( fileIsEmpty(path) != 0 && fileIsEmpty(path) != NULL ){
         tableNameNode = YAMLParseFile(path);
     }else{
@@ -55,7 +56,7 @@ void databaseManipulationManager(char *dbName) {
             case 0: //Quitter le programme
                 return;
             case 1: //Cr�er une table
-                createTable(dbName, tableNameNode, path);
+                createTable(dbName, tableNameNode, path); //Pas besoin du node
                 YAMLSaveNode(tableNameNode, path);
                 break;
             case 2: //Ouvrir une table
@@ -209,6 +210,17 @@ short dropDatabaseManager(char *dbName) {
 }
 
 /*
+ * Goal : Init the created table file with the root node
+ * Input : path (char*), path of the created file
+ * Output : void
+ */
+void createTableFileInit(char* path) {
+    Node *root = YAMLGetMapNode("structure");
+    YAMLSaveNode(root, path);
+    YAMLFreeNode(root);
+}
+
+/*
 Goal : Create a table in database folder
 Input : db (char*), name of the db we manipulate
         tableName(char*), name of the table
@@ -216,8 +228,8 @@ Output : int
 */
 int createTableFile(char *db, char *tableName){
     char tableFileName[255];
-    short strLength = 5;
-    char *str[] = {"resources\\", db, "\\", tableName, ".yml"};
+    short strLength = 6;
+    char *str[] = {"resources\\", db, "\\", tableName, "\\", "metadata.yml"};
 
     concatenateSeveralStr(255, tableFileName, strLength, str);
 
@@ -229,6 +241,7 @@ int createTableFile(char *db, char *tableName){
         printf("Erreur lors de la creation de la table.\nL'emplacement ne doit pas etre accessible\n");
         return 1;
     case 2:
+        //Init le premier noeud
         printf("La table a ete creee avec succes.\n");
         return 2;
     default:
@@ -237,20 +250,44 @@ int createTableFile(char *db, char *tableName){
 }
 
 /*
-Goal : Create a table
-Input : db (char*), name of the db we manipulate
-Output : void
-*/
-void createTable(char *db, Node * tableNameNode, char * path) { /* A modifier avec les fonctions de yml parsing + Ajouter structure de la table */
-    char tableName[100];
-    char tablePath[1000];
-    FILE *pf;
-    short strLengthTwo = 2;
+ * Goal : Save the table into the yaml db file
+ * Input :  - dbName (char*), name of the database
+ *          - tableName (char*), name of the table
+ * Output : void
+ */
+void addTableToDbFile(char* dbName, char* tableName) {
+    Node *dbNode, *newTable, *name, *status;
+    char dbFilePath[255];
+    char *str[] = {"resources\\", dbName, ".yml"};
+
+    concatenateSeveralStr(255, dbFilePath, 3, str);
+
+    //dbNode = YAMLParseFile(str);
+    dbNode = YAMLGetChildAtIndex( YAMLParseFile(dbFilePath), 0 );
+    if( YAMLGetType(dbNode) == UNDEFINED ) {
+        YAMLFreeNode(dbNode);
+        dbNode = YAMLGetSequenceNode("Tables");
+    }
+    newTable = YAMLGetSequenceValueNode();
+    name = YAMLGetValueNode("name", tableName);
+    status = YAMLGetValueNode("status", "empty");
+
+    YAMLAddChild(newTable, name);
+    YAMLAddChild(newTable, status);
+    YAMLAddChild(dbNode, newTable);
+
+    YAMLSaveNode(dbNode, dbFilePath);
+    YAMLFreeNode(newTable);
+    YAMLFreeNode(dbNode);
+}
+
+/*
+ * Goal : Get the name of the table to create
+ * Input : tableName (char*), name of the table
+ * Output : void
+ */
+void askTableName(char* tableName) {
     int length = 0;
-    char *strTable[] = {"resources\\", db};
-
-    concatenateSeveralStr(255, tablePath, strLengthTwo, strTable);
-
     do{
         printf("Saisir le nom de la table a creer : ");
         fflush(stdin);
@@ -263,9 +300,56 @@ void createTable(char *db, Node * tableNameNode, char * path) { /* A modifier av
             system(CLEAR);
         }
     }while( length <= 0 );
+}
 
+/*
+Goal : Create a table
+Input : db (char*), name of the database we manipulate
+Output : void
+*/
+void createTable(char *db, Node * tableNameNode, char * path) { /* pas besoin de tableNameNode */
+    char tableName[100];
+    char tablePath[255];
+    char tableDirPath[255];
+    FILE *pf;
+    int length = 0;
+
+    //Saisir le nom de la table
+    askTableName(tableName);
+
+    //Crée le chemin du répertoire table
+    char *strDb[] = {"resources\\", db, "\\", tableName};
+    concatenateSeveralStr(255, tableDirPath, 4, strDb);
+
+    //Créer le fichier de la table
+    createDir(tableDirPath);
+    if( createTableFile(db, tableName) == 2 ) { //Si la table a été créée avec succès
+        //Créer le chemin du fichier
+        char *strTable[] = {tableDirPath, "\\metadata.yml"};
+        concatenateSeveralStr(255, tablePath, 2, strTable);
+
+        //Ajouter le nom dans le fichier db
+        addTableToDbFile(db, tableName);
+    }
+    system(PAUSE);
+
+/*
+    do{
+        printf("Saisir le nom de la table a creer : ");
+        fflush(stdin);
+        getInput(100, tableName);
+        length = strlen(tableName);
+
+        if( length <= 0 ) { //Y a-t'il d'autres conditions d'erreur ?
+            printf("Le nom entre n'est pas valide.\n");
+            system(PAUSE);
+            system(CLEAR);
+        }
+    }while( length <= 0 );
+*/
+    /*
     if( (pf = fopen(path, "a")) ) { //ouverture du fichier en ajout
-        if( createTableFile(db, tableName) == 2 ){ //Si la table existe pas d�j�
+        if( createTableFile(db, tableName) == 2 ){ //Si la table existe pas déjà
             YAMLAddValueChild(tableNameNode, "value", tableName);
             strcat(tablePath, "\\");
             strcat(tablePath, tableName);
@@ -278,6 +362,7 @@ void createTable(char *db, Node * tableNameNode, char * path) { /* A modifier av
         printf("La base de donnees n'a pas ete trouvee\n");
     }
     system(PAUSE);
+     */
 }
 
 /*
@@ -450,14 +535,14 @@ short openTableAskNumber(short length, char **array) {
  * */
 void testAddTable() {
     Node *newTable;
-    Node *name, *empty;
+    Node *name, *status;
     Node *table = YAMLParseFile("resources\\test_Vincent.yml");
     char tableName[50];
 
     table = YAMLGetChildAtIndex(table, 0);
     if( YAMLIsUndefined(table) ) { //Si le noeud parent a pour type undefined (ne contient aucun enfant)
         YAMLFreeNode(table);
-        table = YAMLGetSequenceNode("tables"); //On récupère une nouvelle map
+        table = YAMLGetSequenceNode("tables"); //On récupère une nouvelle séquence
     }
 
     printf("Entrer le nom de la table a creer : ");
@@ -467,15 +552,15 @@ void testAddTable() {
     newTable = YAMLGetSequenceValueNode();
 
     name = YAMLGetValueNode("name", tableName);
-    empty = YAMLGetValueNode("empty", "yes");
+    status = YAMLGetValueNode("status", "empty");
 
     YAMLAddChild(newTable, name);
-    YAMLAddChild(newTable, empty);
+    YAMLAddChild(newTable, status);
     YAMLAddChild(table, newTable);
 
     YAMLSaveNode(table, "resources\\test_Vincent.yml");
     //YAMLFreeNode(name);
-    //YAMLFreeNode(empty);
+    //YAMLFreeNode(status);
     YAMLFreeNode(newTable);
     YAMLFreeNode(table);
 }

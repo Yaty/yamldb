@@ -1,7 +1,7 @@
 /*
 **  Filename : general.h
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUï¿½NIN ESGI - 3AL-1
 **
 **  Description : Contains varied easy functions' prototypes
 */
@@ -66,6 +66,13 @@ Input : - length (short), max length of the input
 Output : void
 */
 void getInput(short length, char *input);
+
+/*
+ * Goal : Flush the stdin buffer
+ * Input : void
+ * Output : void
+ */
+void flush();
 
 /*
 Goal : Returns the position of the last occurence of symbol in str

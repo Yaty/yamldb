@@ -69,12 +69,27 @@ Output : void
 void createTable(char *db, Node * tableNameNode, char * path);
 
 /*
+ * Goal : Init the created table file with the root node
+ * Input : path (char*), path of the created file
+ * Output : void
+ */
+void createTableFileInit(char* path);
+
+/*
 Goal : Create a table in database folder
 Input : db (char*), name of the db we manipulate
         tableName(char*), name of the table
 Output : int
 */
 int createTableFile(char *db, char *tableName);
+
+/*
+ * Goal : Save the table into the yaml db file
+ * Input :  - dbName (char*), name of the database
+ *          - tableName (char*), name of the table
+ * Output : void
+ */
+void addTableToDbFile(char* dbName, char* tableName);
 
 /*
 Goal : Get the names of all tables created

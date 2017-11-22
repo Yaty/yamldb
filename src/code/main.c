@@ -80,10 +80,7 @@ int main (int argc, char **argv) {
     printf("dirExist(\"%s\", \"%s\") : %hd\n", path, dirName2, dirExist(path, dirName2));
     */
 
-    //databaseManager();
-
-    //testCreateDb();
-    testAddTable();
+    databaseManager();
 
     return EXIT_SUCCESS;
 }

@@ -1,4 +1,0 @@
-Structure:
-    id: INT
-    firstname: VARCHAR
-    lastname: VARCHAR

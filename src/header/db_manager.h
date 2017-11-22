@@ -1,7 +1,7 @@
 /*
 **  Filename : db_manager.h
 **
-**  Made by : Vincent GUÉNIN ESGI - 3AL-1
+**  Made by : Vincent GUï¿½NIN ESGI - 3AL-1
 **
 **  Description : Contains the database management functions prototypes & struct declarations
 */
@@ -33,6 +33,16 @@ Input : name (char*), name of the database to create
 Output : void
 */
 void createDatabase(char* name);
+
+/*
+ * Goal : Create the yaml file of the database and fill it with the init node
+ * Input : filename (char*), path of the file to create
+ * Output : char, state of the function :
+ *          - 0, File already exist
+ *          - 1, Error while creating the file
+ *          - 2, Success
+ */
+char createDatabaseFile(char* filename);
 
 /*
 Goal : Create a database manager

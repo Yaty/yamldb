@@ -91,14 +91,15 @@ Output : void
 */
 void createDatabase(char* name) {
     char filename[255];
+    char dirPath[255];
 
     //Create filename
     //strcpy(filename, "..\\..\\resources\\"); //Pour lancement depuis /bin/Debug/CBDD1.exe
-    strcpy(filename, "resources\\"); //Pour lancement depuis codeblocks
+    strcpy(filename, "resources\\"); //Pour lancement depuis l'IDE
     strcat(filename, name);
     strcat(filename, ".yml");
 
-    switch( createFile(filename) ) {
+    switch( createDatabaseFile(filename) ) {
     case 0:
         printf("Cette base de donnee existe deja.\n");
         break;
@@ -106,12 +107,36 @@ void createDatabase(char* name) {
         printf("Erreur lors de la creation de la base de donnee.\nL'emplacement ne doit pas etre accessible\n");
         break;
     case 2:
-        createDir(name);
+        strcpy(dirPath, "resources\\");
+        strcat(dirPath, name);
+        createDir(dirPath);
         printf("La base de donnee a ete creee avec succes.\n");
         break;
     }
     system(PAUSE);
     system(CLEAR);
+}
+
+/*
+ * Goal : Create the yaml file of the database and fill it with the init node
+ * Input : filename (char*), path of the file to create
+ * Output : char, state of the function :
+ *          - 0, File already exist
+ *          - 1, Error while creating the file
+ *          - 2, Success
+ */
+char createDatabaseFile(char* filename) {
+    char func_state;
+
+    func_state = createFile(filename);
+    if( func_state != 2 ) {
+        return func_state;
+    }
+
+    Node *dbNode = YAMLGetSequenceNode("tables");
+    YAMLSaveNode(dbNode, filename);
+    YAMLFreeNode(dbNode);
+    return 2;
 }
 
 /*
