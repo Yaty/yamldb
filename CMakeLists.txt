@@ -60,7 +60,6 @@ set(TESTS_SRCS
         tests/src/code/api/children.c
         tests/src/code/api/allApi.c
         tests/src/code/api/free.c
-        tests/src/code/api/output.c
         tests/src/code/api/type.c tests/src/code/utils/string.c)
 
 set(TESTS_HEADERS
