@@ -1,4 +1,0 @@
-/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug/CMakeFiles/edit_cache.dir
-/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug/CMakeFiles/cbdd_tests.dir
-/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug/CMakeFiles/cbdd.dir
