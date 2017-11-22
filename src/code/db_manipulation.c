@@ -449,15 +449,33 @@ short openTableAskNumber(short length, char **array) {
  * Output : void
  * */
 void testAddTable() {
+    Node *newTable;
+    Node *name, *empty;
     Node *table = YAMLParseFile("resources\\test_Vincent.yml");
+    char tableName[50];
+
     table = YAMLGetChildAtIndex(table, 0);
     if( YAMLIsUndefined(table) ) { //Si le noeud parent a pour type undefined (ne contient aucun enfant)
         YAMLFreeNode(table);
-        table = YAMLGetMapNode("tables"); //On récupère une nouvelle map
+        table = YAMLGetSequenceNode("tables"); //On récupère une nouvelle map
     }
-    Node *newTable = YAMLGetValueNode("value", "table_test");
+
+    printf("Entrer le nom de la table a creer : ");
+    fflush(stdin);
+    getInput(50, tableName);
+
+    newTable = YAMLGetSequenceValueNode();
+
+    name = YAMLGetValueNode("name", tableName);
+    empty = YAMLGetValueNode("empty", "yes");
+
+    YAMLAddChild(newTable, name);
+    YAMLAddChild(newTable, empty);
     YAMLAddChild(table, newTable);
+
     YAMLSaveNode(table, "resources\\test_Vincent.yml");
+    //YAMLFreeNode(name);
+    //YAMLFreeNode(empty);
     YAMLFreeNode(newTable);
     YAMLFreeNode(table);
 }
@@ -468,7 +486,7 @@ void testAddTable() {
  * Output : void
  */
 void testCreateDb() {
-    Node *table = YAMLGetMapNode("tables");
+    Node *table = YAMLGetSequenceNode("tables");
     YAMLSaveNode(table, "resources\\test_Vincent.yml");
     YAMLFreeNode(table);
 }

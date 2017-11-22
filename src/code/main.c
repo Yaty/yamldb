@@ -82,8 +82,8 @@ int main (int argc, char **argv) {
 
     //databaseManager();
 
-    //createYamlFile();
-    testVincent();
+    //testCreateDb();
+    testAddTable();
 
     return EXIT_SUCCESS;
 }

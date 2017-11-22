@@ -1,4 +1,5 @@
 tables:
-    value: table_test
-    value: table_test
-    value: table_test
+    - name: membre
+      empty: yes
+    - name: car
+      empty: yes
