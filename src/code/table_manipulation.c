@@ -103,14 +103,16 @@ short dropTable(char *dbName, char *tableName) {
 
     concatenateSeveralStr(255, tablePath, strLength, str);
 
-    if( deleteFile(tablePath) != 0 ) { //Supprime le fichier correspondant � la table
+    /*
+    if( deleteFile(tablePath) != 0 ) { //Supprime le fichier correspondant à la table
         return 1;
     }
+     */
 
-    //Supprime le fichier correspondant � la structure de la table
+    //Supprime le fichier correspondant à la structure de la table
 
 
-    //Supprime la ligne correspondant � la table dans le fichier de la db
+    //Supprime la ligne correspondant à la table dans le fichier de la db
     deleteTableInDb(dbName, tableName);
 
     return 0;
@@ -208,6 +210,7 @@ Input : - dbName (char*), name of the database
         - table file (FILE*)
         - column number (int*)
 Output : void
+TODO : Interdir de rentrer un nom de colonne déjà existant
 */
 void columnName(int incomeColumnNumber, Node *columnsNode){
     char columnNameStr[255];

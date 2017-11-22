@@ -442,3 +442,33 @@ short openTableAskNumber(short length, char **array) {
 
     return choice;
 }
+
+/*
+ * Goal : Add a table to a database
+ * Input : void
+ * Output : void
+ * */
+void testAddTable() {
+    Node *table = YAMLParseFile("resources\\test_Vincent.yml");
+    table = YAMLGetChildAtIndex(table, 0);
+    if( YAMLIsUndefined(table) ) { //Si le noeud parent a pour type undefined (ne contient aucun enfant)
+        YAMLFreeNode(table);
+        table = YAMLGetMapNode("tables"); //On récupère une nouvelle map
+    }
+    Node *newTable = YAMLGetValueNode("value", "table_test");
+    YAMLAddChild(table, newTable);
+    YAMLSaveNode(table, "resources\\test_Vincent.yml");
+    YAMLFreeNode(newTable);
+    YAMLFreeNode(table);
+}
+
+/*
+ * Goal : Create a Database and the associated file
+ * Input : void
+ * Output : void
+ */
+void testCreateDb() {
+    Node *table = YAMLGetMapNode("tables");
+    YAMLSaveNode(table, "resources\\test_Vincent.yml");
+    YAMLFreeNode(table);
+}

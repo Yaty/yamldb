@@ -15,6 +15,7 @@
 #include "../header/general.h"
 #include "../header/string_array_functions.h"
 #include "../header/directory_functions.h"
+#include "../header/db_manipulation.h" //Test Vincent
 
 int main (int argc, char **argv) {
     /*
@@ -79,7 +80,10 @@ int main (int argc, char **argv) {
     printf("dirExist(\"%s\", \"%s\") : %hd\n", path, dirName2, dirExist(path, dirName2));
     */
 
-    databaseManager();
+    //databaseManager();
+
+    //createYamlFile();
+    testVincent();
 
     return EXIT_SUCCESS;
 }

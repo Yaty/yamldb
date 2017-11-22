@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="CBDD1"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cbdd_tests">
+				<Option output="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug/cbdd_tests.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 cbdd_tests"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cbdd_tests/fast">
+				<Option output="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug/cbdd_tests.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 cbdd_tests/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cbdd">
+				<Option output="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug/cbdd.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 cbdd"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cbdd/fast">
+				<Option output="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug/cbdd.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/6.4.0/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 cbdd/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j8 -f &quot;/cygdrive/d/ESGI/3AL-S1/Language\ C/CBDD1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/db_manager.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/db_manipulation.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/directory_functions.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/file_manager.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/general.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/main.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/sql/insert.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/sql/query.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/sql/select.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/sql/utils.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/string_array_functions.c">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/table_manipulation.c">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/yaml/api/children.c">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/yaml/api/data.c">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/yaml/api/free.c">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/yaml/api/output.c">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/yaml/api/parse.c">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/yaml/api/type.c">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/code/yaml/utils/parser.c">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/db_manager.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/db_manipulation.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/directory_functions.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/file_manager.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/general.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/sql/insert.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/sql/query.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/sql/select.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/sql/structs.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/sql/utils.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/string_array_functions.h">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/table_manipulation.h">
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/yaml/api.h">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/yaml/api/children.h">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/yaml/api/data.h">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/yaml/api/free.h">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/yaml/api/output.h">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/yaml/api/parse.h">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/yaml/api/type.h">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/yaml/node.h">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/src/header/yaml/utils/parser.h">
+			<Option target="cbdd_tests"/>
+			<Option target="cbdd"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/main.c">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/code/api/allApi.c">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/code/api/children.c">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/code/api/data.c">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/code/api/free.c">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/code/api/output.c">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/code/api/type.c">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/code/parser/allParser.c">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/code/utils/string.c">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/header/api/allApi.h">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/header/api/children.h">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/header/api/data.h">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/header/api/free.h">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/header/api/output.h">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/header/api/type.h">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/header/minunit.h">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/header/parser/allParser.h">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/header/utils.h">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/src/header/utils/string.h">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/tests/utils.c">
+			<Option target="cbdd_tests"/>
+		</Unit>
+		<Unit filename="/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,4 @@
+C:\Users\Gueni\.CLion2017.2\system\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/cygdrive/d/ESGI/3AL-S1/Language C/CBDD1"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /cygdrive/d/ESGI/3AL-S1/Language C/CBDD1/cmake-build-debug
