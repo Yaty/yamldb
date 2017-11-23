@@ -51,4 +51,11 @@ Output : short, state of the process
 */
 int fileIsEmpty(char * path);
 
+/**
+ * Check if a folder exists or not
+ * @param path the folder path
+ * @return 1 if it exists, 0 otherwise
+ */
+int isFolderExists(char *path);
+
 #endif // FILE_MANAGER_H_INCLUDED

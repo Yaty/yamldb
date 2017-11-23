@@ -16,6 +16,8 @@ QueryResult getEmptyResult() {
     res.linesCounter = 0;
     res.rowsCounter = 0;
     res.lines = NULL;
+    res.warnings = NULL;
+    res.warningsCounter = 0;
     return res;
 }
 
@@ -70,4 +72,23 @@ char **getParams(char *query, int *paramsCounter) {
     }
 
     return NULL;
+}
+
+/**
+ * Add a warning message to a query result
+ * @param result
+ * @param warning
+ * @return 1 for success, 0 for failure
+ */
+int addWarningToResult(QueryResult *result, char *warning) {
+    if (warning) {
+        char **tmp = realloc(result->warnings, result->warningsCounter + 1);
+        if (tmp) {
+            result->warnings = tmp;
+            result->warnings[result->warningsCounter++] = warning;
+            return 1;
+        }
+    }
+
+    return 0;
 }

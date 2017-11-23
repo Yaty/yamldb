@@ -8,6 +8,7 @@
 
 /* INCLUDES */
 #include <stdio.h>
+#include <dirent.h>
 #include "../header/file_manager.h"
 
 /*================ FUNCTIONS ================*/
@@ -94,4 +95,22 @@ int fileIsEmpty(char * path) {
         return NULL;
     }
     return NULL;
+}
+
+/**
+ * Check if a folder exists or not
+ * @param path the folder path
+ * @return 1 if it exists, 0 otherwise
+ */
+int isFolderExists(char *path) {
+    if (path) {
+        DIR* dir = opendir(path);
+
+        if (dir) {
+            closedir(dir);
+            return 1;
+        }
+    }
+
+    return 0;
 }

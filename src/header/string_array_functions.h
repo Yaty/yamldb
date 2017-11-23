@@ -140,6 +140,14 @@ char *concat (int strings, ...);
 char *toUpperCase(char *str);
 
 /**
+ * Lowercase a string, the string needs to be allocated dynamically
+ * Example : "BLA" -> "bla"
+ * @param str
+ * @return the lowercase string or null for error
+ */
+char *toLowerCase(char *str);
+
+/**
  * Check if a string starts with another string
  * @param str
  * @param prefix
@@ -162,5 +170,13 @@ int endsWith(char *str, char *suffix);
  * @return an index
  */
 long getSubstringIndex(char *str, char *substr);
+
+/**
+ * Check if strings are equals
+ * @param str1
+ * @param str2
+ * @return 1 for true, 0 for false
+ */
+int areStringsEquals(char *str1, char *str2);
 
 #endif // STRING_ARRAY_FUNCTIONS_H_INCLUDED

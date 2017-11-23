@@ -29,4 +29,12 @@ QueryResult getFailedResult(char *message);
  */
 char **getParams(char *query, int *paramsCounter);
 
+/**
+ * Add a warning message to a query result
+ * @param result
+ * @param warning
+ * @return 1 for success, 0 for failure
+ */
+int addWarningToResult(QueryResult *result, char *warning);
+
 #endif //CBDD1_UTILS_H

@@ -15,6 +15,8 @@ typedef struct QueryResult {
     size_t rowsCounter;
     QueryStatus status;
     char *message;
+    char **warnings;
+    size_t warningsCounter;
 } QueryResult;
 
 #endif //CBDD1_STRUCTS_H

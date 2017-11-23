@@ -7,28 +7,17 @@
 #include <string.h>
 #include "../../header/string_array_functions.h"
 #include "../../header/sql/utils.h"
+#include "../../header/file_manager.h"
+#include "../../header/yaml/api.h"
 
 static char **getColumns(char *query, int *columnsCounter) {
-    char *queryCpy = trim(toUpperCase(strdup(query)));
+    char *queryCpy = toLowerCase(trim(strdup(query)));
+    char **res;
 
     if (queryCpy) {
-        size_t fromIndex = getSubstringIndex(queryCpy, "FROM") - 1;
+        long fromIndex = getSubstringIndex(queryCpy, "from") - 1;
         queryCpy[fromIndex] = '\0';
-        char **columns = getParams(queryCpy, columnsCounter); // Get columns after select
-        queryCpy[fromIndex] = ' '; // reset
-        free(queryCpy);
-        return columns;
-    }
-
-    return NULL;
-}
-
-static char **getTables(char *query, int *tablesCounter) {
-    char *queryCpy = trim(toUpperCase(strdup(query)));
-
-    if (queryCpy) {
-        char *queryCpy2 = trim(queryCpy + getSubstringIndex(queryCpy, "FROM") + 5);
-        char **res = getParams(queryCpy2, tablesCounter);
+        res = getParams(queryCpy, columnsCounter); // Get columns after select
         free(queryCpy);
         return res;
     }
@@ -36,11 +25,27 @@ static char **getTables(char *query, int *tablesCounter) {
     return NULL;
 }
 
-static char **getConditions(char *query, int *conditionsCounter) {
-    char *queryCpy = trim(toUpperCase(strdup(query)));
+static char **getTables(char *query, int *tablesCounter) {
+    char *queryCpy = toLowerCase(trim(strdup(query)));
+    char *tables;
+    char **res;
 
     if (queryCpy) {
-        long whereIndex = getSubstringIndex(queryCpy, "WHERE");
+        tables = trim(queryCpy + getSubstringIndex(queryCpy, "from") + 5);
+        res = getParams(tables, tablesCounter);
+        free(queryCpy);
+        return res;
+    }
+
+    return NULL;
+}
+
+// TODO
+static char **getConditions(char *query, int *conditionsCounter) {
+    char *queryCpy = trim(toLowerCase(strdup(query)));
+
+    if (queryCpy) {
+        long whereIndex = getSubstringIndex(queryCpy, "where");
 
         if (whereIndex > 0) {
             char *queryCpy2 = trim(queryCpy + whereIndex + 5);
@@ -92,6 +97,7 @@ static char *parseSelectQuery(char *query, char ***columns, int *columnsCounter,
  */
 QueryResult executeSelect(char *query, char *dbPath) {
     int i = 0;
+    int j = 0;
     int columnsCounter = 0;
     int tablesCounter = 0;
     int conditionsCounter = 0;
@@ -101,15 +107,42 @@ QueryResult executeSelect(char *query, char *dbPath) {
     char **conditions;
     char **orders;
     char *parseQuery = parseSelectQuery(query, &columns, &columnsCounter, &tables, &tablesCounter, &conditions, &conditionsCounter, &orders, &ordersCounter);
+    char *currentTable;
+    char *currentTablePath;
+    char *currentTableMetaPath;
+    char *currentColumn;
 
     if (parseQuery == NULL && columnsCounter > 0 && tablesCounter > 0) {
         QueryResult res = getEmptyResult();
 
+        for (i = 0; i < tablesCounter; i++) {
+            currentTable = tables[i];
+            currentTablePath = concat(3, dbPath, "/", currentTable);
+            currentTableMetaPath = concat(2, currentTablePath, "/metadata.yml");
 
+            Node *root = YAMLParseFile(currentTableMetaPath);
+            Node *metas = YAMLGetChildByKey(root, "structure");
 
-        // TODO : Execute select here, then do conditions then order if there is
-        for (i = 0; i < columnsCounter; i++) printf("Column : %s\n", columns[i]);
-        for (i = 0; i < tablesCounter; i++) printf("Table : %s\n", tables[i]);
+            if (isFolderExists(currentTablePath) && DBIsValidMetadata(metas)) { // Valid table
+                printf("VALID TABLE %s\n", currentTable);
+               for (j = 0; j < columnsCounter; j++) {
+                   currentColumn = columns[j];
+                   Node *currentNodeColumn = YAMLGetChildByKey(metas, currentColumn);
+                   if (currentNodeColumn && DBIsValidColumnType(YAMLGetValue(currentNodeColumn))) {
+                        printf("VALID COLUMN %s\n", currentColumn);
+                       // TODO
+                   } else {
+                       addWarningToResult(&res, concat(2, "Invalid column : ", currentColumn));
+                   }
+               }
+            } else {
+                addWarningToResult(&res, concat(2, "Invalid table : ", currentTable));
+            }
+
+            YAMLFreeNode(root);
+            free(currentTableMetaPath);
+            free(currentTablePath);
+        }
 
         for (i = 0; i < columnsCounter; i++) free(columns[i]);
         for (i = 0; i < tablesCounter; i++) free(tables[i]);

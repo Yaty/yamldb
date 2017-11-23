@@ -17,7 +17,7 @@ set(SRCS
         src/code/general.c
         src/code/string_array_functions.c
         src/code/table_manipulation.c
-        src/code/sql/query.c src/code/sql/select.c src/code/sql/utils.c src/code/sql/insert.c)
+        src/code/sql/query.c src/code/sql/select.c src/code/sql/utils.c src/code/sql/insert.c src/code/yaml/api/db.c)
 
 set(HEADERS
         src/header/yaml/api.h
@@ -36,7 +36,7 @@ set(HEADERS
         src/header/general.h
         src/header/string_array_functions.h
         src/header/table_manipulation.h
-        src/header/sql/query.h src/header/sql/utils.h src/header/sql/select.h src/header/sql/structs.h src/header/sql/insert.h)
+        src/header/sql/query.h src/header/sql/utils.h src/header/sql/select.h src/header/sql/structs.h src/header/sql/insert.h src/header/yaml/api/db.h)
 
 add_executable(cbdd ${SRCS} ${HEADERS})
 

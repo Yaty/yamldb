@@ -303,6 +303,26 @@ char *concat (int strings, ...) {
 
     return NULL;
 }
+
+/**
+ * Uppercase or lowercase a string
+ * @param str
+ * @param upper
+ * @return the string or null if error
+ */
+static char *transformCase(char *str, int upper) {
+    if (str) {
+        size_t length = strlen(str);
+        int i;
+        for (i = 0; i < length; i++) {
+            str[i] = upper ? toupper(str[i]) : tolower(str[i]);
+        }
+        return str;
+    }
+
+    return NULL;
+}
+
 /**
  * Uppercase a string, the string needs to be allocated dynamically
  * Example : "bla" -> "BLA"
@@ -310,16 +330,17 @@ char *concat (int strings, ...) {
  * @return the uppercase string or null for error
  */
 char *toUpperCase(char *str) {
-    if (str) {
-        size_t length = strlen(str);
-        int i;
-        for (i = 0; i < length; i++) {
-            str[i] = toupper(str[i]);
-        }
-        return str;
-    }
+    return transformCase(str, 1);
+}
 
-    return NULL;
+/**
+ * Lowercase a string, the string needs to be allocated dynamically
+ * Example : "BLA" -> "bla"
+ * @param str
+ * @return the lowercase string or null for error
+ */
+char *toLowerCase(char *str) {
+    return transformCase(str, 0);
 }
 
 /**
@@ -371,4 +392,18 @@ long getSubstringIndex(char *str, char *substr) {
     }
 
     return -1;
+}
+
+/**
+ * Check if strings are equals
+ * @param str1
+ * @param str2
+ * @return 1 for true, 0 for false
+ */
+int areStringsEquals(char *str1, char *str2) {
+    if (str1 && str2) {
+        return strcmp(str1, str2) == 0;
+    }
+
+    return 0;
 }

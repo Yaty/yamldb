@@ -12,5 +12,6 @@
 #include "api/output.h"
 #include "api/parse.h"
 #include "api/type.h"
+#include "api/db.h"
 
 #endif //CBDD1_API_H

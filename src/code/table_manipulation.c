@@ -278,7 +278,7 @@ char *selectColumnType(){
     menu = typeManipulationManagerMenu();
     system(CLEAR);
 
-    switch( menu ) {
+    switch( menu ) { // TODO USE ENUM
     case 0: //INT
         return "INT";
     case 1: //VARCHAR

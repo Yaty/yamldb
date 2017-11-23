@@ -105,6 +105,15 @@ static char *toUppercase2() {
     mu_assert("toUppercase1", toUpperCase(NULL) == NULL);
 }
 
+static char *toLowercase1() {
+    char *str1 = strdup("FOO BAR __ X 123 ''");
+    mu_assert("toLowercase1", strcmp(toLowerCase(str1), "foo bar __ x 123 ''") == 0);
+}
+
+static char *toLowercase2() {
+    mu_assert("toLowercase1", toLowerCase(NULL) == NULL);
+}
+
 static char *startsWith1() {
     mu_assert("startsWith1", startsWith("manger", "man"));
 }
@@ -249,6 +258,30 @@ static char *removeChars7() {
     mu_assert("removeChars7", removeChars(NULL, 0, 2) == 0);
 }
 
+static char *areStringEquals1() {
+    mu_assert("areStringEquals1", areStringsEquals("ABCdef", "ABCdef"));
+}
+
+static char *areStringEquals2() {
+    mu_assert("areStringEquals2", areStringsEquals("éàc^$ **ù", "éàc^$ **ù"));
+}
+
+static char *areStringEquals3() {
+    mu_assert("areStringEquals3", areStringsEquals("éàc^$ **ù", "éàc^$ **") == 0);
+}
+
+static char *areStringEquals4() {
+    mu_assert("areStringEquals4", areStringsEquals("éàc^$ **ù", NULL) == 0);
+}
+
+static char *areStringEquals5() {
+    mu_assert("areStringEquals5", areStringsEquals(NULL, "DDDDDDD") == 0);
+}
+
+static char *areStringEquals6() {
+    mu_assert("areStringEquals6", areStringsEquals(NULL, NULL) == 0);
+}
+
 static char *allTests() {
     mu_run_test(trim1);
     mu_run_test(trim2);
@@ -268,6 +301,8 @@ static char *allTests() {
     mu_run_test(concat4);
     mu_run_test(toUppercase1);
     mu_run_test(toUppercase2);
+    mu_run_test(toLowercase1);
+    mu_run_test(toLowercase2);
     mu_run_test(startsWith1);
     mu_run_test(startsWith2);
     mu_run_test(startsWith3);
@@ -303,6 +338,12 @@ static char *allTests() {
     mu_run_test(removeChars5);
     mu_run_test(removeChars6);
     mu_run_test(removeChars7);
+    mu_run_test(areStringEquals1);
+    mu_run_test(areStringEquals2);
+    mu_run_test(areStringEquals3);
+    mu_run_test(areStringEquals4);
+    mu_run_test(areStringEquals5);
+    mu_run_test(areStringEquals6);
     return 0;
 }
 
