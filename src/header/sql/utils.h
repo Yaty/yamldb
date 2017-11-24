@@ -37,4 +37,9 @@ char **getParams(char *query, int *paramsCounter);
  */
 int addWarningToResult(QueryResult *result, char *warning);
 
+/**
+ * Print a query result
+ */
+void printQueryResult(QueryResult *res);
+
 #endif //CBDD1_UTILS_H

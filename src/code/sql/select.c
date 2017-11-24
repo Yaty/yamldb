@@ -7,7 +7,6 @@
 #include <string.h>
 #include "../../header/string_array_functions.h"
 #include "../../header/sql/utils.h"
-#include "../../header/file_manager.h"
 #include "../../header/yaml/api.h"
 
 static char **getColumns(char *query, int *columnsCounter) {
@@ -98,6 +97,7 @@ static char *parseSelectQuery(char *query, char ***columns, int *columnsCounter,
 QueryResult executeSelect(char *query, char *dbPath) {
     int i = 0;
     int j = 0;
+    int k = 0;
     int columnsCounter = 0;
     int tablesCounter = 0;
     int conditionsCounter = 0;
@@ -110,41 +110,49 @@ QueryResult executeSelect(char *query, char *dbPath) {
     char *currentTable;
     char *currentTablePath;
     char *currentTableMetaPath;
-    char *currentColumn;
+    char *currentTableDataPath;
+    // char *currentColumn;
 
-    if (parseQuery == NULL && columnsCounter > 0 && tablesCounter > 0) {
+    if (parseQuery == NULL && columnsCounter > 0 && tablesCounter == 1) {
         QueryResult res = getEmptyResult();
+        res.headers = columns;
 
-        for (i = 0; i < tablesCounter; i++) {
-            currentTable = tables[i];
-            currentTablePath = concat(3, dbPath, "/", currentTable);
-            currentTableMetaPath = concat(2, currentTablePath, "/metadata.yml");
+        currentTable = tables[0]; // for now we support a select from only one table
+        currentTablePath = concat(3, dbPath, "/", currentTable);
+        currentTableMetaPath = concat(2, currentTablePath, "/metadata.yml");
+        currentTableDataPath = concat(2, currentTablePath, "/data.yml");
 
-            Node *root = YAMLParseFile(currentTableMetaPath);
-            Node *metas = YAMLGetChildByKey(root, "structure");
+        Node *rootMetas = YAMLParseFile(currentTableMetaPath);
+        Node *metas = YAMLGetChildByKey(rootMetas, "structure");
+        Node *rootData = YAMLParseFile(currentTableDataPath);
+        Node *data = YAMLGetChildByKey(rootData, "data");
+        Node *currentLine;
+        Node *currentCouple;
+        int dataSize = YAMLGetSize(data);
 
-            if (isFolderExists(currentTablePath) && DBIsValidMetadata(metas)) { // Valid table
-                printf("VALID TABLE %s\n", currentTable);
-               for (j = 0; j < columnsCounter; j++) {
-                   currentColumn = columns[j];
-                   Node *currentNodeColumn = YAMLGetChildByKey(metas, currentColumn);
-                   if (currentNodeColumn && DBIsValidColumnType(YAMLGetValue(currentNodeColumn))) {
-                        printf("VALID COLUMN %s\n", currentColumn);
-                       // TODO
-                   } else {
-                       addWarningToResult(&res, concat(2, "Invalid column : ", currentColumn));
-                   }
-               }
-            } else {
-                addWarningToResult(&res, concat(2, "Invalid table : ", currentTable));
+        if (rootMetas && rootData && DBIsValidMetadata(metas) && DBIsValidData(data)) { // Valid table
+            res.table = malloc(sizeof(char **) * dataSize);
+            res.columnsCounter = (size_t) columnsCounter;
+            res.rowsCounter = (size_t) dataSize;
+
+            for (j = 0; j < dataSize; j++) {
+                res.table[j] = malloc(sizeof(char*) * columnsCounter);
+                currentLine = YAMLGetChildAtIndex(data, j);
+                for (k = 0; k < columnsCounter; k++) {
+                    currentCouple = YAMLGetChildByKey(currentLine, columns[k]);
+                    res.table[j][k] = strdup(YAMLGetValue(currentCouple));
+                }
             }
-
-            YAMLFreeNode(root);
-            free(currentTableMetaPath);
-            free(currentTablePath);
+        } else {
+            addWarningToResult(&res, concat(2, "Invalid table : ", currentTable));
         }
 
-        for (i = 0; i < columnsCounter; i++) free(columns[i]);
+        YAMLFreeNode(rootMetas);
+        YAMLFreeNode(rootData);
+        free(currentTableMetaPath);
+        free(currentTableDataPath);
+        free(currentTablePath);
+        // for (i = 0; i < columnsCounter; i++) free(columns[i]); // Used by query result, will be free later
         for (i = 0; i < tablesCounter; i++) free(tables[i]);
         return res;
     } else {

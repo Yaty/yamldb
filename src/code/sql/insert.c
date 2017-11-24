@@ -15,8 +15,8 @@
  */
 QueryResult executeInsert(char *query, char *dbPath) {
     QueryResult res = getEmptyResult();
-    res.lines = malloc(sizeof(char **));
-    res.lines[0] = malloc(sizeof(char *));
-    res.lines[0][0] = strdup("BAAAM");
+    res.table = malloc(sizeof(char **));
+    res.table[0] = malloc(sizeof(char *));
+    res.table[0][0] = strdup("BAAAM");
     return res;
 }

@@ -57,3 +57,40 @@ int DBIsValidColumnType(char *type) {
 
     return 0;
 }
+
+/**
+ * Check if a table has valid data
+ * @param data
+ * @return 1 for true, 0 for false
+ */
+int DBIsValidData(Node *data) {
+    // TODO CHECK IS EACH COLUMN IS A VALID ONE (DESCRIBED IN METADATA.YML)
+    if (data) {
+        int i;
+        int j;
+        int size2;
+        int size1 = YAMLGetSize(data);
+        Node *child;
+        Node *child2;
+        if (YAMLIsSequence(data) && size1 > 0 && areStringsEquals(YAMLGetKey(data), "data")) {
+            for (i = 0; i < size1; i++) {
+                child = YAMLGetChildAtIndex(data, i);
+                size2 = YAMLGetSize(child);
+                if (YAMLIsSequenceValue(child) && size2 > 0) {
+                    for (j = 0; j < size2; j++) {
+                        child2 = YAMLGetChildAtIndex(child, j);
+                        if (!YAMLIsValue(child2)) {
+                            return 0;
+                        }
+                    }
+                } else {
+                    return 0;
+                }
+            }
+
+            return 1;
+        }
+    }
+
+    return 0;
+}

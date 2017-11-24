@@ -10,8 +10,9 @@
 typedef enum QueryStatus { SUCCESS, FAILURE } QueryStatus;
 
 typedef struct QueryResult {
-    char ***lines;
-    size_t linesCounter;
+    char ***table;
+    char **headers;
+    size_t columnsCounter;
     size_t rowsCounter;
     QueryStatus status;
     char *message;

@@ -21,4 +21,11 @@ int DBIsValidMetadata(Node *node);
  */
 int DBIsValidColumnType(char *type);
 
+/**
+ * Check if a table has valid data
+ * @param data
+ * @return 1 for true, 0 for false
+ */
+int DBIsValidData(Node *data);
+
 #endif //CBDD1_DB_H

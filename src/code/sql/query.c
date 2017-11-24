@@ -17,19 +17,19 @@
  */
 QueryResult SQLExecuteQuery(char *queryString, char *dbPath) {
      if (queryString) {
-         char *queryCpy = toUpperCase(trim(strdup(queryString)));
+         char *queryCpy = toLowerCase(trim(strdup(queryString)));
          if (queryCpy) {
              QueryResult res;
              short prependIndex = 0;
 
-             if (startsWith(queryCpy, "SELECT")) {
-                 prependIndex = 7; // length of "SELECT "
+             if (startsWith(queryCpy, "select")) {
+                 prependIndex = 7; // length of "select "
                  res = executeSelect(queryCpy + prependIndex, dbPath);
-             } else if (startsWith(queryCpy, "INSERT")) {
+             } else if (startsWith(queryCpy, "insert")) {
                  prependIndex = 7;
                  res = executeInsert(queryCpy + prependIndex, dbPath);
              } else {
-                 res = getFailedResult("Error 2 : Invalid query. Please use a valid keyword like SELECT, INSERT ...");
+                 res = getFailedResult("Error 2 : Invalid query. Please use a valid keyword like select, insert ...");
              }
 
              free(queryCpy - prependIndex);
@@ -46,19 +46,19 @@ void SQLFreeQueryResult(QueryResult *res) {
     int i;
     int j;
 
-    for (i = 0; i < res->linesCounter; i++) {
-        for (j = 0; j < res->rowsCounter; j++) {
-            free(res->lines[i][j]);
-            res->lines[i][j] = NULL;
+    for (i = 0; i < res->rowsCounter; i++) {
+        for (j = 0; j < res->columnsCounter; j++) {
+            free(res->table[i][j]);
+            res->table[i][j] = NULL;
         }
 
-        free(res->lines[i]);
-        res->lines[i] = NULL;
+        free(res->table[i]);
+        res->table[i] = NULL;
     }
 
-    if (res->lines) {
-        free(res->lines);
-        res->lines = NULL;
+    if (res->table) {
+        free(res->table);
+        res->table = NULL;
     }
 
     free(res);
