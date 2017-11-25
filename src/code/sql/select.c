@@ -143,6 +143,8 @@ QueryResult executeSelect(char *query, char *dbPath) {
                     res.table[j][k] = strdup(YAMLGetValue(currentCouple));
                 }
             }
+
+            res.status = SUCCESS;
         } else {
             addWarningToResult(&res, concat(2, "Invalid table : ", currentTable));
         }
