@@ -144,19 +144,3 @@ Input : - length (short), length of array
 Output : number of the table
 */
 short openTableAskNumber(short length, char **array);
-
-/*
- * Goal : Create a Database and the associated file
- * Input : void
- * Output : void
- */
-void testCreateDb();
-
-/*
- * Goal : Add a table to a database
- * Input : void
- * Output : void
- * */
-void testAddTable();
-
-#endif // DB_MANIPULATION_H_INCLUDED
