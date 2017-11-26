@@ -20,8 +20,13 @@
 ## Etape 3 : SQL2
 
 - [x] faire une requête select sur une table
-- [ ] faire une requête select sur plusieurs tables en même temps (jointures)
-
+- [x] faire une requête select sur plusieurs tables sans conditions (bonus)
+- [ ] faire une requête select sur plusieurs tables avec jointures
+  - [ ] inner join
+  - [ ] left join (bonus)
+  - [ ] right join (bonus)
+  - [ ] full join (bonus)
+  
 ## Etape 4 : GTK
 
 - [ ] exécuter vos requêtes SQL
