@@ -19,7 +19,7 @@
 
 ## Etape 3 : SQL2
 
-- [ ] faire une requête select sur une table
+- [x] faire une requête select sur une table
 - [ ] faire une requête select sur plusieurs tables en même temps (jointures)
 
 ## Etape 4 : GTK
