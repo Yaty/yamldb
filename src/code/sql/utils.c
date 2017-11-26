@@ -128,4 +128,7 @@ void printQueryResult(QueryResult *res) {
     for (i = 0; i < res->warningsCounter; i++) {
         printf("WARN : %s\n", res->warnings[i]);
     }
+
+    // MESSAGE
+    printf("%s\n", res->message);
 }

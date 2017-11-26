@@ -98,10 +98,16 @@ QueryResult executeSelect(char *query, char *dbPath) {
     int i = 0;
     int j = 0;
     int k = 0;
+    int dataSize = 0;
     int columnsCounter = 0;
     int tablesCounter = 0;
     int conditionsCounter = 0;
     int ordersCounter = 0;
+    int linesCounter = 0;
+    int dataAdded = 0;
+    int currentLineId = 0;
+    int tmpData = 0;
+    char ***tmp;
     char **columns;
     char **tables;
     char **conditions;
@@ -111,50 +117,81 @@ QueryResult executeSelect(char *query, char *dbPath) {
     char *currentTablePath;
     char *currentTableMetaPath;
     char *currentTableDataPath;
-    // char *currentColumn;
+    Node *rootMetas;
+    Node *metas;
+    Node *rootData;
+    Node *data;
+    Node *currentLine;
+    Node *currentCouple;
 
-    if (parseQuery == NULL && columnsCounter > 0 && tablesCounter == 1) {
+    if (parseQuery == NULL && columnsCounter > 0 && tablesCounter > 0) {
         QueryResult res = getEmptyResult();
         res.headers = columns;
+        res.columnsCounter = (size_t) columnsCounter;
 
-        currentTable = tables[0]; // for now we support a select from only one table
-        currentTablePath = concat(3, dbPath, "/", currentTable);
-        currentTableMetaPath = concat(2, currentTablePath, "/metadata.yml");
-        currentTableDataPath = concat(2, currentTablePath, "/data.yml");
+        for (i = 0; i < tablesCounter; i++) {
+            currentTable = tables[i];
+            currentTablePath = concat(3, dbPath, "/", currentTable);
+            currentTableMetaPath = concat(2, currentTablePath, "/metadata.yml");
+            currentTableDataPath = concat(2, currentTablePath, "/data.yml");
 
-        Node *rootMetas = YAMLParseFile(currentTableMetaPath);
-        Node *metas = YAMLGetChildByKey(rootMetas, "structure");
-        Node *rootData = YAMLParseFile(currentTableDataPath);
-        Node *data = YAMLGetChildByKey(rootData, "data");
-        Node *currentLine;
-        Node *currentCouple;
-        int dataSize = YAMLGetSize(data);
+            rootMetas = YAMLParseFile(currentTableMetaPath);
+            metas = YAMLGetChildByKey(rootMetas, "structure");
+            rootData = YAMLParseFile(currentTableDataPath);
+            data = YAMLGetChildByKey(rootData, "data");
+            dataSize = YAMLGetSize(data);
+            linesCounter += dataSize;
 
-        if (rootMetas && rootData && DBIsValidMetadata(metas) && DBIsValidData(data)) { // Valid table
-            res.table = malloc(sizeof(char **) * dataSize);
-            res.columnsCounter = (size_t) columnsCounter;
-            res.rowsCounter = (size_t) dataSize;
+            if (rootMetas && rootData && DBIsValidMetadata(metas) && DBIsValidData(data)) { // Valid table
+                tmp = realloc(res.table, sizeof(char **) * linesCounter);
+                if (tmp) {
+                    res.table = tmp;
+                    res.rowsCounter = (size_t) linesCounter;
 
-            for (j = 0; j < dataSize; j++) {
-                res.table[j] = malloc(sizeof(char*) * columnsCounter);
-                currentLine = YAMLGetChildAtIndex(data, j);
-                for (k = 0; k < columnsCounter; k++) {
-                    currentCouple = YAMLGetChildByKey(currentLine, columns[k]);
-                    res.table[j][k] = strdup(YAMLGetValue(currentCouple));
+                    for (j = 0; j < dataSize; j++) {
+                        res.table[currentLineId] = malloc(sizeof(char*) * columnsCounter);
+                        if (res.table[currentLineId]) {
+                            currentLine = YAMLGetChildAtIndex(data, j);
+                            if (currentLine) {
+                                tmpData = dataAdded;
+
+                                for (k = 0; k < columnsCounter; k++) {
+                                    currentCouple = YAMLGetChildByKey(currentLine, columns[k]);
+                                    if (currentCouple) {
+                                        res.table[currentLineId][k] = strdup(YAMLGetValue(currentCouple));
+                                        dataAdded += 1;
+                                    } else {
+                                        addWarningToResult(&res, strdup("Column not found in table line"));
+                                    }
+                                }
+
+                                if (tmpData + columnsCounter == dataAdded) {
+                                    currentLineId += 1;
+                                }
+                            } else {
+                                addWarningToResult(&res, strdup("Line not found."));
+                            }
+                        } else {
+                            addWarningToResult(&res, concat(2, "Internal error : a line will be missing from table : ", currentTable));
+                        }
+                    }
+                } else {
+                    addWarningToResult(&res, concat(2, "Internal error, a table has been avoided : ", currentTable));
                 }
+            } else {
+                addWarningToResult(&res, concat(2, "Invalid table : ", currentTable));
             }
 
-            res.status = SUCCESS;
-        } else {
-            addWarningToResult(&res, concat(2, "Invalid table : ", currentTable));
+            YAMLFreeNode(rootMetas);
+            YAMLFreeNode(rootData);
+            free(currentTableMetaPath);
+            free(currentTableDataPath);
+            free(currentTablePath);
         }
 
-        YAMLFreeNode(rootMetas);
-        YAMLFreeNode(rootData);
-        free(currentTableMetaPath);
-        free(currentTableDataPath);
-        free(currentTablePath);
-        // for (i = 0; i < columnsCounter; i++) free(columns[i]); // Used by query result, will be free later
+        res.status = SUCCESS;
+
+        // Columns are used by the result, so they will be freed later
         for (i = 0; i < tablesCounter; i++) free(tables[i]);
         return res;
     } else {
