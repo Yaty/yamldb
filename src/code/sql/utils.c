@@ -45,10 +45,12 @@ QueryResult getFailedResult(char *message) {
 char **getParams(char *query, int *paramsCounter) {
     if (query && paramsCounter) {
         char *queryCpy = strdup(query);
+        char *trimmedParam;
         char *pt = strtok(queryCpy, ",");
         char **params = NULL;
         char **temp = NULL;
         int i = 0;
+        long index = 0;
         *paramsCounter = 0;
 
         if (pt == NULL) {
@@ -60,7 +62,11 @@ char **getParams(char *query, int *paramsCounter) {
             temp = realloc(params, sizeof(char*) * (*paramsCounter + 1));
             if (temp) {
                 params = temp;
-                char *trimmedParam = trim(strdup(pt));
+                trimmedParam = trim(strdup(pt)); // will be freed later
+                index = getSubstringIndex(trimmedParam, " ");
+                if (index > 0) { // Keep the first word
+                    trimmedParam[index] = '\0';
+                }
                 params[(*paramsCounter)++] = trimmedParam;
                 pt = strtok (NULL, ",");
             } else {

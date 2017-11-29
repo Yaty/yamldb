@@ -21,7 +21,7 @@ set(SRCS
         src/code/sql/select.c
         src/code/sql/utils.c
         src/code/sql/insert.c
-        src/code/yaml/api/db.c)
+        src/code/yaml/api/db.c src/code/sql/join.c)
 
 set(HEADERS
         src/header/yaml/api.h
@@ -45,7 +45,7 @@ set(HEADERS
         src/header/sql/select.h
         src/header/sql/structs.h
         src/header/sql/insert.h
-        src/header/yaml/api/db.h)
+        src/header/yaml/api/db.h src/header/sql/join.h)
 
 add_executable(cbdd ${SRCS} ${HEADERS})
 
