@@ -12,4 +12,11 @@
  */
 int YAMLFreeNode (Node *node);
 
+/**
+ * Only free a node without freeing his children
+ * @param node
+ * @return 1 for success, 0 for failure
+ */
+int YAMLPartialNodeFree(Node *node);
+
 #endif //CBDD1_FREE_H

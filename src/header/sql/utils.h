@@ -5,29 +5,8 @@
 #ifndef CBDD1_UTILS_H
 #define CBDD1_UTILS_H
 
-#include "structs.h"
-
-/**
- * Get initialized QueryResult
- * @return a queryresult
- */
-QueryResult getEmptyResult();
-
-/**
- * Get a query result with a failure status and a message
- * @param message
- * @return a query result
- */
-QueryResult getFailedResult(char *message);
-
-/**
- * Get params from a string
- * Example : "param1, param2, param3 bla blabla bla" will return "param1", "param2" and "param3"
- * @param query the string
- * @param paramsCounter the number of params found
- * @return an array of string to free
- */
-char **getParams(char *query, int *paramsCounter);
+#include "query.h"
+#include "../yaml/node.h"
 
 /**
  * Add a warning message to a query result
@@ -38,8 +17,13 @@ char **getParams(char *query, int *paramsCounter);
 int addWarningToResult(QueryResult *result, char *warning);
 
 /**
- * Print a query result
+ * Load data and metadata from a table
+ * @param dbPath
+ * @param currentTable
+ * @param data
+ * @param metas
+ * @return the number of lines
  */
-void printQueryResult(QueryResult *res);
+int loadData(char *dbPath, char *currentTable, Node **data, Node **metas);
 
 #endif //CBDD1_UTILS_H

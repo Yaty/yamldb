@@ -10,6 +10,7 @@
 #define STRING_ARRAY_FUNCTIONS_H_INCLUDED
 
 #include <stdarg.h>
+#include <stddef.h>
 
 /*================ STRUCT DECLARATION ================*/
 

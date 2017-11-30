@@ -5,7 +5,18 @@
 #ifndef CBDD1_QUERY_H
 #define CBDD1_QUERY_H
 
-#include "structs.h"
+typedef enum QueryStatus { SUCCESS, FAILURE } QueryStatus;
+
+typedef struct QueryResult {
+    char ***table;
+    char **headers;
+    size_t columnsCounter;
+    size_t rowsCounter;
+    QueryStatus status;
+    char *message;
+    char **warnings;
+    size_t warningsCounter;
+} QueryResult;
 
 /**
  * Execute a sql query on a db
@@ -16,5 +27,23 @@
 QueryResult SQLExecuteQuery(char *queryString, char *dbPath);
 
 void SQLFreeQueryResult(QueryResult *res);
+
+/**
+ * Get initialized QueryResult
+ * @return a queryresult
+ */
+QueryResult getEmptyResult();
+
+/**
+ * Get a query result with a failure status and a message
+ * @param message
+ * @return a query result
+ */
+QueryResult getFailedResult(char *message);
+
+/**
+ * Print a query result
+ */
+void printQueryResult(QueryResult *res);
 
 #endif //CBDD1_QUERY_H

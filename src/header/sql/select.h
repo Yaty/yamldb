@@ -5,7 +5,7 @@
 #ifndef CBDD1_SELECT_H
 #define CBDD1_SELECT_H
 
-#include "structs.h"
+#include "query.h"
 
 /**
  * Execute a SQL select from a string which is the query

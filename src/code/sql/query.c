@@ -89,3 +89,70 @@ void SQLFreeQueryResult(QueryResult *res) {
     }
 }
 
+
+/**
+ * Get initialized QueryResult
+ * @return a queryresult
+ */
+QueryResult getEmptyResult() {
+    QueryResult res;
+    res.rowsCounter = 0;
+    res.columnsCounter = 0;
+    res.table = NULL;
+    res.headers = NULL;
+    res.warnings = NULL;
+    res.warningsCounter = 0;
+    return res;
+}
+
+/**
+ * Get a query result with a failure status and a message
+ * @param message
+ * @return a query result
+ */
+QueryResult getFailedResult(char *message) {
+    QueryResult res = getEmptyResult();
+    res.status = FAILURE;
+    res.message = message;
+    return res;
+}
+
+
+/**
+ * Print a query result
+ */
+void printQueryResult(QueryResult *res) {
+    int i;
+    int j;
+
+    // HEADERS
+    for (i = 0; i < res->columnsCounter; i++) {
+        if (i == 0) printf("|");
+        printf("%10s|", res->headers[i]);
+    }
+    printf("\n");
+
+    for (i = 0; i < res->columnsCounter; i++) {
+        if (i == 0) printf("|");
+        printf("==========|");
+    }
+    printf("\n");
+
+    // LINES
+    for (i = 0; i < res->rowsCounter; i++) {
+        printf("|");
+        for (j = 0; j < res->columnsCounter; j++) {
+            printf("%10s|", res->table[i][j]);
+        }
+        printf("\n");
+    }
+
+    // WARNINGS
+    for (i = 0; i < res->warningsCounter; i++) {
+        printf("WARN : %s\n", res->warnings[i]);
+    }
+
+    // MESSAGE
+    printf("%s\n", res->message);
+}
+

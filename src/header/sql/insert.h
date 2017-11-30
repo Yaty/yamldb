@@ -5,8 +5,6 @@
 #ifndef CBDD1_INSERT_H
 #define CBDD1_INSERT_H
 
-#include "structs.h"
-
 /**
  * Execute a insert SQL query
  * @param query

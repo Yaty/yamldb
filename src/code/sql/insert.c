@@ -4,7 +4,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "../../header/sql/structs.h"
 #include "../../header/sql/utils.h"
 
 /**

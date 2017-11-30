@@ -46,3 +46,33 @@ int YAMLFreeNode (Node *node) {
     return 0;
 }
 
+/**
+ * Only free a node without freeing his children
+ * @param node
+ * @return 1 for success, 0 for failure
+ */
+int YAMLPartialNodeFree(Node *node) {
+    if (node) {
+        if (node->key) {
+            free(node->key);
+            node->key = NULL;
+        }
+
+        if (node->value) {
+            free(node->value);
+            node->value = NULL;
+        }
+
+        if (node->children) {
+            free(node->children);
+            node->children = NULL;
+        }
+
+        free(node);
+
+        return 1;
+    }
+
+    return 0;
+}
+

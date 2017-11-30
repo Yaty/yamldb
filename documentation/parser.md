@@ -177,6 +177,10 @@ Fixe le type d'un noeud.
 
 Libère la mémoire utilisée par le noeud. Fonction à executer avant de ne plus se servir de ce noeud.
 
+##### `int YAMLPartialNodeFree(Node *node)`
+
+Libère la mémoire du noeud en question, mais pas de ses enfants.
+
 #### Data
 
 ##### `Node *YAMLGetMapNode(char *key)`

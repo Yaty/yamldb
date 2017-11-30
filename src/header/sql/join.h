@@ -5,17 +5,12 @@
 #ifndef CBDD1_JOIN_H
 #define CBDD1_JOIN_H
 
+#include "../utils/hashmap.h"
+#include "operators.h"
+
 typedef enum JoinType {
     NONE, INNER, LEFT, RIGHT, FULL
 } JoinType;
-
-typedef enum Comparator {
-    NO_COMPARATOR, EQUAL, GREATER, LESSER, GREATER_EQUAL, LESSER_EQUAL, NOT_EQUAL
-} Comparator;
-
-typedef enum LogicalOperator {
-    NO_OPERATOR, AND, OR, ANY, BETWEEN, EXISTS, IN, LIKE, NOT, SOME
-} LogicalOperator;
 
 typedef struct JoinField {
     char *originTable;
@@ -30,10 +25,10 @@ typedef struct Join {
     enum JoinType type;
     JoinField *fields;
     int fieldsNumber;
+    char *target;
 } Join;
 
 typedef struct Joins {
-    char *target;
     Join *joins;
     int joinsNumber;
 } Joins;
@@ -55,5 +50,15 @@ Join getEmptyJoin();
  * @return a JoinField
  */
 JoinField getEmptyJoinField();
+
+/**
+ * Return a HashMap filled with data Nodes
+ * Key : table name
+ * Value : the yml file parsed, browsable in a Node struct
+ * @param joins
+ * @param dbPath
+ * @return the hashmap
+ */
+HashMap *initDataMap(Joins *joins, char *dbPath);
 
 #endif //CBDD1_JOIN_H
