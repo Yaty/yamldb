@@ -19,11 +19,11 @@
  * @param dbPath path to the db yaml file
  * @return a query result
  */
-QueryResult SQLExecuteQuery(char *queryString, char *dbPath) {
+QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
     if (queryString && dbPath) {
         char *queryCpy = toLowerCase(trim(strdup(queryString)));
         if (queryCpy) {
-            QueryResult res;
+            QueryResult *res = getEmptyResult();
             short prependIndex = 0;
             char timeSpent[32];
             struct timeval start, end;
@@ -31,20 +31,21 @@ QueryResult SQLExecuteQuery(char *queryString, char *dbPath) {
 
             if (startsWith(queryCpy, "select")) {
                 prependIndex = 7; // length of "select "
-                res = executeSelect(queryCpy + prependIndex, dbPath);
+                executeSelect(res, queryCpy + prependIndex, dbPath);
             } else if (startsWith(queryCpy, "insert")) {
                 prependIndex = 7;
-                res = executeInsert(queryCpy + prependIndex, dbPath);
+                executeInsert(res, queryCpy + prependIndex, dbPath);
             } else {
                 res = getFailedResult("Error 2 : Invalid query. Please use a valid keyword like select, insert ...");
             }
 
             gettimeofday(&end, NULL);
             sprintf(timeSpent, "%ld", (end.tv_usec - start.tv_usec) / 1000);
-            res.message = res.status == SUCCESS
+            res->message = res->status == SUCCESS
                 ? concat(3, "Successfully executed query in ", timeSpent, "ms.")
                 : concat(3, "Failure while executing the query in ", timeSpent, "ms.");
             free(queryCpy - prependIndex);
+
             return res;
          } else {
              return getFailedResult("Error 3 : error while executing query.");
@@ -94,14 +95,14 @@ void SQLFreeQueryResult(QueryResult *res) {
  * Get initialized QueryResult
  * @return a queryresult
  */
-QueryResult getEmptyResult() {
-    QueryResult res;
-    res.rowsCounter = 0;
-    res.columnsCounter = 0;
-    res.table = NULL;
-    res.headers = NULL;
-    res.warnings = NULL;
-    res.warningsCounter = 0;
+QueryResult *getEmptyResult() {
+    QueryResult *res = malloc(sizeof(QueryResult));
+    res->rowsCounter = 0;
+    res->columnsCounter = 0;
+    res->table = NULL;
+    res->headers = NULL;
+    res->warnings = NULL;
+    res->warningsCounter = 0;
     return res;
 }
 
@@ -110,10 +111,10 @@ QueryResult getEmptyResult() {
  * @param message
  * @return a query result
  */
-QueryResult getFailedResult(char *message) {
-    QueryResult res = getEmptyResult();
-    res.status = FAILURE;
-    res.message = message;
+QueryResult *getFailedResult(char *message) {
+    QueryResult *res = getEmptyResult();
+    res->status = FAILURE;
+    res->message = message;
     return res;
 }
 

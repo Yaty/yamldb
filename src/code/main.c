@@ -16,6 +16,8 @@
 #include "../header/string_array_functions.h"
 #include "../header/directory_functions.h"
 #include "../header/db_manipulation.h" //Test Vincent
+#include "../header/sql/query.h"
+#include "../header/sql/utils.h"
 
 int main (int argc, char **argv) {
     /*
@@ -80,7 +82,14 @@ int main (int argc, char **argv) {
     printf("dirExist(\"%s\", \"%s\") : %hd\n", path, dirName2, dirExist(path, dirName2));
     */
 
-    databaseManager();
+    // databaseManager();
+
+    // TODO : plante, quand column existe pas
+    // TODO : gérer SELECT *
+
+    QueryResult *res = SQLExecuteQuery("SELECT age, nom FROM table1", "./resources/data/base1");
+    printQueryResult(res);
+    SQLFreeQueryResult(res);
 
     return EXIT_SUCCESS;
 }

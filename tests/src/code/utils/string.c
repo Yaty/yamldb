@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "../../header/minunit.h"
 #include "../../../../src/header/string_array_functions.h"
 
@@ -234,7 +235,7 @@ static char *removeChars1() {
 
 static char *removeChars2() {
     char *str = strdup(" test ");
-    int res = removeChars(str, 0, strlen(str));
+    int res = removeChars(str, 0, (int) strlen(str));
     mu_assert("removeChars2", strcmp(str, "") == 0 && res);
 }
 
@@ -280,6 +281,87 @@ static char *areStringEquals5() {
 
 static char *areStringEquals6() {
     mu_assert("areStringEquals6", areStringsEquals(NULL, NULL) == 0);
+}
+
+static char **getArray(int size) {
+    char **array = malloc(sizeof(char*) * size);
+    for (int i = 0; i < size; i++) {
+        char number[i / 10 + 1];
+        sprintf(number, "%d", i);
+        array[i] = concat(2, "bla", number);
+    }
+    return array;
+}
+
+static char *stringIntoArray1() {
+    char *str = "bla0";
+    char **array = getArray(1);
+    mu_assert("stringIntoArray1", stringIntoArray(str, array, 1));
+}
+
+static char *stringIntoArray2() {
+    char *str = "bla";
+    char **array = getArray(1);
+    mu_assert("stringIntoArray2", stringIntoArray(str, array, 1) == 0);
+}
+
+static char *stringIntoArray3() {
+    char *str = "bla";
+    char **array = getArray(0);
+    mu_assert("stringIntoArray3", stringIntoArray(str, array, 1) == 0);
+}
+
+static char *stringIntoArray4() {
+    char *str = NULL;
+    char **array = getArray(1);
+    mu_assert("stringIntoArray4", stringIntoArray(str, array, 1) == 0);
+}
+
+static char *stringIntoArray5() {
+    char *str = "bla";
+    char **array = NULL;
+    mu_assert("stringIntoArray5", stringIntoArray(str, array, 1) == 0);
+}
+
+static char *stringIntoArray6() {
+    char *str = NULL;
+    char **array = getArray(0);
+    mu_assert("stringIntoArray6", stringIntoArray(str, array, 1) == 0);
+}
+
+static char *stringIntoArray7() {
+    char *str = NULL;
+    char **array = NULL;
+    mu_assert("stringIntoArray7", stringIntoArray(str, array, 1) == 0);
+}
+
+static char *addStringIntoArray1() {
+    char *str = "bla";
+    char **array = getArray(1);
+    int res = addStringIntoArray(str, &array, 1);
+    int res2 = stringIntoArray(str, array, 2);
+    mu_assert("addStringIntoArray1", res && res2);
+}
+
+static char *addStringIntoArray2() {
+    char *str = NULL;
+    char **array = getArray(1);
+    int res = addStringIntoArray(str, &array, 1);
+    mu_assert("addStringIntoArray2", res == 0);
+}
+
+static char *addStringIntoArray3() {
+    char *str = "str";
+    char **array = NULL;
+    int res = addStringIntoArray(str, &array, 1);
+    mu_assert("addStringIntoArray3", res == 0);
+}
+
+static char *addStringIntoArray4() {
+    char *str = NULL;
+    char **array = NULL;
+    int res = addStringIntoArray(str, &array, 1);
+    mu_assert("addStringIntoArray4", res == 0);
 }
 
 static char *allTests() {
@@ -344,6 +426,17 @@ static char *allTests() {
     mu_run_test(areStringEquals4);
     mu_run_test(areStringEquals5);
     mu_run_test(areStringEquals6);
+    mu_run_test(stringIntoArray1);
+    mu_run_test(stringIntoArray2);
+    mu_run_test(stringIntoArray3);
+    mu_run_test(stringIntoArray4);
+    mu_run_test(stringIntoArray5);
+    mu_run_test(stringIntoArray6);
+    mu_run_test(stringIntoArray7);
+    mu_run_test(addStringIntoArray1);
+    mu_run_test(addStringIntoArray2);
+    mu_run_test(addStringIntoArray3);
+    mu_run_test(addStringIntoArray4);
     return 0;
 }
 

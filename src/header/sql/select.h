@@ -10,8 +10,8 @@
 /**
  * Execute a SQL select from a string which is the query
  * @param query  a string
- * @return a filled query result
+ * @return a filled query result (in params)
  */
-QueryResult executeSelect(char *query, char *dbPath);
+void executeSelect(QueryResult *res, char *query, char *dbPath);
 
 #endif //CBDD1_SELECT_H

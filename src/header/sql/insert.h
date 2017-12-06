@@ -8,8 +8,8 @@
 /**
  * Execute a insert SQL query
  * @param query
- * @return a query result
+ * @return a query result (in params)
  */
-QueryResult executeInsert(char *query, char *dbPath);
+void executeInsert(QueryResult *res, char *query, char *dbPath);
 
 #endif //CBDD1_INSERT_H

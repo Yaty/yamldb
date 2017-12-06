@@ -7,6 +7,7 @@
 #include "../../header/yaml/api.h"
 #include "../../header/sql/query.h"
 #include "../../header/string_array_functions.h"
+#include "../../header/utils/hashmap.h"
 
 /**
  * Add a warning message to a query result
@@ -16,12 +17,7 @@
  */
 int addWarningToResult(QueryResult *result, char *warning) {
     if (warning) {
-        char **tmp = realloc(result->warnings, result->warningsCounter + 1);
-        if (tmp) {
-            result->warnings = tmp;
-            result->warnings[result->warningsCounter++] = warning;
-            return 1;
-        }
+        return addStringIntoArray(warning, &result->warnings, (int) result->warningsCounter);
     }
 
     return 0;
@@ -58,4 +54,35 @@ int loadData(char *dbPath, char *currentTable, Node **data, Node **metas) {
         YAMLFreeNode(rootMetas);
         return 0;
     }
+}
+
+/**
+ * Add a node by his file path to a hashmap
+ * Data key = table
+ * Metadata key = table-metadata
+ * @param dbPath
+ * @param table
+ * @param data
+ */
+void addNodeToHashMap(char *dbPath, char *table, HashMap *data) {
+    char *currentNodeDataPath = concat(4, dbPath, "/", table, "/data.yml");
+    Node *currentNodeRoot = YAMLParseFile(currentNodeDataPath);
+    Node *currentNode = YAMLGetChildByKey(currentNodeRoot, "data");
+
+    char *currentNodeDataPathMeta = concat(4, dbPath, "/", table, "/metadata.yml");
+    Node *currentNodeRootMeta = YAMLParseFile(currentNodeDataPathMeta);
+    Node *currentNodeMeta = YAMLGetChildByKey(currentNodeRootMeta, "structure");
+
+    if (DBIsValidData(currentNode) && DBIsValidMetadata(currentNodeMeta)) {
+        hashInsert(data, strdup(table), currentNode);
+        hashInsert(data, concat(2, table, "-metadata"), currentNodeMeta);
+        YAMLPartialNodeFree(currentNodeRoot);
+        YAMLPartialNodeFree(currentNodeRootMeta);
+    } else {
+        YAMLFreeNode(currentNodeRoot);
+        YAMLFreeNode(currentNodeRootMeta);
+    }
+
+    free(currentNodeDataPath);
+    free(currentNodeDataPathMeta);
 }

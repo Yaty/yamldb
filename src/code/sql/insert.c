@@ -12,10 +12,8 @@
  * @param dbPath path to the db yaml file
  * @return a query result
  */
-QueryResult executeInsert(char *query, char *dbPath) {
-    QueryResult res = getEmptyResult();
-    res.table = malloc(sizeof(char **));
-    res.table[0] = malloc(sizeof(char *));
-    res.table[0][0] = strdup("BAAAM");
-    return res;
+void executeInsert(QueryResult *res, char *query, char *dbPath) {
+    res->table = malloc(sizeof(char **));
+    res->table[0] = malloc(sizeof(char *));
+    res->table[0][0] = strdup("BAAAM");
 }

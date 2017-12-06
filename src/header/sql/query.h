@@ -24,7 +24,7 @@ typedef struct QueryResult {
  * @param dbPath path to the db yaml file
  * @return a query result
  */
-QueryResult SQLExecuteQuery(char *queryString, char *dbPath);
+QueryResult *SQLExecuteQuery(char *queryString, char *dbPath);
 
 void SQLFreeQueryResult(QueryResult *res);
 
@@ -32,14 +32,14 @@ void SQLFreeQueryResult(QueryResult *res);
  * Get initialized QueryResult
  * @return a queryresult
  */
-QueryResult getEmptyResult();
+QueryResult *getEmptyResult();
 
 /**
  * Get a query result with a failure status and a message
  * @param message
  * @return a query result
  */
-QueryResult getFailedResult(char *message);
+QueryResult *getFailedResult(char *message);
 
 /**
  * Print a query result

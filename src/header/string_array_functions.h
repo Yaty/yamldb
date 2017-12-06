@@ -180,4 +180,23 @@ long getSubstringIndex(char *str, char *substr);
  */
 int areStringsEquals(char *str1, char *str2);
 
+
+/**
+ * Check if a string is inside an array of string
+ * @param str
+ * @param array
+ * @param arraySize
+ * @return 1 for true, 0 for false
+ */
+int stringIntoArray(char *str, char **array, int arraySize);
+
+/**
+ * Add a string into an array
+ * @param string
+ * @param array
+ * @param arraySize
+ * @return 1 for success, 0 for failure
+ */
+int addStringIntoArray(char *string, char ***array, size_t arraySize);
+
 #endif // STRING_ARRAY_FUNCTIONS_H_INCLUDED

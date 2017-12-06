@@ -77,6 +77,6 @@ JoinType getJoinType(char *str, long index);
  * @param query
  * @return the joins structure
  */
-Joins getJoins(char *query);
+Joins *getJoins(char *query);
 
 #endif //CBDD1_PARSER_H

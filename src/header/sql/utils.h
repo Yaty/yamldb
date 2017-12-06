@@ -7,6 +7,7 @@
 
 #include "query.h"
 #include "../yaml/node.h"
+#include "../utils/hashmap.h"
 
 /**
  * Add a warning message to a query result
@@ -25,5 +26,15 @@ int addWarningToResult(QueryResult *result, char *warning);
  * @return the number of lines
  */
 int loadData(char *dbPath, char *currentTable, Node **data, Node **metas);
+
+/**
+ * Add a node by his file path to a hashmap
+ * Data key = table
+ * Metadata key = table-metadata
+ * @param dbPath
+ * @param table
+ * @param data
+ */
+void addNodeToHashMap(char *dbPath, char *table, HashMap *data);
 
 #endif //CBDD1_UTILS_H

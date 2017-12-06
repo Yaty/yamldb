@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "../../header/string_array_functions.h"
 #include "../../header/sql/operators.h"
 #include "../../header/sql/join.h"
@@ -191,6 +192,11 @@ int getTableColumn(char *str, long indexStart, long indexEnd, char **table, char
                     *table = trim(*table);
                     *column = trim(*column);
                     return 1;
+                } else {
+                    free(*table);
+                    free(*column);
+                    *table = NULL;
+                    *column = NULL;
                 }
             }
         }
@@ -294,8 +300,8 @@ JoinType getJoinType(char *str, long index) {
  * @param query
  * @return the joins structure
  */
-Joins getJoins(char *query) {
-    Joins joins = getEmptyJoins();
+Joins* getJoins(char *query) {
+    Joins *joins = getEmptyJoins();
 
     if (query) {
         char *queryCpy = toLowerCase(trim(strdup(query)));
@@ -310,7 +316,7 @@ Joins getJoins(char *query) {
         long indexOn;
         long indexOperator;
         Join *joinsTmp = NULL;
-        Join newJoin;
+        Join *newJoin;
         JoinType type;
         JoinField *fields = NULL;
         JoinField *fieldsTmp = NULL;
@@ -343,29 +349,29 @@ Joins getJoins(char *query) {
                                     fieldsTmp = realloc(fields, (size_t) fieldsNumber + 1);
                                     if (fieldsTmp) {
                                         fields = fieldsTmp;
-                                        fields[fieldsNumber] = getEmptyJoinField();
+                                        fields[fieldsNumber] = *getEmptyJoinField();
                                         fields[fieldsNumber].originTable = table1;
                                         fields[fieldsNumber].originColumn = col1;
                                         fields[fieldsNumber].targetTable = table2;
-                                        fields[fieldsNumber].targetColumn = col2;
+                                        fields[fieldsNumber].targetColumn = col1;
                                         fields[fieldsNumber].comparator = currentComparator;
-                                        fields[fieldsNumber].logicOp = NO_OPERATOR; // We will detect this after
+                                        indexOperator = getLogicalOperator(ptr, &fields[fieldsNumber].logicOp); // This will set logicOp
                                         fieldsNumber++;
                                     }
                                 }
                             }
-                        } while ((indexOperator = getLogicalOperator(ptr, &fields[fieldsNumber].logicOp)) >= 0 && indexOperator < getSubstringIndex(ptr, "join"));
+                        } while (indexOperator >= 0 && indexOperator < getSubstringIndex(ptr, "join"));
 
-                        joinsTmp = realloc(joins.joins, (size_t) joins.joinsNumber + 1);
+                        joinsTmp = realloc(joins->joins, (size_t) joins->joinsNumber + 1);
                         if (joinsTmp) {
                             newJoin = getEmptyJoin();
-                            newJoin.type = type;
-                            newJoin.fields = fields;
-                            newJoin.target = strdup(target);
-                            newJoin.fieldsNumber = fieldsNumber;
+                            newJoin->type = type;
+                            newJoin->fields = fields;
+                            newJoin->target = strdup(target);
+                            newJoin->fieldsNumber = fieldsNumber;
 
-                            joins.joins = joinsTmp;
-                            joins.joins[joins.joinsNumber++] = newJoin;
+                            joins->joins = joinsTmp;
+                            joins->joins[joins->joinsNumber++] = *newJoin;
                         }
                         free(target);
                     }

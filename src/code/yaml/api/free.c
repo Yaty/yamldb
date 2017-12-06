@@ -63,11 +63,6 @@ int YAMLPartialNodeFree(Node *node) {
             node->value = NULL;
         }
 
-        if (node->children) {
-            free(node->children);
-            node->children = NULL;
-        }
-
         free(node);
 
         return 1;

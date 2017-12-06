@@ -37,28 +37,18 @@ typedef struct Joins {
  * Get empty initialized Joins
  * @return a Joins
  */
-Joins getEmptyJoins();
+Joins *getEmptyJoins();
 
 /**
  * Get empty initialized join
  * @return a Join
  */
-Join getEmptyJoin();
+Join *getEmptyJoin();
 
 /**
  * Get empty initialized join field
  * @return a JoinField
  */
-JoinField getEmptyJoinField();
-
-/**
- * Return a HashMap filled with data Nodes
- * Key : table name
- * Value : the yml file parsed, browsable in a Node struct
- * @param joins
- * @param dbPath
- * @return the hashmap
- */
-HashMap *initDataMap(Joins *joins, char *dbPath);
+JoinField *getEmptyJoinField();
 
 #endif //CBDD1_JOIN_H

@@ -407,3 +407,42 @@ int areStringsEquals(char *str1, char *str2) {
 
     return 0;
 }
+
+/**
+ * Check if a string is inside an array of string
+ * @param str
+ * @param array
+ * @param arraySize
+ * @return 1 for true, 0 for false
+ */
+int stringIntoArray(char *str, char **array, int arraySize) {
+    if (str && array && arraySize >= 0) {
+        for (int i = 0; i < arraySize; i++) {
+            if (areStringsEquals(array[i], str)) {
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * Add a string into an array
+ * @param string
+ * @param array
+ * @param arraySize
+ * @return 1 for success, 0 for failure
+ */
+int addStringIntoArray(char *string, char ***array, size_t arraySize) {
+    if (string && array && *array && arraySize >= 0) {
+        char **tmp = realloc(*array, (arraySize + 1) * sizeof(char*));
+        if (tmp) {
+            *array = tmp;
+            (*array)[arraySize] = string;
+            return 1;
+        }
+    }
+
+    return 0;
+}
