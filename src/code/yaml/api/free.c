@@ -25,10 +25,10 @@ int YAMLFreeNode (Node *node) {
             }
         }
 
-        if (node->children) {
+        /*if (node->children) {
             free(node->children);
             node->children = NULL;
-        }
+        }*/
 
         if (node->key) {
             free(node->key);

@@ -1,3 +1,5 @@
 Tables:
     - name: membre
       status: empty
+    - name: table_1
+      status: empty
