@@ -189,5 +189,14 @@ void addCaracteristics(char *dbName, char *table, int type);
  * */
 int displayColumns(Node *columns);
 
+/*
+ * Goal : set values for columns caracteristics.
+ * Input : result (Node *)
+ *         choice (int)
+ *         text (*char)
+ *         path (*char)
+ *         type (int)
+ * Output : void
+ * */
 void setCaracteristics(Node *result, int choice, char *text, char *path, int type);
 #endif // DB_MANIPULATION_H_INCLUDED

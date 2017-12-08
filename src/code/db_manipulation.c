@@ -640,6 +640,15 @@ int displayColumns(Node *columns){
     return choice;
 }
 
+/*
+ * Goal : set values for columns caracteristics.
+ * Input : result (Node *)
+ *         choice (int)
+ *         text (*char)
+ *         path (*char)
+ *         type (int)
+ * Output : void
+ * */
 void setCaracteristics(Node *result, int choice, char *text, char *path, int type){
     Node *column;
     Node *child;
