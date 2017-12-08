@@ -68,15 +68,25 @@ Contenu des fichiers metadata.yml :
 
 ``` yaml
 structure:
-    column_name: Type
+    column_name:
+        type: type
+        primary: no
+        defaultValue: no
+        autoIncrement: no
     ...
 ```
 ``` yaml - table1
 structure:
-    id: integer
-    name: string
-    lastname: string
-    address: string
+    id:
+        type: INT
+        primary: no
+        defaultValue: no
+        autoIncrement: yes
+    name:
+        type: VARCHAR
+        primary: yes
+        defaultValue: VALUE
+        autoIncrement: no
     ...
 ```
 
