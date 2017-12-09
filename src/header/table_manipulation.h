@@ -51,7 +51,7 @@ Input : - dbName (char*), name of the database
         - table file (FILE*)
 Output : void
 */
-void addColumns(char *tableName);
+void addColumns(char *dbName, char *tableName);
 
 /*
 Goal : return column number in table

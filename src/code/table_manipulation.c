@@ -167,11 +167,14 @@ Input : - dbName (char*), name of the database
         - table file (FILE*)
 Output : void
 */
-void addColumns(char *tableName){
+void addColumns(char *dbName, char *tableName){
     int columnNumberVal = columnNumber();
     int tempColumn = 0;
     short menu;
+    char *path[] = {"resources", "/", dbName, "/", tableName, "/", "metadata.yml"};
     Node * columnsNode = YAMLGetMapNode("Structure");
+    char metaPath[500];
+    concatenateSeveralStr(500, metaPath, 7, path);
 
     do{
         system(CLEAR);
@@ -191,7 +194,7 @@ void addColumns(char *tableName){
         system(CLEAR);
 
     }while( columnNumberVal != tempColumn );
-    YAMLSaveNode(columnsNode, tableName);
+    YAMLSaveNode(columnsNode, metaPath);
 }
 
 /*
@@ -249,6 +252,8 @@ void columnName(int incomeColumnNumber, Node *columnsNode){
     char columnNameStr[255];
     char columnType[50];
     int length = 0;
+    Node *temp;
+    Node *child;
 
     do{
         system(CLEAR);
@@ -263,8 +268,20 @@ void columnName(int incomeColumnNumber, Node *columnsNode){
             system(CLEAR);
         }
     }while( length <= 0 );
-    strcpy(columnType, selectColumnType());
-    YAMLAddValueChild(columnsNode, columnNameStr, columnType);
+    do{
+        strcpy(columnType, selectColumnType());
+    }while( columnType == NULL );
+
+    temp = YAMLGetMapNode(columnNameStr);
+    child = YAMLGetValueNode("type", columnType);
+    YAMLAddChild(temp, child);
+    child = YAMLGetValueNode("primary", "no");
+    YAMLAddChild(temp, child);
+    child = YAMLGetValueNode("defaultValue", "no");
+    YAMLAddChild(temp, child);
+    child = YAMLGetValueNode("autoIncrement", "no");
+    YAMLAddChild(temp, child);
+    YAMLAddChild(columnsNode, temp);
 }
 
 /*

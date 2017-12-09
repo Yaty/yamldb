@@ -103,7 +103,7 @@ void createDatabase(char* name) {
     case 0:
         printf("Cette base de donnee existe deja.\n");
         break;
-    case 1:
+        case 1:
         printf("Erreur lors de la creation de la base de donnee.\nL'emplacement ne doit pas etre accessible\n");
         break;
     case 2:

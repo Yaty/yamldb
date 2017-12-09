@@ -159,4 +159,44 @@ void testCreateDb();
  * */
 void testAddTable();
 
+/*
+ * Goal : Add attributs to columns line.
+ * Input : str (char *)
+ * Output : void
+ * */
+void createAttribut(char *str);
+
+/*
+ * Goal : defined attribut to column.
+ * Input : dbName (char *)
+ *         table (char *)
+ * Output : void
+ * */
+void definedAttributs(char *dbName, char *table);
+
+/*
+ * Goal : defined the primary key.
+ * Input : dbName (char *)
+ *         table (char *)
+ * Output : void
+ * */
+void addCaracteristics(char *dbName, char *table, int type);
+
+/*
+ * Goal : display columns from yaml file.
+ * Input : colums (Node *)
+ * Output : choice of column
+ * */
+int displayColumns(Node *columns);
+
+/*
+ * Goal : set values for columns caracteristics.
+ * Input : result (Node *)
+ *         choice (int)
+ *         text (*char)
+ *         path (*char)
+ *         type (int)
+ * Output : void
+ * */
+void setCaracteristics(Node *result, int choice, char *text, char *path, int type);
 #endif // DB_MANIPULATION_H_INCLUDED

@@ -1,4 +1,0 @@
-structure:
-    age: int
-    nom: text
-    prenom: text

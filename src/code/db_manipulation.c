@@ -54,6 +54,9 @@ void databaseManipulationManager(char *dbName) {
             case 4: //Supprimer une base de donn�es
                 dropDatabaseManager(dbName);
                 return;
+            case 5:
+                createAttribut(dbName);
+                break;
             default:
                 break;
         }
@@ -68,9 +71,9 @@ Input : dbName (char*), name of the database
 Output : short, choice of the user in the menu
 */
 short databaseManipulationManagerMenu(char *dbName) {
-    short length = 5;
+    short length = 6;
     short choice;
-    char *array[] = {"Quitter le programme", "Creer une table", "Ouvrir une table", "Lister toutes les tables", "Supprimer une base de donnees"};
+    char *array[] = {"Quitter le programme", "Creer une table", "Ouvrir une table", "Lister toutes les tables", "Supprimer une base de donnees", "Definir des attributs"};
 
     do{
         system(CLEAR);
@@ -252,11 +255,11 @@ void addTableToDbFile(char* dbName, char* tableName) {
     dbNode = YAMLGetChildAtIndex( YAMLParseFile(dbFilePath), 0 );
     if( YAMLGetType(dbNode) == UNDEFINED ) {
         YAMLFreeNode(dbNode);
-        dbNode = YAMLGetSequenceNode("Tables");
+        dbNode = YAMLGetSequenceNode(strdup("Tables"));
     }
     newTable = YAMLGetSequenceValueNode();
-    name = YAMLGetValueNode("name", tableName);
-    status = YAMLGetValueNode("status", "empty");
+    name = YAMLGetValueNode(strdup("name"), strdup(tableName));
+    status = YAMLGetValueNode(strdup("status"), strdup("empty"));
 
     YAMLAddChild(newTable, name);
     YAMLAddChild(newTable, status);
@@ -265,6 +268,7 @@ void addTableToDbFile(char* dbName, char* tableName) {
     YAMLSaveNode(dbNode, dbFilePath);
     YAMLFreeNode(newTable);
     YAMLFreeNode(dbNode);
+    addColumns(dbName, tableName);
 }
 
 /*
@@ -517,4 +521,140 @@ void testCreateDb() {
     Node *table = YAMLGetSequenceNode("tables");
     YAMLSaveNode(table, "resources\\test_Vincent.yml");
     YAMLFreeNode(table);
+}
+
+/*
+ * Goal : Add attributs to columns line.
+ * Input : str (char *)
+ * Output : void
+ * */
+void createAttribut(char* dbName){
+    char *array[] = {"resources", "\\", dbName};
+    char **list;
+    short length = 3;
+    char path[255];
+    short choice;
+    char table[100];
+
+    concatenateSeveralStr(255, path, length, array);
+    getTablesListManager(path, &length, &list); //R�cup�rer la liste des noms
+
+    choice = openTableAskNumber(length, list);
+    if( choice == 0 ){
+        system(CLEAR);
+        return;
+    }
+    strcpy(table, list[choice - 1]);
+    definedAttributs(dbName, table);
+}
+
+/*
+ * Goal : defined attribut to column.
+ * Input : str (char *)
+ *         table (char *)
+ * Output : void
+ * */
+void definedAttributs(char *dbName, char *table){
+    char *array[] = {"menu precedent", "clef primaire", "Valeur par defaut", "Auto increment"};
+    short length = 4;
+    int choice;
+    do{
+        displayMenu(table, length, array);
+        printf("Votre choix: ");
+        scanf("%d", &choice);
+        system(CLEAR);
+    }while(choice < 0 && choice >= length);
+    switch(choice){
+        case 0:
+            return;
+        case 1:
+            addCaracteristics(dbName, table, choice);
+            break;
+        case 2:
+            addCaracteristics(dbName, table, choice);
+            break;
+        case 3:
+            addCaracteristics(dbName, table, choice);
+            break;
+    }
+}
+
+/*
+ * Goal : defined the primary key.
+ * Input : dbName (char *)
+ *         table (char *)
+ * Output : void
+ * */
+void addCaracteristics(char *dbName, char *table, int type){
+    char *array[] = {"resources", "/", dbName, "/", table, "/", "metadata.yml"};
+    char path[255];
+    char val[255];
+    short length = 7;
+    int choice;
+    Node *result;
+    Node *child;
+
+
+    concatenateSeveralStr(255, path, length, array);
+    Node *column = YAMLParseFile(path);
+    result = YAMLGetChildByKey(column, "Structure");
+    choice = displayColumns(result);
+    if( type == 1 ){
+        setCaracteristics(result, choice, "yes", path, type);
+    }else if( type == 2 ){
+        do{
+            printf("Ecrire la valeur par defaut: ");
+            getInput(255, val);
+        }while(strcmp(val, "no") == 0);
+        setCaracteristics(result, choice, val, path, type);
+    }else if( type == 3 ){
+        setCaracteristics(result, choice, "yes", path, type);
+    }
+    system(PAUSE);
+    system(CLEAR);
+}
+
+/*
+ * Goal : display columns from yaml file.
+ * Input : colums (Node *)
+ * Output : choice of column
+ * */
+int displayColumns(Node *columns){
+    int i;
+    int choice;
+    char *value;
+    Node *column;
+    Node *child;
+
+    for( i = 0; i < YAMLGetSize(columns); i++ ){
+        column = YAMLGetChildAtIndex(columns, i);
+        value = YAMLGetKey(column);
+        printf("%d - %s\n", i, value);
+    }
+    do{
+        flush();
+        printf("Saisir le numéro de la colonne: ");
+        scanf("%d", &choice);
+    }while(choice >= YAMLGetSize(columns) || choice < 0);
+
+    return choice;
+}
+
+/*
+ * Goal : set values for columns caracteristics.
+ * Input : result (Node *)
+ *         choice (int)
+ *         text (*char)
+ *         path (*char)
+ *         type (int)
+ * Output : void
+ * */
+void setCaracteristics(Node *result, int choice, char *text, char *path, int type){
+    Node *column;
+    Node *child;
+
+    column = YAMLGetChildAtIndex(result, choice);
+    child = YAMLGetChildAtIndex(column, type);
+    YAMLSetValue(child, text);
+    YAMLSaveNode(result, path);
 }
