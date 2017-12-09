@@ -11,11 +11,8 @@
 
 #define BUFFER_SIZE 512
 
-#ifdef _WIN32
-#define MODIFIERS "%[^:]: %[^]"
-#else
-#define MODIFIERS "%[^:]: %s"
-#endif
+#define STRINGIZE_(x) #x
+#define STRINGIZE(x) STRINGIZE_(x)
 
 /**
  * Check if a node is a collection
@@ -55,12 +52,12 @@ int addChild (Node *parent, Node *child) {
  * @return an empty initialized node, NULL if error
  */
 Node *getEmptyNode() {
-    Node *node = (Node*) malloc(sizeof(Node));
+    Node *node = malloc(sizeof(Node));
     if (node) {
         node->childrenNumber = 0;
-        node->key = (char*) malloc(sizeof(char) * BUFFER_SIZE);
-        node->value = (char*) malloc(sizeof(char) * BUFFER_SIZE);
-        node->children = (Node*) malloc(sizeof(Node));
+        node->key = malloc(0);
+        node->value = malloc(0);
+        node->children = malloc(0);
         node->type = UNDEFINED;
         return node;
     }
@@ -137,7 +134,8 @@ int isValidMapInitializer (char *str) {
  */
 int getKeyValueFromString (char *str, char *key, char *value) {
     if (str && key && value) {
-        return sscanf(str, MODIFIERS, key, value);
+        // Modifier : %BUFFER_SIZE[^:]:%BUFFER_SIZE[^\n]
+        return sscanf(str, "%" STRINGIZE(BUFFER_SIZE) "[^:]:%" STRINGIZE(BUFFER_SIZE) "[^\n]", key, value);
     }
 
     return 0;
