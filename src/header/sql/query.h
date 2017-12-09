@@ -44,6 +44,6 @@ QueryResult *getFailedResult(char *message);
 /**
  * Print a query result
  */
-void printQueryResult(QueryResult *res);
+void SQLPrintQueryResult(QueryResult *res);
 
 #endif //CBDD1_QUERY_H

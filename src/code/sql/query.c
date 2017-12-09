@@ -118,24 +118,70 @@ QueryResult *getFailedResult(char *message) {
     return res;
 }
 
+static char **getColumnsSizeModifiers(QueryResult *res) {
+    if (res && res->columnsCounter > 0) {
+        int i;
+        int j;
+        size_t columnMaxSize;
+        size_t resLength;
+        size_t columnLength;
+        char **columnsSize = malloc(res->columnsCounter * sizeof(char*));
+        char *columnSize;
+
+        for (i = 0; i < res->columnsCounter; i++) {
+            columnMaxSize = 0;
+            columnSize = malloc(sizeof(char) * 32);
+
+            for (j = 0; j < res->rowsCounter; j++) {
+                columnLength = strlen(res->table[j][i]);
+                if (columnLength > columnMaxSize) {
+                    columnMaxSize = columnLength;
+                }
+            }
+
+            resLength = strlen(res->headers[i]);
+            if (resLength > columnMaxSize) {
+                columnMaxSize = resLength;
+            }
+
+            sprintf(columnSize, "%d", (int) columnMaxSize + 2); // + 1 to have a padding
+            columnsSize[i] = concat(3, "%", columnSize, "s|");
+            free(columnSize);
+        }
+
+        return columnsSize;
+    }
+
+    return NULL;
+}
+
 
 /**
  * Print a query result
  */
-void printQueryResult(QueryResult *res) {
+void SQLPrintQueryResult(QueryResult *res) {
     int i;
     int j;
+
+    char **columnsSizeModifiers = getColumnsSizeModifiers(res);
+    char *columnSize;
 
     // HEADERS
     for (i = 0; i < res->columnsCounter; i++) {
         if (i == 0) printf("|");
-        printf("%10s|", res->headers[i]);
+        printf(columnsSizeModifiers[i], res->headers[i]);
     }
     printf("\n");
 
     for (i = 0; i < res->columnsCounter; i++) {
         if (i == 0) printf("|");
-        printf("==========|");
+        columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
+        substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
+        for (j = 0; j < strtol(columnSize, NULL, 10); j++) {
+            printf("=");
+        }
+        printf("|");
+        free(columnSize);
     }
     printf("\n");
 
@@ -143,17 +189,21 @@ void printQueryResult(QueryResult *res) {
     for (i = 0; i < res->rowsCounter; i++) {
         printf("|");
         for (j = 0; j < res->columnsCounter; j++) {
-            printf("%10s|", res->table[i][j]);
+            printf(columnsSizeModifiers[j], res->table[i][j]);
         }
         printf("\n");
     }
 
     // WARNINGS
     for (i = 0; i < res->warningsCounter; i++) {
-        printf("WARN : %s\n", res->warnings[i]);
+        printf("WARNING : %s\n", res->warnings[i]);
     }
 
     // MESSAGE
     printf("%s\n", res->message);
+
+    for (i = 0; i < res->columnsCounter; i++) {
+        free(columnsSizeModifiers[i]);
+    }
 }
 
