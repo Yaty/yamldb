@@ -63,4 +63,11 @@ char *YAMLGetKey(Node *node);
  */
 int YAMLSetKey(Node *node, char *key);
 
+/**
+ * Deep copy a node
+ * @param node
+ * @return the new node
+ */
+Node *YAMLDeepCopy(Node *node);
+
 #endif //CBDD1_DATA_H

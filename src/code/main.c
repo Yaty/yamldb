@@ -87,7 +87,7 @@ int main (int argc, char **argv) {
     // TODO : plante, quand column existe pas
     // TODO : gérer SELECT *
 
-    QueryResult *res = SQLExecuteQuery("SELECT age, nom FROM table1", "./resources/data/base1");
+    QueryResult *res = SQLExecuteQuery("SELECT age, nom, adresse FROM table1 JOIN table2 ON table1.nom = table2.nom", "./resources/data/base1");
     printQueryResult(res);
     SQLFreeQueryResult(res);
 

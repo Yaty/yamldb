@@ -239,94 +239,160 @@ static void execJoinRequest(QueryResult *res, char **tables, int tablesCounter, 
     }
 }
 
-static int evalJoinField(JoinField joinField, HashMap *dataMap) {
-    int i;
-    int j;
-    Node *originLine;
-    Node *originCell;
-    Node *targetLine;
-    Node *targetCell;
-    Node *table1 = hashLookup(dataMap, joinField.originTable);
-    Node *metas1 = getMetas(dataMap, joinField.originTable);
-    Node *table2 = hashLookup(dataMap, joinField.targetTable);
-    Node *metas2 = getMetas(dataMap, joinField.targetTable);
-
-    if (!table1 || !metas1 || !table2 || !metas2) {
-        return 0;
-    }
-
-    // Column type check
-    if (!areStringsEquals(
-            YAMLGetValue(YAMLGetChildByKey(metas1, joinField.originColumn)),
-            YAMLGetValue(YAMLGetChildByKey(metas2, joinField.targetTable)))) {
-        return 0;
-    }
-
-    for (i = 0; i < YAMLGetSize(table1); i++) {
-        originLine = YAMLGetChildAtIndex(table1, i);
-        originCell = YAMLGetChildByKey(originLine, joinField.originColumn);
-
-        for (j = 0; j < YAMLGetSize(table2); j++) { // For each line of the target table
-            targetLine = YAMLGetChildAtIndex(table2, j);
-            targetCell = YAMLGetChildByKey(targetLine, joinField.targetColumn);
-
-            if (areStringsEquals(joinField.originColumn, "integer")) {
-                if (evalComparatorInt(
-                        (int) strtol(YAMLGetValue(originCell), NULL, 10), // STR to int
-                        (int) strtol(YAMLGetValue(targetCell), NULL, 10),
-                        joinField.comparator
-                )) {
-
-                }
-            }
-        }
-    }
-}
-
-static int evalJoin(Join join, HashMap *dataMap) {
-    int i;
-    int res = 0;
-
-    for (i = 0; i < join.fieldsNumber; i++) {
-        res += evalJoinField(join.fields[i], dataMap);
-    }
-
-    return res > 0;
-}
-
-static Node *makeJoin(Join join, char **columns, int columnsCounter, HashMap *dataMap, char ***warnings, size_t *warningsNumber) {
-    // TODO :
-    /*
-     * HANDLE JOIN TYPES
-     * GET THE FIRST MATCH FROM ALL JOIN FIELDS THEN RETURN IT IN A NODE
-     * COLUMNS THAT WE WANT ARE IN **columns
-     * line:
-     *  col1: val1
-     */
-}
-
-static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns, int columnsCounter, HashMap *dataMap, char ***warnings, size_t *warningsNumber) {
-    if (currentLine && joins && columns && columnsCounter > 0) {
+static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMap, char ***warnings, size_t *warningsNumber, Node *lineFull, char *target) {
+    if (fields && fieldsNumber > 0 && dataMap) {
         int i;
         int j;
+        int res;
+        int fieldValues[fieldsNumber];
+        char *originCell;
+        char *originCellType;
+        char *targetCellType;
+        JoinField field;
+        Node *table1;
+        Node *table2;
+        Node *metas1;
+        Node *metas2;
+        Node *targetData;
 
-        Node *res = YAMLGetMapNode("line");
-        Node *joinLine;
-        Node *joinCell;
+        targetData = hashLookup(dataMap, target);
 
-        for (i = 0; i < joins->joinsNumber; i++) { // For each join
-            joinLine = makeJoin(joins->joins[i], columns, columnsCounter, dataMap, warnings, warningsNumber);
-            for (j = 0; j < YAMLGetSize(joinLine); j++) { // For each column from a the join
-                joinCell = YAMLGetChildAtIndex(joinLine, j);
-                if (YAMLGetChildByKey(res, YAMLGetKey(joinCell)) == NULL) { // Check if the column is not here
-                    YAMLAddChild(res, joinCell); // Add column: value into our result
-                } else {
-                    *warningsNumber += addStringIntoArray(strdup("Duplicated column during a join."), warnings, *warningsNumber);
-                }
-            }
+        if (!targetData) {
+            *warningsNumber += addStringIntoArray(
+                    concat(2, "Invalid target table for a join : ", target),
+                    warnings,
+                    *warningsNumber
+            );
+            return NULL;
         }
 
-        return res;
+        for (i = 0; i < YAMLGetSize(targetData); i++) {
+            for (j = 0; j < fieldsNumber; j++) {
+                field = fields[j];
+
+                table1 = hashLookup(dataMap, field.originTable);
+                metas1 = getMetas(dataMap, field.originTable);
+                table2 = hashLookup(dataMap, field.targetTable);
+                metas2 = getMetas(dataMap, field.targetTable);
+
+                if (!table1 || !metas1 || !table2 || !metas2) {
+                    *warningsNumber += addStringIntoArray(
+                            concat(4, "Invalid tables (data or metadata missing for one of them) : ", field.originTable, " ,", field.targetTable),
+                            warnings,
+                            *warningsNumber
+                    );
+                    return NULL;
+                }
+
+                originCell = YAMLGetValue(YAMLGetChildByKey(lineFull, field.originColumn));
+                originCellType = YAMLGetValue(YAMLGetChildByKey(metas1, field.originColumn)); // TODO : HANDLE NEW METADATA STRUCTURE
+                targetCellType = YAMLGetValue(YAMLGetChildByKey(metas2, field.targetColumn)); // TODO : IDEM
+
+                if (!originCell) {
+                    *warningsNumber += addStringIntoArray(
+                            concat(2, "Invalid column data : ", field.originColumn),
+                            warnings,
+                            *warningsNumber
+                    );
+                    return NULL;
+                }
+
+                if (!originCellType || !targetCellType) {
+                    *warningsNumber += addStringIntoArray(
+                            concat(3, "Invalid column type : ", field.originColumn, field.targetColumn),
+                            warnings,
+                            *warningsNumber
+                    );
+                    return NULL;
+                }
+
+                // Column type check, we can only compare if they have the same type TODO HANDLE NEW METADATA STRUCTURE
+                if (!areStringsEquals(originCellType, targetCellType)) {
+                    *warningsNumber += addStringIntoArray(
+                            concat(
+                                    4,
+                                    "Invalid join field. You can't compare two columns with a different type : ",
+                                    field.originColumn, " and ", field.targetColumn
+                            ),
+                            warnings,
+                            *warningsNumber
+                    );
+                    return NULL;
+                }
+
+                if (YAMLGetChildByKey(lineFull, field.originColumn) == NULL) {
+                    *warningsNumber += addStringIntoArray(
+                            concat(2, "Invalid column in join field : ", field.originColumn),
+                            warnings,
+                            *warningsNumber
+                    );
+                    return NULL;
+                }
+
+
+                switch (field.comparator) {
+                    case EQUAL:
+                        fieldValues[j] = isEqual(
+                                originCell,
+                                YAMLGetValue(YAMLGetChildByKey(YAMLGetChildAtIndex(targetData, i), field.targetColumn)),
+                                originCellType
+                        );
+                        break;
+                    case GREATER:
+                        break;
+                    case LESSER:
+                        break;
+                    case GREATER_EQUAL:
+                        break;
+                    case LESSER_EQUAL:
+                        break;
+                    case NOT_EQUAL:
+                        break;
+                    default:
+                        *warningsNumber += addStringIntoArray(
+                                strdup("Invalid join field comparator : "),
+                                warnings,
+                                *warningsNumber
+                        );
+                        return NULL;
+                }
+            }
+
+            res = 0;
+            if (fieldsNumber > 1) {
+                for (j = 0; j < fieldsNumber - 1; j++) {
+                    res += evalOperatorInt(fieldValues[j], fieldValues[j + 1], fields[j].logicOp);
+                }
+
+                if (res == fieldsNumber - 1) {
+                    return YAMLGetChildAtIndex(targetData, i);
+                }
+            } else if (fieldValues[0]) {
+                return YAMLGetChildAtIndex(targetData, i);
+            }
+        }
+    }
+
+    return NULL;
+}
+
+static Node *makeJoin(Join *join, char **columns, int columnsCounter, HashMap *dataMap, char ***warnings, size_t *warningsNumber, Node *lineFull) {
+    if (join && columns && columnsCounter > 0 && dataMap && warnings && lineFull) {
+        Node *joinRes = evalJoinFields(join->fields, join->fieldsNumber, dataMap, warnings, warningsNumber, lineFull, join->target);
+        if (joinRes) {
+            switch (join->type) {
+                case INNER:
+                    return joinRes;
+                case FULL:
+                    break;
+                case LEFT:
+                    break;
+                case RIGHT:
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     return NULL;
@@ -358,6 +424,41 @@ static Node *getNewLine(Node *currentLine, char **columns, int columnsCounter) {
     return NULL;
 }
 
+static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns, int columnsCounter, HashMap *dataMap, char ***warnings, size_t *warningsNumber) {
+    if (currentLine && joins && columns && columnsCounter > 0 && joins->joinsNumber > 0) {
+        int i;
+        int j;
+
+        Node *res = getNewLine(currentLine, columns, columnsCounter); // first we get value from a normal select
+        Node *joinLine;
+        Node *joinCell;
+
+        Node *wrap = YAMLGetMapNode("line");
+        wrap->children = currentLine->children;
+        wrap->childrenNumber = currentLine->childrenNumber;
+        Node *root = YAMLDeepCopy(wrap);
+        Node *lineFull = YAMLGetChildByKey(root, "line");
+        YAMLPartialNodeFree(root);
+
+        for (i = 0; i < joins->joinsNumber; i++) { // For each join
+            joinLine = makeJoin(&joins->joins[i], columns, columnsCounter, dataMap, warnings, warningsNumber, lineFull);
+            for (j = 0; j < YAMLGetSize(joinLine); j++) { // For each column from a the join
+                joinCell = YAMLGetChildAtIndex(joinLine, j);
+                if (YAMLGetChildByKey(res, YAMLGetKey(joinCell)) == NULL) { // Check if the column is not here
+                    YAMLAddChild(res, joinCell); // Add column: value into our result
+                    YAMLAddChild(lineFull, joinCell);
+                } else {
+                    *warningsNumber += addStringIntoArray(strdup("Duplicated column during a join."), warnings, *warningsNumber);
+                }
+            }
+        }
+
+        return res;
+    }
+
+    return NULL;
+}
+
 /**
  * Execute a SQL select from a string which is the query
  * @param query  a string
@@ -367,11 +468,6 @@ static Node *getNewLine(Node *currentLine, char **columns, int columnsCounter) {
 void executeSelect(QueryResult *res, char *query, char *dbPath) {
     int i = 0;
     int j = 0;
-    int k = 0;
-    int l = 0;
-    int m = 0;
-    int n = 0;
-    int o = 0;
     int dataSize = 0;
     int columnsCounter = 0;
     int tablesCounter = 0;
@@ -391,16 +487,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     Node *data;
     Node *currentLine;
     HashMap *dataMap = NULL;
-    JoinField currentField;
-    Node *currentColumn1;
-    Node *currentJoinTable;
-    Node *currentLineJoin;
-    Node *currentLineJoinCouple;
-    Node *currentJoinFieldTable1;
-    Node *currentJoinFieldTable2;
     Node *newLine;
-    int addThisLine = 1;
-    int innerJoinMatch = 0;
 
     if (columnsCounter <= 0 || tablesCounter <= 0) {
         SQLFreeQueryResult(res);
@@ -411,6 +498,9 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     res->headers = columns;
     res->columnsCounter = (size_t) columnsCounter;
     dataMap = initDataMap(joins, tables, tablesCounter, dbPath);
+
+    YAMLPrintNode(hashLookup(dataMap, "table2")); // TODO FIX PARSER ONLY GET FIRST NUMBER
+    // TODO FIX COLUMN ORDERING IN JOIN
 
     for (i = 0; i < tablesCounter; i++) {
         currentTable = tables[i];

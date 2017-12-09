@@ -2,11 +2,8 @@
 // Created by Hugo on 27/11/2017.
 //
 
-#include <memory.h>
 #include <stdlib.h>
 #include "../../header/sql/join.h"
-#include "../../header/yaml/api.h"
-#include "../../header/string_array_functions.h"
 
 /**
  * Get empty initialized Joins

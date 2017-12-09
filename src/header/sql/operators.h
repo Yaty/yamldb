@@ -40,4 +40,13 @@ int evalComparatorString(char *a, char *b, Comparator operator);
  */
 int evalComparatorInt(int a, int b, Comparator operator);
 
+/**
+ * Check if two values are equals according to a type
+ * @param a
+ * @param b
+ * @param type
+ * @return 1 for equal, 0 for not, -1 for error
+ */
+int isEqual(void *a, void *b, char *type);
+
 #endif //CBDD1_OPERATORS_H

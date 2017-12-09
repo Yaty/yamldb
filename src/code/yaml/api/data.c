@@ -7,6 +7,8 @@
 #include "../../../header/yaml/node.h"
 #include "../../../header/yaml/utils/parser.h"
 #include "../../../header/yaml/api/data.h"
+#include "../../../header/yaml/api/output.h"
+#include "../../../header/yaml/api/parse.h"
 
 /**
  * NODE DATA
@@ -139,4 +141,19 @@ int YAMLSetKey(Node *node, char *key) {
     }
 
     return 0;
+}
+
+/**
+ * Deep copy a node
+ * @param node
+ * @return the new node
+ */
+Node *YAMLDeepCopy(Node *node) {
+    char path[] = "./resources/data/tmp.yml";
+
+    if (node && YAMLSaveNode(node, path)) {
+        return YAMLParseFile(path);
+    }
+
+    return NULL;
 }

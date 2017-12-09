@@ -69,3 +69,23 @@ int evalComparatorInt(int a, int b, Comparator operator) {
             return 0;
     }
 };
+
+/**
+ * Check if two values are equals according to a type
+ * @param a
+ * @param b
+ * @param type
+ * @return 1 for equal, 0 for not, -1 for error
+ */
+int isEqual(void *a, void *b, char *type) {
+    if (a && b && type) {
+        type = toLowerCase(type);
+        if (areStringsEquals(type, "int")) { // TODO, HANDLE ALL TYPES
+            return (int) a == (int) b;
+        } else if (areStringsEquals(type, "text")) {
+            return areStringsEquals((char*) a, (char*) b);
+        }
+    }
+
+    return -1;
+}

@@ -215,6 +215,11 @@ Récupére la valeur de la clé.
 
 Fixe la valeur de la clé.
 
+##### `Node *YAMLDeepCopy(Node *node)`
+
+Faire une copie deep d'un noeud YAML.
+Une deep copy permet d'avoir un nouveau noeud qui a les même valeurs que l'autre mais sur des emplacements mémoires différents.
+
 #### Children
 
 ##### `int YAMLGetSize(Node *node)`

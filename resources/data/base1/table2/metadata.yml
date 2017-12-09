@@ -1,0 +1,3 @@
+structure:
+    adresse: text
+    nom: text
