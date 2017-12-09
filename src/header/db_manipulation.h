@@ -144,3 +144,5 @@ Input : - length (short), length of array
 Output : number of the table
 */
 short openTableAskNumber(short length, char **array);
+
+#endif

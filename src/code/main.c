@@ -15,7 +15,7 @@
 #include "../header/general.h"
 #include "../header/string_array_functions.h"
 #include "../header/directory_functions.h"
-#include "../header/db_manipulation.h" //Test Vincent
+//#include "../header/db_manipulation.h" //Test Vincent
 
 int main (int argc, char **argv) {
     /*

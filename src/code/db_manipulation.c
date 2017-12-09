@@ -190,6 +190,7 @@ short dropDatabaseManager(char *dbName) {
         printf("Erreur lors de la suppression de la base de donnees.\n");
     }
     system(PAUSE);
+
     system(CLEAR);
 
     return funcState;
@@ -263,7 +264,7 @@ void addTableToDbFile(char* dbName, char* tableName) {
     YAMLAddChild(dbNode, newTable);
 
     YAMLSaveNode(dbNode, dbFilePath);
-    YAMLFreeNode(newTable);
+    //YAMLFreeNode(newTable);
     YAMLFreeNode(dbNode);
 }
 
