@@ -20,7 +20,7 @@ static int addLine(Node *line, QueryResult *res, int index, char **columns, int 
         for (i = 0; i < columnsNumber; i++) {
             currentCouple = YAMLGetChildByKey(line, columns[i]);
             if (currentCouple) {
-                res->table[index][i] = YAMLGetValue(currentCouple);
+                res->table[index][i] = strdup(YAMLGetValue(currentCouple));
             } else {
                 res->table[index][i] = strdup("(NULL)");
             }
@@ -111,7 +111,7 @@ static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMa
                 }
 
                 // Column type check, we can only compare if they have the same type TODO HANDLE NEW METADATA STRUCTURE
-                if (!areStringsEquals(originCellType, targetCellType)) {
+                if (!areStringsEquals(originCellType, targetCellType, 1)) {
                     *warningsNumber += addStringIntoArray(
                             concat(
                                     4,

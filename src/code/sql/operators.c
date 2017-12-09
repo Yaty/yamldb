@@ -37,9 +37,9 @@ int evalOperatorInt(int a, int b, LogicalOperator operator) {
 int evalComparatorString(char *a, char *b, Comparator operator) {
     switch (operator) {
         case EQUAL:
-            return areStringsEquals(a, b);
+            return areStringsEquals(a, b, 0);
         case NOT_EQUAL:
-            return !areStringsEquals(a, b);
+            return !areStringsEquals(a, b, 0);
         default:
             return 0;
     }
@@ -81,10 +81,10 @@ int evalComparatorInt(int a, int b, Comparator operator) {
 int isEqual(char *a, char *b, char *type) {
     if (a && b && type) {
         type = toLowerCase(type);
-        if (areStringsEquals(type, "int")) { // TODO, HANDLE ALL TYPES
+        if (areStringsEquals(type, "int", 1)) { // TODO, HANDLE ALL TYPES
             return strtol(a, NULL, 10) == strtol(b, NULL, 10);
-        } else if (areStringsEquals(type, "text")) {
-            return areStringsEquals((char*) a, (char*) b);
+        } else if (areStringsEquals(type, "string", 1)) {
+            return areStringsEquals((char*) a, (char*) b, 0);
         }
     }
 

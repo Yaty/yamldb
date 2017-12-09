@@ -24,7 +24,7 @@ void hashInsert (HashMap *h, char *key, void *value) {
         int i = h->size;
 
         for (int j = 0; j < i; j++) {
-            if (areStringsEquals(key, h->keys[i])) {
+            if (areStringsEquals(key, h->keys[i], 0)) {
                 return; // this name already exist
             }
         }
@@ -37,7 +37,7 @@ void hashInsert (HashMap *h, char *key, void *value) {
 
 void *hashLookup (HashMap *h, char *key) {
     for (int i = 0; i < h->size; i++) {
-        if (areStringsEquals(h->keys[i], key)) {
+        if (areStringsEquals(h->keys[i], key, 0)) {
             return h->values[i];
         }
     }

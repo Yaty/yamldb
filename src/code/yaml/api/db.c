@@ -17,10 +17,10 @@ int DBIsValidMetadata(Node *node) {
         int i;
         int size = YAMLGetSize(node);
         Node *child;
-        if(YAMLIsMap(node) && size > 0 && areStringsEquals(YAMLGetKey(node), "structure")) {
+        if(YAMLIsMap(node) && size > 0 && areStringsEquals(YAMLGetKey(node), "structure", 1)) {
             for (i = 0; i < size; i++) {
                 child = YAMLGetChildAtIndex(node, i);
-                if (YAMLIsValue(child) == 0) {
+                if (YAMLIsMap(child) == 0 || YAMLGetSize(child) < 1) {
                     return 0;
                 }
             }
@@ -45,7 +45,7 @@ int DBIsValidColumnType(char *type) {
         int i;
 
         for (i = 0; i < typeNumber; i++) {
-            if (areStringsEquals(types[i], type)) {
+            if (areStringsEquals(types[i], type, 1)) {
                 free(typeCpy);
                 return 1;
             }
@@ -72,7 +72,7 @@ int DBIsValidData(Node *data) {
         int size1 = YAMLGetSize(data);
         Node *child;
         Node *child2;
-        if (YAMLIsSequence(data) && size1 > 0 && areStringsEquals(YAMLGetKey(data), "data")) {
+        if (YAMLIsSequence(data) && size1 > 0 && areStringsEquals(YAMLGetKey(data), "data", 1)) {
             for (i = 0; i < size1; i++) {
                 child = YAMLGetChildAtIndex(data, i);
                 size2 = YAMLGetSize(child);

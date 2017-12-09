@@ -152,9 +152,10 @@ char *toLowerCase(char *str);
  * Check if a string starts with another string
  * @param str
  * @param prefix
+ * @param sensitivity 0 for case-sensitive,  1 for case-non-sensitive
  * @return 1 for true, 0 for false
  */
-int startsWith(char *str, char *prefix);
+int startsWith(char *str, char *prefix, int sensitivity);
 
 /**
  * Check if a string ends with another string
@@ -168,17 +169,19 @@ int endsWith(char *str, char *suffix);
  * Get index where a substring is in a string
  * @param str
  * @param substr
+ * @param sensitivity 1 for case insensitivity
  * @return an index
  */
-long getSubstringIndex(char *str, char *substr);
+long getSubstringIndex(char *str, char *substr, int sensitivity);
 
 /**
  * Check if strings are equals
  * @param str1
  * @param str2
+ * @param sensitivity 1 for case insensitivity
  * @return 1 for true, 0 for false
  */
-int areStringsEquals(char *str1, char *str2);
+int areStringsEquals(char *str1, char *str2, int sensitivity);
 
 
 /**

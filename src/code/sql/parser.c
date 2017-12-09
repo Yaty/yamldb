@@ -37,7 +37,7 @@ char **getParams(char *query, int *paramsCounter) {
             if (temp) {
                 params = temp;
                 trimmedParam = trim(strdup(pt)); // will be freed later
-                index = getSubstringIndex(trimmedParam, " ");
+                index = getSubstringIndex(trimmedParam, " ", 0);
                 if (index > 0) { // Keep the first word
                     trimmedParam[index] = '\0';
                 }
@@ -63,11 +63,11 @@ char **getParams(char *query, int *paramsCounter) {
  * @return
  */
 char **getColumns(char *query, int *columnsCounter) {
-    char *queryCpy = toLowerCase(trim(strdup(query)));
+    char *queryCpy = trim(strdup(query));
     char **res;
 
     if (queryCpy) {
-        long fromIndex = getSubstringIndex(queryCpy, "from") - 1;
+        long fromIndex = getSubstringIndex(queryCpy, "from", 1) - 1;
         queryCpy[fromIndex] = '\0';
         res = getParams(queryCpy, columnsCounter); // Get columns after select
         free(queryCpy);
@@ -84,12 +84,12 @@ char **getColumns(char *query, int *columnsCounter) {
  * @return
  */
 char **getTables(char *query, int *tablesCounter) {
-    char *queryCpy = toLowerCase(trim(strdup(query)));
+    char *queryCpy = trim(strdup(query));
     char *tables;
     char **res;
 
     if (queryCpy) {
-        tables = trim(queryCpy + getSubstringIndex(queryCpy, "from") + 5);
+        tables = trim(queryCpy + getSubstringIndex(queryCpy, "from", 1) + 5);
         res = getParams(tables, tablesCounter);
         free(queryCpy);
         return res;
@@ -100,10 +100,10 @@ char **getTables(char *query, int *tablesCounter) {
 
 // TODO
 char **getConditions(char *query, int *conditionsCounter) {
-    char *queryCpy = trim(toLowerCase(strdup(query)));
+    char *queryCpy = trim(strdup(query));
 
     if (queryCpy) {
-        long whereIndex = getSubstringIndex(queryCpy, "where");
+        long whereIndex = getSubstringIndex(queryCpy, "where", 1);
 
         if (whereIndex > 0) {
             char *queryCpy2 = trim(queryCpy + whereIndex + 5);
@@ -129,12 +129,12 @@ char **getOrders(char *query, int *ordersCounter) {
 long getComparator(char *str, Comparator *comparator) {
     if (str && comparator) {
         long compIndexes[] = {
-                getSubstringIndex(str, "="),
-                getSubstringIndex(str, ">"),
-                getSubstringIndex(str, "<"),
-                getSubstringIndex(str, ">="),
-                getSubstringIndex(str, "<="),
-                getSubstringIndex(str, "<>")
+                getSubstringIndex(str, "=", 0),
+                getSubstringIndex(str, ">", 0),
+                getSubstringIndex(str, "<", 0),
+                getSubstringIndex(str, ">=", 0),
+                getSubstringIndex(str, "<=", 0),
+                getSubstringIndex(str, "<>", 0)
         };
 
         short size = sizeof(compIndexes) / sizeof(compIndexes[0]);
@@ -181,7 +181,7 @@ long getComparator(char *str, Comparator *comparator) {
  */
 int getTableColumn(char *str, long indexStart, long indexEnd, char **table, char **column) {
     if (str && table && column && indexStart >= 0 && indexEnd > indexStart + 1) {
-        long pointIndex = getSubstringIndex(str, ".");
+        long pointIndex = getSubstringIndex(str, ".", 0);
         if (pointIndex > 0) {
             *table = malloc(sizeof(char) * pointIndex);
             *column = malloc(sizeof(char) * (indexEnd - indexStart - pointIndex));
@@ -214,15 +214,15 @@ int getTableColumn(char *str, long indexStart, long indexEnd, char **table, char
 long getLogicalOperator(char *str, LogicalOperator *operator) {
     if (str && operator) {
         long opeIndexes[] = {
-                getSubstringIndex(str, "and"),
-                getSubstringIndex(str, "or"),
-                getSubstringIndex(str, "any"),
-                getSubstringIndex(str, "between"),
-                getSubstringIndex(str, "exists"),
-                getSubstringIndex(str, "in"),
-                getSubstringIndex(str, "like"),
-                getSubstringIndex(str, "not"),
-                getSubstringIndex(str, "some"),
+                getSubstringIndex(str, "and", 1),
+                getSubstringIndex(str, "or", 1),
+                getSubstringIndex(str, "any", 1),
+                getSubstringIndex(str, "between", 1),
+                getSubstringIndex(str, "exists", 1),
+                getSubstringIndex(str, "in", 1),
+                getSubstringIndex(str, "like", 1),
+                getSubstringIndex(str, "not", 1),
+                getSubstringIndex(str, "some", 1),
         };
 
         short i = 0;
@@ -276,11 +276,11 @@ JoinType getJoinType(char *str, long index) {
                 p += 1;
                 trim(p);
 
-                if (areStringsEquals(p, "left")) {
+                if (areStringsEquals(p, "left", 1)) {
                     type = LEFT;
-                } else if (areStringsEquals(p, "right")) {
+                } else if (areStringsEquals(p, "right", 1)) {
                     type = RIGHT;
-                } else if (areStringsEquals(p, "full")) {
+                } else if (areStringsEquals(p, "full", 1)) {
                     type = FULL;
                 } else {
                     type = INNER;
@@ -304,7 +304,7 @@ Joins* getJoins(char *query) {
     Joins *joins = getEmptyJoins();
 
     if (query) {
-        char *queryCpy = toLowerCase(trim(strdup(query)));
+        char *queryCpy = trim(strdup(query));
         char *ptr = queryCpy;
         char *target = NULL;
         char *table1;
@@ -323,19 +323,19 @@ Joins* getJoins(char *query) {
         Comparator currentComparator;
         int fieldsNumber = 0;
 
-        while ((index = getSubstringIndex(ptr, "join")) != -1) {
+        while ((index = getSubstringIndex(ptr, "join", 1)) != -1) {
             type = getJoinType(ptr, index);
             ptr += index + 4; // make ptr point the the space after it
             ptr = trim(ptr);
 
             if (type) {
-                indexSpace = getSubstringIndex(ptr, " "); // ptr ~= "t on bla.bla = bla.bla ..."
+                indexSpace = getSubstringIndex(ptr, " ", 0); // ptr ~= "t on bla.bla = bla.bla ..."
                 if (indexSpace > 0) {
                     target = strdup(ptr);
                     target[indexSpace] = '\0';
                     ptr += indexSpace; // ptr ~= "on bla.bla = bla.bla ..."
                     ptr = trim(ptr);
-                    indexOn = getSubstringIndex(ptr, "on");
+                    indexOn = getSubstringIndex(ptr, "on", 1);
                     if (indexOn == 0) {
                         ptr += 2; // ptr ~= "bla.bla = bla.bla ..."
                         ptr = trim(ptr);
@@ -360,7 +360,7 @@ Joins* getJoins(char *query) {
                                     }
                                 }
                             }
-                        } while (indexOperator >= 0 && indexOperator < getSubstringIndex(ptr, "join"));
+                        } while (indexOperator >= 0 && indexOperator < getSubstringIndex(ptr, "join", 1));
 
                         joinsTmp = realloc(joins->joins, (size_t) joins->joinsNumber + 1);
                         if (joinsTmp) {

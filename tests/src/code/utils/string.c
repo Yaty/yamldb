@@ -116,31 +116,35 @@ static char *toLowercase2() {
 }
 
 static char *startsWith1() {
-    mu_assert("startsWith1", startsWith("manger", "man"));
+    mu_assert("startsWith1", startsWith("manger", "man", 0));
 }
 
 static char *startsWith2() {
-    mu_assert("startsWith2", startsWith("manger", "abcdef") == 0);
+    mu_assert("startsWith2", startsWith("manger", "abcdef", 0) == 0);
 }
 
 static char *startsWith3() {
-    mu_assert("startsWith3", startsWith("manger", "") == 0);
+    mu_assert("startsWith3", startsWith("manger", "", 0) == 0);
 }
 
 static char *startsWith4() {
-    mu_assert("startsWith4", startsWith("manger", NULL) == 0);
+    mu_assert("startsWith4", startsWith("manger", NULL, 0) == 0);
 }
 
 static char *startsWith5() {
-    mu_assert("startsWith5", startsWith(NULL, "abc") == 0);
+    mu_assert("startsWith5", startsWith(NULL, "abc", 0) == 0);
 }
 
 static char *startsWith6() {
-    mu_assert("startsWith6", startsWith("manger", "manger"));
+    mu_assert("startsWith6", startsWith("manger", "manger", 0));
 }
 
 static char *startsWith7() {
-    mu_assert("startsWith7", startsWith(NULL, NULL) == 0);
+    mu_assert("startsWith7", startsWith(NULL, NULL, 0) == 0);
+}
+
+static char *startsWith8() {
+    mu_assert("startsWith8", startsWith("miam", "MIAm", 1));
 }
 
 static char *endsWith1() {
@@ -172,31 +176,35 @@ static char *endsWith7() {
 }
 
 static char *substringIndex1() {
-    mu_assert("substringIndex1", getSubstringIndex("substring moi !", "string") == 3);
+    mu_assert("substringIndex1", getSubstringIndex("substring moi !", "string", 0) == 3);
 }
 
 static char *substringIndex2() {
-    mu_assert("substringIndex2", getSubstringIndex("substring moi !", "et bha non !") == -1);
+    mu_assert("substringIndex2", getSubstringIndex("substring moi !", "et bha non !", 0) == -1);
 }
 
 static char *substringIndex3() {
-    mu_assert("substringIndex3", getSubstringIndex("substring moi !", "s") == 0);
+    mu_assert("substringIndex3", getSubstringIndex("substring moi !", "s", 0) == 0);
 }
 
 static char *substringIndex4() {
-    mu_assert("substringIndex4", getSubstringIndex("substring moi !", "!") == 14);
+    mu_assert("substringIndex4", getSubstringIndex("substring moi !", "!", 0) == 14);
 }
 
 static char *substringIndex5() {
-    mu_assert("substringIndex5", getSubstringIndex("substring moi !", NULL) == -1);
+    mu_assert("substringIndex5", getSubstringIndex("substring moi !", NULL, 0) == -1);
 }
 
 static char *substringIndex6() {
-    mu_assert("substringIndex6", getSubstringIndex(NULL, "ABC") == -1);
+    mu_assert("substringIndex6", getSubstringIndex(NULL, "ABC", 0) == -1);
 }
 
 static char *substringIndex7() {
-    mu_assert("substringIndex7", getSubstringIndex(NULL, NULL) == -1);
+    mu_assert("substringIndex7", getSubstringIndex(NULL, NULL, 0) == -1);
+}
+
+static char *substringIndex8() {
+    mu_assert("substringIndex8", getSubstringIndex("je suis une phrase", "SUIS UNE", 1));
 }
 
 static char *charIndex1() {
@@ -260,27 +268,31 @@ static char *removeChars7() {
 }
 
 static char *areStringEquals1() {
-    mu_assert("areStringEquals1", areStringsEquals("ABCdef", "ABCdef"));
+    mu_assert("areStringEquals1", areStringsEquals("ABCdef", "ABCdef", 0));
 }
 
 static char *areStringEquals2() {
-    mu_assert("areStringEquals2", areStringsEquals("éàc^$ **ù", "éàc^$ **ù"));
+    mu_assert("areStringEquals2", areStringsEquals("éàc^$ **ù", "éàc^$ **ù", 0));
 }
 
 static char *areStringEquals3() {
-    mu_assert("areStringEquals3", areStringsEquals("éàc^$ **ù", "éàc^$ **") == 0);
+    mu_assert("areStringEquals3", areStringsEquals("éàc^$ **ù", "éàc^$ **", 0) == 0);
 }
 
 static char *areStringEquals4() {
-    mu_assert("areStringEquals4", areStringsEquals("éàc^$ **ù", NULL) == 0);
+    mu_assert("areStringEquals4", areStringsEquals("éàc^$ **ù", NULL, 0) == 0);
 }
 
 static char *areStringEquals5() {
-    mu_assert("areStringEquals5", areStringsEquals(NULL, "DDDDDDD") == 0);
+    mu_assert("areStringEquals5", areStringsEquals(NULL, "DDDDDDD", 0) == 0);
 }
 
 static char *areStringEquals6() {
-    mu_assert("areStringEquals6", areStringsEquals(NULL, NULL) == 0);
+    mu_assert("areStringEquals6", areStringsEquals(NULL, NULL, 0) == 0);
+}
+
+static char *areStringEquals7() {
+    mu_assert("areStringEquals7", areStringsEquals("blabla", "BLABlA", 1));
 }
 
 static char **getArray(int size) {
@@ -346,15 +358,16 @@ static char *addStringIntoArray1() {
 static char *addStringIntoArray2() {
     char *str = NULL;
     char **array = getArray(1);
-    int res = addStringIntoArray(str, &array, 1);
+    int res = addStringIntoArray(str, &array, 0);
     mu_assert("addStringIntoArray2", res == 0);
 }
 
 static char *addStringIntoArray3() {
     char *str = "str";
     char **array = NULL;
-    int res = addStringIntoArray(str, &array, 1);
-    mu_assert("addStringIntoArray3", res == 0);
+    int res = addStringIntoArray(str, &array, 0);
+    int res2 = stringIntoArray(str, array, 1);
+    mu_assert("addStringIntoArray3", res && res2);
 }
 
 static char *addStringIntoArray4() {
@@ -392,6 +405,7 @@ static char *allTests() {
     mu_run_test(startsWith5);
     mu_run_test(startsWith6);
     mu_run_test(startsWith7);
+    mu_run_test(startsWith8);
     mu_run_test(endsWith1);
     mu_run_test(endsWith2);
     mu_run_test(endsWith3);
@@ -406,6 +420,7 @@ static char *allTests() {
     mu_run_test(substringIndex5);
     mu_run_test(substringIndex6);
     mu_run_test(substringIndex7);
+    mu_run_test(substringIndex8);
     mu_run_test(charIndex1);
     mu_run_test(charIndex2);
     mu_run_test(charIndex3);
@@ -426,6 +441,7 @@ static char *allTests() {
     mu_run_test(areStringEquals4);
     mu_run_test(areStringEquals5);
     mu_run_test(areStringEquals6);
+    mu_run_test(areStringEquals7);
     mu_run_test(stringIntoArray1);
     mu_run_test(stringIntoArray2);
     mu_run_test(stringIntoArray3);

@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "../../header/yaml/api.h"
 #include "../../header/sql/query.h"
 #include "../../header/string_array_functions.h"
@@ -18,7 +19,9 @@
  */
 int addWarningToResult(QueryResult *result, char *warning) {
     if (warning) {
-        return addStringIntoArray(warning, &result->warnings, (int) result->warningsCounter);
+        int res = addStringIntoArray(warning, &result->warnings, (int) result->warningsCounter);
+        result->warningsCounter += res;
+        return res;
     }
 
     return 0;
@@ -73,7 +76,7 @@ void addNodeToHashMap(char *dbPath, char *table, HashMap *data) {
     char *currentNodeDataPathMeta = concat(4, dbPath, "/", table, "/metadata.yml");
     Node *currentNodeRootMeta = YAMLParseFile(currentNodeDataPathMeta);
     Node *currentNodeMeta = YAMLGetChildByKey(currentNodeRootMeta, "structure");
-
+    
     if (DBIsValidData(currentNode) && DBIsValidMetadata(currentNodeMeta)) {
         hashInsert(data, strdup(table), currentNode);
         hashInsert(data, concat(2, table, "-metadata"), currentNodeMeta);
@@ -141,7 +144,9 @@ HashMap *initDataMap(Joins *joins, char **tables, int tablesCounter, char *dbPat
         }
 
         for (i = 0; i < tablesCounter; i++) {
-            addNodeToHashMap(dbPath, tables[i], data);
+            if (hashLookup(data, tables[i]) == NULL) { // do not add twice
+                addNodeToHashMap(dbPath, tables[i], data);
+            }
         }
 
         return data;

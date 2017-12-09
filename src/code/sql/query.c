@@ -20,7 +20,7 @@
  */
 QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
     if (queryString && dbPath) {
-        char *queryCpy = toLowerCase(trim(strdup(queryString)));
+        char *queryCpy = trim(strdup(queryString));
         if (queryCpy) {
             QueryResult *res = getEmptyResult();
             short prependIndex = 0;
@@ -28,10 +28,10 @@ QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
             struct timeval start, end;
             gettimeofday(&start, NULL);
 
-            if (startsWith(queryCpy, "select")) {
+            if (startsWith(queryCpy, "select", 1)) {
                 prependIndex = 7; // length of "select "
                 executeSelect(res, queryCpy + prependIndex, dbPath);
-            } else if (startsWith(queryCpy, "insert")) {
+            } else if (startsWith(queryCpy, "insert", 1)) {
                 prependIndex = 7;
                 executeInsert(res, queryCpy + prependIndex, dbPath);
             } else {
@@ -162,62 +162,71 @@ void SQLPrintQueryResult(QueryResult *res) {
     int i;
     int j;
 
-    char **columnsSizeModifiers = getColumnsSizeModifiers(res);
-    char *columnSize;
+    if (res->rowsCounter > 0) {
 
-    // HEADER BAR
-    for (i = 0; i < res->columnsCounter; i++) {
-        if (i == 0) printf("|");
-        columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
-        substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
-        for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
-            printf("-");
-        }
-        printf("|");
-        free(columnSize);
-    }
-    printf("\n");
+        char **columnsSizeModifiers = getColumnsSizeModifiers(res);
+        char *columnSize;
 
-    // HEADERS
-    for (i = 0; i < res->columnsCounter; i++) {
-        if (i == 0) printf("|");
-        printf(columnsSizeModifiers[i], res->headers[i]);
-    }
-    printf("\n");
-
-    for (i = 0; i < res->columnsCounter; i++) {
-        if (i == 0) printf("|");
-        columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
-        substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
-        for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
-            printf("-");
-        }
-        printf("|");
-        free(columnSize);
-    }
-    printf("\n");
-
-    // LINES
-    for (i = 0; i < res->rowsCounter; i++) {
-        printf("|");
-        for (j = 0; j < res->columnsCounter; j++) {
-            printf(columnsSizeModifiers[j], res->table[i][j]);
+        // HEADER BAR
+        for (i = 0; i < res->columnsCounter; i++) {
+            if (i == 0) printf("|");
+            columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
+            substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
+            for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
+                printf("-");
+            }
+            printf("|");
+            free(columnSize);
         }
         printf("\n");
-    }
 
-    // FOOTER BAR
-    for (i = 0; i < res->columnsCounter; i++) {
-        if (i == 0) printf("|");
-        columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
-        substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
-        for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
-            printf("-");
+        // HEADERS
+        for (i = 0; i < res->columnsCounter; i++) {
+            if (i == 0) printf("|");
+            printf(columnsSizeModifiers[i], res->headers[i]);
         }
-        printf("|");
-        free(columnSize);
+        printf("\n");
+
+        for (i = 0; i < res->columnsCounter; i++) {
+            if (i == 0) printf("|");
+            columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
+            substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
+            for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
+                printf("-");
+            }
+            printf("|");
+            free(columnSize);
+        }
+        printf("\n");
+
+        // LINES
+        for (i = 0; i < res->rowsCounter; i++) {
+            printf("|");
+            for (j = 0; j < res->columnsCounter; j++) {
+                printf(columnsSizeModifiers[j], res->table[i][j]);
+            }
+            printf("\n");
+        }
+
+        // FOOTER BAR
+        for (i = 0; i < res->columnsCounter; i++) {
+            if (i == 0) printf("|");
+            columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
+            substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
+            for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
+                printf("-");
+            }
+            printf("|");
+            free(columnSize);
+        }
+        printf("\n");
+
+        for (i = 0; i < res->columnsCounter; i++) {
+            free(columnsSizeModifiers[i]);
+        }
+    } else {
+        printf("No results.\n");
     }
-    printf("\n");
 
     // WARNINGS
     for (i = 0; i < res->warningsCounter; i++) {
@@ -226,9 +235,5 @@ void SQLPrintQueryResult(QueryResult *res) {
 
     // MESSAGE
     printf("%s\n", res->message);
-
-    for (i = 0; i < res->columnsCounter; i++) {
-        free(columnsSizeModifiers[i]);
-    }
 }
 

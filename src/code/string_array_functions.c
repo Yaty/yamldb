@@ -286,7 +286,7 @@ char *concat (int strings, ...) {
         size_t resLength = countStringsLength(strings, list);
 
         if (resLength > 0) {
-            res = malloc(sizeof(char) * resLength);
+            res = malloc(sizeof(char) * resLength + 1);
             res[0] = '\0';
 
             for (i = 0; i < strings; i++) {
@@ -295,6 +295,8 @@ char *concat (int strings, ...) {
                     strcat(res, currentStr);
                 }
             }
+
+            res[resLength] = '\0';
         }
 
         va_end(list);
@@ -347,13 +349,29 @@ char *toLowerCase(char *str) {
  * Check if a string starts with another string
  * @param str
  * @param prefix
+ * @param sensitivity 1 for case insensitivity
  * @return 1 for true, 0 for false
  */
-int startsWith(char *str, char *prefix) {
+int startsWith(char *str, char *prefix, int sensitivity) {
     if (str && prefix) {
-        size_t prefixLength = strlen(prefix);
+        int res;
+        char *strCpy = strdup(str);
+        char *prefixCpy = strdup(prefix);
+
+        if (sensitivity == 1) {
+            strCpy = toLowerCase(strCpy);
+            prefixCpy = toLowerCase(prefixCpy);
+        }
+
+        size_t prefixLength = strlen(prefixCpy);
         if (prefixLength == 0) return 0;
-        return strncmp(prefix, str, strlen(prefix)) == 0;
+
+        res = strncmp(prefixCpy, strCpy, prefixLength);
+
+        free(strCpy);
+        free(prefixCpy);
+
+        return res == 0;
     }
 
     return 0;
@@ -381,14 +399,30 @@ int endsWith(char *str, char *suffix) {
  * Get index where a substring is in a string
  * @param str
  * @param substr
+ * @param sensitivity 1 for case insensitivity
  * @return an index
  */
-long getSubstringIndex(char *str, char *substr) {
+long getSubstringIndex(char *str, char *substr, int sensitivity) {
     if (str && substr) {
-        char *buffer = strstr(str, substr);
-        if (buffer) {
-            return buffer - str;
+        long res = -1;
+        char *strCpy = strdup(str);
+        char *substrCpy = strdup(substr);
+
+        if (sensitivity == 1) {
+            strCpy = toLowerCase(strCpy);
+            substrCpy = toLowerCase(substrCpy);
         }
+
+        char *buffer = strstr(strCpy, substrCpy);
+
+        if (buffer) {
+            res = buffer - strCpy;
+        }
+
+        free(strCpy);
+        free(substrCpy);
+
+        return res;
     }
 
     return -1;
@@ -398,11 +432,26 @@ long getSubstringIndex(char *str, char *substr) {
  * Check if strings are equals
  * @param str1
  * @param str2
+ * @param sensitivity 1 for case insensitivity
  * @return 1 for true, 0 for false
  */
-int areStringsEquals(char *str1, char *str2) {
+int areStringsEquals(char *str1, char *str2, int sensitivity) {
     if (str1 && str2) {
-        return strcmp(str1, str2) == 0;
+        int res;
+        char *str1Cpy = strdup(str1);
+        char *str2Cpy = strdup(str2);
+
+        if (sensitivity == 1) {
+            str1Cpy = toLowerCase(str1Cpy);
+            str2Cpy = toLowerCase(str2Cpy);
+        }
+
+        res = strcmp(str1Cpy, str2Cpy);
+
+        free(str1Cpy);
+        free(str2Cpy);
+
+        return res == 0;
     }
 
     return 0;
@@ -418,7 +467,7 @@ int areStringsEquals(char *str1, char *str2) {
 int stringIntoArray(char *str, char **array, int arraySize) {
     if (str && array && arraySize >= 0) {
         for (int i = 0; i < arraySize; i++) {
-            if (areStringsEquals(array[i], str)) {
+            if (areStringsEquals(array[i], str, 0)) {
                 return 1;
             }
         }
@@ -435,7 +484,7 @@ int stringIntoArray(char *str, char **array, int arraySize) {
  * @return 1 for success, 0 for failure
  */
 int addStringIntoArray(char *string, char ***array, size_t arraySize) {
-    if (string && array && *array && arraySize >= 0) {
+    if (string && array && arraySize >= 0) {
         char **tmp = realloc(*array, (arraySize + 1) * sizeof(char*));
         if (tmp) {
             *array = tmp;
