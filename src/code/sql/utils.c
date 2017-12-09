@@ -76,7 +76,7 @@ void addNodeToHashMap(char *dbPath, char *table, HashMap *data) {
     char *currentNodeDataPathMeta = concat(4, dbPath, "/", table, "/metadata.yml");
     Node *currentNodeRootMeta = YAMLParseFile(currentNodeDataPathMeta);
     Node *currentNodeMeta = YAMLGetChildByKey(currentNodeRootMeta, "structure");
-    
+
     if (DBIsValidData(currentNode) && DBIsValidMetadata(currentNodeMeta)) {
         hashInsert(data, strdup(table), currentNode);
         hashInsert(data, concat(2, table, "-metadata"), currentNodeMeta);
@@ -171,4 +171,101 @@ Node *getMetas(HashMap *dataMap, char *table) {
     }
 
     return NULL;
+}
+
+/**
+ * Remove invalid columns
+ * @param columns
+ * @param columnsCounter
+ * @param tables
+ * @param tablesCounter
+ * @param res
+ * @param dataMap
+ */
+void removeInvalidColumns(char ***columns, int *columnsCounter, char **tables, int tablesCounter, QueryResult *res, HashMap *dataMap) {
+    if (columns && *columns && columnsCounter && *columnsCounter > 0 && dataMap) {
+        int i;
+        int j;
+        int columnExist;
+        Node *checkColumnTable;
+
+        for (i = 0; i < *columnsCounter; i++) {
+            columnExist = 0;
+
+            for (j = 0; j < tablesCounter; j++) {
+                checkColumnTable = getMetas(dataMap, tables[j]);
+                if (checkColumnTable) {
+                    columnExist += YAMLGetChildByKey(checkColumnTable, (*columns)[i]) != NULL;
+                }
+            }
+
+            if (columnExist == 0) {
+                addWarningToResult(res, concat(2, "Invalid column : ", (*columns)[i]));
+                removeElementAtIndex(columns, *columnsCounter, i, 1);
+                *columnsCounter -= 1;
+            }
+        }
+    }
+}
+
+/**
+ * Remove invalid tables
+ * @param tables
+ * @param tablesCounter
+ * @param res
+ * @param dataMap
+ */
+void removeInvalidTables(char ***tables, int *tablesCounter, QueryResult *res, HashMap *dataMap) {
+    if (tables && *tables && tablesCounter && *tablesCounter > 0 && res && dataMap) {
+        int i;
+        for (i = 0; i < *tablesCounter; i++) {
+            if (hashLookup(dataMap, *tables[i]) == NULL) {
+                addWarningToResult(res, concat(2, "Invalid tabe : ", *tables[i]));
+                removeElementAtIndex(tables, *tablesCounter, i, 1);
+                *tablesCounter -= 1;
+            }
+        }
+    }
+}
+
+/**
+ * Check if * is in columns then pick all columns from all table
+ * @param columns
+ * @param columnsCounter
+ * @param tables
+ * @param tablesCounter
+ * @param dataMap
+ */
+void handleFullTableSelector(char ***columns, int *columnsCounter, char **tables, int tablesCounter, HashMap *dataMap) {
+    if (columns && columnsCounter && *columnsCounter > 0 && dataMap) {
+        if (stringIntoArray("*", *columns, *columnsCounter)) {
+            int i;
+            int j;
+            char *key;
+            Node *metas;
+
+            for (i = 0; i < *columnsCounter; i++) {
+                free(*columns[i]);
+                *columns[i] = NULL;
+            }
+
+            free(*columns);
+
+            *columnsCounter = 0;
+
+            for (i = 0; i < tablesCounter; i++) {
+                metas = getMetas(dataMap, tables[i]);
+                if (metas) {
+                    *columns = malloc(sizeof(char*) * YAMLGetSize(metas));
+                    for (j = 0; j < YAMLGetSize(metas); j++) {
+                        key = YAMLGetKey(YAMLGetChildAtIndex(metas, j));
+                        if (key) {
+                            (*columns)[j] = strdup(key);
+                            (*columnsCounter)++;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

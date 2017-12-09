@@ -43,3 +43,73 @@ JoinField *getEmptyJoinField() {
     j->logicOp = NO_OPERATOR;
     return j;
 }
+
+/**
+ * Free join field
+ * @param field
+ */
+void freeJoinField(JoinField *field) {
+    if (field) {
+        if (field->originTable) {
+            free(field->originTable);
+            field->originTable = NULL;
+        }
+
+        if (field->originColumn) {
+            free(field->originColumn);
+            field->originColumn = NULL;
+        }
+
+        if (field->targetTable) {
+            free(field->targetTable);
+            field->targetTable = NULL;
+        }
+
+        if (field->targetColumn) {
+            free(field->targetColumn);
+            field->targetColumn = NULL;
+        }
+
+        free(field);
+        field = NULL;
+    }
+}
+
+/**
+ * Free join
+ * @param join
+ */
+void freeJoin(Join *join) {
+    if (join) {
+        int i;
+
+        if (join->target) {
+            free(join->target);
+            join->target = NULL;
+        }
+
+        for (i = 0; i < join->fieldsNumber; i++) {
+            freeJoinField(&join->fields[i]);
+        }
+
+        free(join);
+        join = NULL;
+    }
+}
+
+/**
+ * Free joins
+ * @param joins
+ */
+void freeJoins(Joins *joins) {
+    if (joins) {
+        int i;
+
+        for (i = 0; i < joins->joinsNumber; i++) {
+            freeJoin(&joins->joins[i]);
+        }
+
+        free(joins);
+        joins = NULL;
+    }
+}

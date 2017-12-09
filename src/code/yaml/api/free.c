@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include "../../../header/yaml/node.h"
+#include "../../../header/yaml/api/free.h"
 
 /**
  * Free recursively a Node and his children

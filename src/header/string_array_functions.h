@@ -202,4 +202,21 @@ int stringIntoArray(char *str, char **array, int arraySize);
  */
 int addStringIntoArray(char *string, char ***array, size_t arraySize);
 
+/**
+ * Remove an element at an index in an array
+ * @param array
+ * @param arraySize
+ * @param index
+ * @param freeElement if we free
+ */
+void removeElementAtIndex(char ***array, int arraySize, int index, int freeElement);
+
+/**
+ * Make string array deep copy
+ * @param columns
+ * @param columnsCounter
+ * @return copied array
+ */
+char **makeStringsDeepCopy(char **columns, int columnsCounter);
+
 #endif // STRING_ARRAY_FUNCTIONS_H_INCLUDED

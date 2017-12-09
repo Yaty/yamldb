@@ -4,4 +4,6 @@ tables:
     - name: orders
       empty: no
     - name: orderDetails
-      empty: yes
+      empty: no
+    - name: products
+      empty: no

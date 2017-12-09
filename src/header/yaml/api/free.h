@@ -2,8 +2,8 @@
 // Created by Hugo on 05/11/2017.
 //
 
-#ifndef CBDD1_FREE_H
-#define CBDD1_FREE_H
+#ifndef CBDD1_FREE_YAML_H
+#define CBDD1_FREE_YAML_H
 
 /**
  * Free recursively a Node and his children
@@ -19,4 +19,4 @@ int YAMLFreeNode (Node *node);
  */
 int YAMLPartialNodeFree(Node *node);
 
-#endif //CBDD1_FREE_H
+#endif //CBDD1_FREE_YAML_H

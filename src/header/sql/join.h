@@ -51,4 +51,22 @@ Join *getEmptyJoin();
  */
 JoinField *getEmptyJoinField();
 
+/**
+ * Free joins
+ * @param joins
+ */
+void freeJoins(Joins *joins);
+
+/**
+ * Free join
+ * @param join
+ */
+void freeJoin(Join *join);
+
+/**
+ * Free join field
+ * @param field
+ */
+void freeJoinField(JoinField *field);
+
 #endif //CBDD1_JOIN_H

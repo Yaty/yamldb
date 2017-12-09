@@ -2,8 +2,8 @@
 // Created by Hugo on 12/11/2017.
 //
 
-#ifndef CBDD1_UTILS_H
-#define CBDD1_UTILS_H
+#ifndef CBDD1_UTILS_SQL_H
+#define CBDD1_UTILS_SQL_H
 
 #include "query.h"
 #include "../yaml/node.h"
@@ -62,4 +62,34 @@ HashMap *initDataMap(Joins *joins, char **tables, int tablesCounter, char *dbPat
  */
 Node *getMetas(HashMap *dataMap, char *table);
 
-#endif //CBDD1_UTILS_H
+/**
+ * Remove invalid columns
+ * @param columns
+ * @param columnsCounter
+ * @param tables
+ * @param tablesCounter
+ * @param res
+ * @param dataMap
+ */
+void removeInvalidColumns(char ***columns, int *columnsCounter, char **tables, int tablesCounter, QueryResult *res, HashMap *dataMap);
+
+/**
+ * Remove invalid tables
+ * @param tables
+ * @param tablesCounter
+ * @param res
+ * @param dataMap
+ */
+void removeInvalidTables(char ***tables, int *tablesCounter, QueryResult *res, HashMap *dataMap);
+
+/**
+ * Check if * is in columns then pick all columns from all table
+ * @param columns
+ * @param columnsCounter
+ * @param tables
+ * @param tablesCounter
+ * @param dataMap
+ */
+void handleFullTableSelector(char ***columns, int *columnsCounter, char **tables, int tablesCounter, HashMap *dataMap);
+
+#endif //CBDD1_UTILS_SQL_H

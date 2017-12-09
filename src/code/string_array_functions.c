@@ -495,3 +495,48 @@ int addStringIntoArray(char *string, char ***array, size_t arraySize) {
 
     return 0;
 }
+
+/**
+ * Remove an element at an index in an array
+ * @param array
+ * @param arraySize
+ * @param index
+ * @param freeElement if we free
+ */
+void removeElementAtIndex(char ***array, int arraySize, int index, int freeElement) {
+    if (array && *array && arraySize > 0 && index >= 0) {
+        int i;
+
+        if (freeElement) {
+            free(*array[index]);
+        }
+
+
+        for (i = index; i < arraySize - 1; i++) {
+            (*array)[index] = (*array)[index + 1];
+        }
+
+        (*array)[arraySize - 1] = NULL;
+    }
+}
+
+/**
+ * Make string array deep copy
+ * @param columns
+ * @param columnsCounter
+ * @return copied array
+ */
+char **makeStringsDeepCopy(char **columns, int columnsCounter) {
+    if (columns && columnsCounter > 0) {
+        int i;
+        char **res = malloc(sizeof(char*) * columnsCounter);
+
+        for (i = 0; i < columnsCounter; i++) {
+            res[i] = strdup(columns[i]);
+        }
+
+        return res;
+    }
+
+    return NULL;
+}

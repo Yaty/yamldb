@@ -228,7 +228,7 @@ static Node *getNewLine(Node *currentLine, char **columns, int columnsCounter) {
 
         for (i = 0; i < YAMLGetSize(currentLine); i++) {
             currentColumn = YAMLGetChildAtIndex(currentLine, i);
-            if (stringIntoArray(YAMLGetKey(currentColumn), columns, columnsCounter)) {
+            if (stringIntoArray(YAMLGetKey(currentColumn), columns, columnsCounter) || stringIntoArray("*", columns, columnsCounter)) {
                 YAMLAddChild(line, currentColumn);
             }
         }
@@ -301,6 +301,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     // int ordersCounter = 0;
     int linesCounter = 0;
     int currentLineId = 0;
+    int addLineSuccess;
     Joins *joins = getJoins(query);
     char **columns = getColumns(query, &columnsCounter);
     char **tables = getTables(query, &tablesCounter);
@@ -315,15 +316,19 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     HashMap *dataMap = NULL;
     Node *newLine;
 
+    dataMap = initDataMap(joins, tables, tablesCounter, dbPath);
+    handleFullTableSelector(&columns, &columnsCounter, tables, tablesCounter, dataMap);
+    removeInvalidColumns(&columns, &columnsCounter, tables, tablesCounter, res, dataMap);
+    removeInvalidTables(&tables, &tablesCounter, res, dataMap);
+
     if (columnsCounter <= 0 || tablesCounter <= 0) {
-        SQLFreeQueryResult(res);
-        res = getFailedResult("Bad query.");
+        addWarningToResult(res, strdup("No valid columns or tables."));
+        res->status = FAILURE;
         return;
     }
 
-    res->headers = columns;
+    res->headers = makeStringsDeepCopy(columns, columnsCounter);
     res->columnsCounter = (size_t) columnsCounter;
-    dataMap = initDataMap(joins, tables, tablesCounter, dbPath);
 
     for (i = 0; i < tablesCounter; i++) {
         currentTable = tables[i];
@@ -349,7 +354,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
         }
 
         res->table = tmp;
-        res->rowsCounter = (size_t) linesCounter;
+        res->rowsCounter = 0;
 
         for (j = 0; j < dataSize; j++) {
             currentLine = YAMLGetChildAtIndex(data, j);
@@ -365,8 +370,10 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
                 newLine = getNewLine(currentLine, columns, columnsCounter);
             }
 
-            if (newLine) {
-                currentLineId += addLine(newLine, res, currentLineId, columns, columnsCounter);
+            if (YAMLGetSize(newLine) > 0) {
+                addLineSuccess = addLine(newLine, res, currentLineId, columns, columnsCounter);
+                currentLineId += addLineSuccess;
+                res->rowsCounter += addLineSuccess;
             }
         }
 
@@ -376,7 +383,8 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
 
     res->status = res->warningsCounter == 0 ? SUCCESS : FAILURE;
 
-    // Columns are used by the result, so they will be freed later
-    for (i = 0; i < tablesCounter; i++) free(tables[i]);
     freeHashMapFilledWithNode(dataMap);
+    for (i = 0; i < tablesCounter; i++) free(tables[i]);
+    for (i = 0; i < columnsCounter; i++) free(columns[i]);
+    freeJoins(joins);
 }
