@@ -1,7 +1,0 @@
-Tables:
-    - name: table_1
-      status: empty
-    - name: table_2
-      status: empty
-    - name: table_3
-      status: empty

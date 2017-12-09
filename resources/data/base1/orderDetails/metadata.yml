@@ -1,0 +1,21 @@
+structure:
+    orderDetailId:
+        type: INT
+        primary: no
+        defaultValue: no
+        autoIncrement: yes
+    orderId:
+        type: INT
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    productId:
+        type: STRING
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    quantity:
+        type: INT
+        primary: no
+        defaultValue: no
+        autoIncrement: no

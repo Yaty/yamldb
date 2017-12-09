@@ -1,0 +1,6 @@
+# Types
+
+1. INT
+2. DOUBLE
+3. CHAR
+4. STRING

@@ -1,0 +1,7 @@
+tables:
+    - name: customers
+      empty: no
+    - name: orders
+      empty: no
+    - name: orderDetails
+      empty: yes
