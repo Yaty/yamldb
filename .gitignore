@@ -53,7 +53,20 @@ dkms.conf
 
 # IDE
 .idea
+
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
 cmake-build-debug/
 cmake-build-debug/*
+cmake-build-debug
+*cmake-build-debug*
 cbdd.exe.stackdump
 cbdd_tests.exe.stackdump
