@@ -2,6 +2,7 @@
 // Created by Hugo on 01/12/2017.
 //
 
+#include <stdlib.h>
 #include "../../header/sql/operators.h"
 #include "../../header/string_array_functions.h"
 
@@ -77,11 +78,11 @@ int evalComparatorInt(int a, int b, Comparator operator) {
  * @param type
  * @return 1 for equal, 0 for not, -1 for error
  */
-int isEqual(void *a, void *b, char *type) {
+int isEqual(char *a, char *b, char *type) {
     if (a && b && type) {
         type = toLowerCase(type);
         if (areStringsEquals(type, "int")) { // TODO, HANDLE ALL TYPES
-            return (int) a == (int) b;
+            return strtol(a, NULL, 10) == strtol(b, NULL, 10);
         } else if (areStringsEquals(type, "text")) {
             return areStringsEquals((char*) a, (char*) b);
         }
