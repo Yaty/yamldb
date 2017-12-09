@@ -5,7 +5,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sched.h>
-#include <time.h>
 #include <sys/time.h>
 #include <stdio.h>
 #include "../../header/sql/utils.h"
@@ -145,7 +144,7 @@ static char **getColumnsSizeModifiers(QueryResult *res) {
             }
 
             sprintf(columnSize, "%d", (int) columnMaxSize + 2); // + 1 to have a padding
-            columnsSize[i] = concat(3, "%", columnSize, "s|");
+            columnsSize[i] = concat(3, "%", columnSize, "s |");
             free(columnSize);
         }
 
@@ -166,6 +165,19 @@ void SQLPrintQueryResult(QueryResult *res) {
     char **columnsSizeModifiers = getColumnsSizeModifiers(res);
     char *columnSize;
 
+    // HEADER BAR
+    for (i = 0; i < res->columnsCounter; i++) {
+        if (i == 0) printf("|");
+        columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
+        substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
+        for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
+            printf("-");
+        }
+        printf("|");
+        free(columnSize);
+    }
+    printf("\n");
+
     // HEADERS
     for (i = 0; i < res->columnsCounter; i++) {
         if (i == 0) printf("|");
@@ -177,8 +189,8 @@ void SQLPrintQueryResult(QueryResult *res) {
         if (i == 0) printf("|");
         columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
         substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
-        for (j = 0; j < strtol(columnSize, NULL, 10); j++) {
-            printf("=");
+        for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
+            printf("-");
         }
         printf("|");
         free(columnSize);
@@ -193,6 +205,19 @@ void SQLPrintQueryResult(QueryResult *res) {
         }
         printf("\n");
     }
+
+    // FOOTER BAR
+    for (i = 0; i < res->columnsCounter; i++) {
+        if (i == 0) printf("|");
+        columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
+        substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
+        for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
+            printf("-");
+        }
+        printf("|");
+        free(columnSize);
+    }
+    printf("\n");
 
     // WARNINGS
     for (i = 0; i < res->warningsCounter; i++) {

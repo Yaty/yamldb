@@ -8,99 +8,41 @@
 #include "../../header/string_array_functions.h"
 #include "../../header/sql/utils.h"
 #include "../../header/yaml/api.h"
-#include "../../header/sql/join.h"
 #include "../../header/sql/parser.h"
 
-static int addLine(Node *line, QueryResult *res, int index) {
+static int addLine(Node *line, QueryResult *res, int index, char **columns, int columnsNumber) {
     if (line && res && index >= 0) {
+        int i;
+        Node *currentCouple;
+
         res->table[index] = malloc(sizeof(char *) * YAMLGetSize(line));
 
-        if (res->table[index]) {
-            for (int i = 0; i < YAMLGetSize(line); i++) {
-                Node *currentCouple = YAMLGetChildAtIndex(line, i);
-                if (currentCouple) {
-                    res->table[index][i] = strdup(YAMLGetValue(currentCouple));
-                } else {
-                    res->table[index][i] = strdup("(NULL)");
-                }
+        for (i = 0; i < columnsNumber; i++) {
+            currentCouple = YAMLGetChildByKey(line, columns[i]);
+            if (currentCouple) {
+                res->table[index][i] = YAMLGetValue(currentCouple);
+            } else {
+                res->table[index][i] = strdup("(NULL)");
             }
-
-            return 1;
         }
+
+        return 1;
     }
 
     return 0;
 }
 
-static void freeHashMap(HashMap *map) {
-    if (map) {
-        for (int i = 0; i < map->size; i++) {
-            free(map->keys[i]);
-            YAMLFreeNode(map->values[i]);
-        }
-
-        free(map);
-    }
-}
-
 /**
- * Return a HashMap filled with data Nodes
- * Key : table name
- * Value : the yml file parsed, browsable in a Node struct
- * @param joins
- * @param dbPath
- * @return the hashmap
+ * Eval join fields and return columns
+ * @param fields
+ * @param fieldsNumber
+ * @param dataMap
+ * @param warnings
+ * @param warningsNumber
+ * @param lineFull
+ * @param target
+ * @return node struct
  */
-static HashMap *initDataMap(Joins *joins, char **tables, int tablesCounter, char *dbPath) {
-    if (dbPath) {
-        int i;
-        int j;
-        int counter = 0;
-        Join currentJoin;
-        JoinField currentField;
-
-        for (i = 0; i < joins->joinsNumber; i++) {
-            currentJoin = joins->joins[i];
-            for (j = 0; j < currentJoin.fieldsNumber; j++) {
-                currentField = currentJoin.fields[j];
-                if (!stringIntoArray(currentField.originTable, tables, tablesCounter)) counter++; // the condition prevent to count twice the same table
-                if (!stringIntoArray(currentField.targetTable, tables, tablesCounter)) counter++;
-            }
-        }
-
-        HashMap *data = hashNew(counter * 2 + tablesCounter * 2); // * 2 to count the metadata file
-
-        for (i = 0; i < joins->joinsNumber; i++) {
-            currentJoin = joins->joins[i];
-            for (j = 0; j < currentJoin.fieldsNumber; j++) {
-                currentField = currentJoin.fields[j];
-                if (currentField.originTable) addNodeToHashMap(dbPath, currentField.originTable, data);
-                if (currentField.targetTable) addNodeToHashMap(dbPath, currentField.targetTable, data);
-            }
-        }
-
-        for (i = 0; i < tablesCounter; i++) {
-            addNodeToHashMap(dbPath, tables[i], data);
-        }
-
-        return data;
-
-    }
-
-    return hashNew(0);
-}
-
-static Node *getMetas(HashMap *dataMap, char *table) {
-    if (dataMap && table) {
-        char *path = concat(2, table, "-metadata");
-        Node *metas = hashLookup(dataMap, path);
-        free(path);
-        return metas;
-    }
-
-    return NULL;
-}
-
 static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMap, char ***warnings, size_t *warningsNumber, Node *lineFull, char *target) {
     if (fields && fieldsNumber > 0 && dataMap) {
         int i;
@@ -238,8 +180,19 @@ static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMa
     return NULL;
 }
 
-static Node *makeJoin(Join *join, char **columns, int columnsCounter, HashMap *dataMap, char ***warnings, size_t *warningsNumber, Node *lineFull) {
-    if (join && columns && columnsCounter > 0 && dataMap && warnings && lineFull) {
+/**
+ * Make a join, handle all types of joins
+ * @param join
+ * @param columns
+ * @param columnsCounter
+ * @param dataMap
+ * @param warnings
+ * @param warningsNumber
+ * @param lineFull
+ * @return the join in a node struct
+ */
+static Node *makeJoin(Join *join, HashMap *dataMap, char ***warnings, size_t *warningsNumber, Node *lineFull) {
+    if (join && dataMap && warnings && lineFull) {
         Node *joinRes = evalJoinFields(join->fields, join->fieldsNumber, dataMap, warnings, warningsNumber, lineFull, join->target);
         if (joinRes) {
             switch (join->type) {
@@ -286,6 +239,17 @@ static Node *getNewLine(Node *currentLine, char **columns, int columnsCounter) {
     return NULL;
 }
 
+/**
+ * Make a join on the current line
+ * @param currentLine
+ * @param joins
+ * @param columns
+ * @param columnsCounter
+ * @param dataMap
+ * @param warnings
+ * @param warningsNumber
+ * @return the join in a node struct
+ */
 static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns, int columnsCounter, HashMap *dataMap, char ***warnings, size_t *warningsNumber) {
     if (currentLine && joins && columns && columnsCounter > 0 && joins->joinsNumber > 0) {
         int i;
@@ -303,7 +267,7 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns,
         YAMLPartialNodeFree(root);
 
         for (i = 0; i < joins->joinsNumber; i++) { // For each join
-            joinLine = makeJoin(&joins->joins[i], columns, columnsCounter, dataMap, warnings, warningsNumber, lineFull);
+            joinLine = makeJoin(&joins->joins[i], dataMap, warnings, warningsNumber, lineFull);
             for (j = 0; j < YAMLGetSize(joinLine); j++) { // For each column from a the join
                 joinCell = YAMLGetChildAtIndex(joinLine, j);
                 if (YAMLGetChildByKey(res, YAMLGetKey(joinCell)) == NULL) { // Check if the column is not here
@@ -361,9 +325,6 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     res->columnsCounter = (size_t) columnsCounter;
     dataMap = initDataMap(joins, tables, tablesCounter, dbPath);
 
-    YAMLPrintNode(hashLookup(dataMap, "table2")); // TODO FIX PARSER ONLY GET FIRST NUMBER
-    // TODO FIX COLUMN ORDERING IN JOIN
-
     for (i = 0; i < tablesCounter; i++) {
         currentTable = tables[i];
 
@@ -405,7 +366,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
             }
 
             if (newLine) {
-                currentLineId += addLine(newLine, res, currentLineId);
+                currentLineId += addLine(newLine, res, currentLineId, columns, columnsCounter);
             }
         }
 
@@ -417,7 +378,5 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
 
     // Columns are used by the result, so they will be freed later
     for (i = 0; i < tablesCounter; i++) free(tables[i]);
-    if (dataMap) freeHashMap(dataMap);
-    // for (i = 0; i < joins.joinsNumber; i++) YAMLFreeNode(&joinsTableData[i]);
-    // if (joinsTableData) free(joinsTableData);
+    freeHashMapFilledWithNode(dataMap);
 }

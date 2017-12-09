@@ -8,6 +8,7 @@
 #include "query.h"
 #include "../yaml/node.h"
 #include "../utils/hashmap.h"
+#include "join.h"
 
 /**
  * Add a warning message to a query result
@@ -36,5 +37,29 @@ int loadData(char *dbPath, char *currentTable, Node **data, Node **metas);
  * @param data
  */
 void addNodeToHashMap(char *dbPath, char *table, HashMap *data);
+
+/**
+ * Free hash map which is filled by node struct
+ * @param map
+ */
+void freeHashMapFilledWithNode(HashMap *map);
+
+/**
+ * Return a HashMap filled with data Nodes
+ * Key : table name
+ * Value : the yml file parsed, browsable in a Node struct
+ * @param joins
+ * @param dbPath
+ * @return the hashmap
+ */
+HashMap *initDataMap(Joins *joins, char **tables, int tablesCounter, char *dbPath);
+
+/**
+ * Get meta node from a hashmap
+ * @param dataMap
+ * @param table
+ * @return
+ */
+Node *getMetas(HashMap *dataMap, char *table);
 
 #endif //CBDD1_UTILS_H
