@@ -350,10 +350,10 @@ Joins* getJoins(char *query) {
                                     if (fieldsTmp) {
                                         fields = fieldsTmp;
                                         fields[fieldsNumber] = *getEmptyJoinField();
-                                        fields[fieldsNumber].originTable = table1;
-                                        fields[fieldsNumber].originColumn = col1;
-                                        fields[fieldsNumber].targetTable = table2;
-                                        fields[fieldsNumber].targetColumn = col1;
+                                        fields[fieldsNumber].originTable = strdup(table1);
+                                        fields[fieldsNumber].originColumn = strdup(col1);
+                                        fields[fieldsNumber].targetTable = strdup(table2);
+                                        fields[fieldsNumber].targetColumn = strdup(col1);
                                         fields[fieldsNumber].comparator = currentComparator;
                                         indexOperator = getLogicalOperator(ptr, &fields[fieldsNumber].logicOp); // This will set logicOp
                                         fieldsNumber++;

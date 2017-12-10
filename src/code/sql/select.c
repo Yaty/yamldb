@@ -81,7 +81,7 @@ static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMa
 
                 if (!table1 || !metas1 || !table2 || !metas2) {
                     *warningsNumber += addStringIntoArray(
-                            concat(4, "Invalid tables (data or metadata missing for one of them) : ", field.originTable, " ,", field.targetTable),
+                            concat(4, "Invalid tables (data or metadata missing for one of them) : ", strdup(field.originTable), " ,", strdup(field.targetTable)),
                             warnings,
                             *warningsNumber
                     );
@@ -89,12 +89,12 @@ static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMa
                 }
 
                 originCell = YAMLGetValue(YAMLGetChildByKey(lineFull, field.originColumn));
-                originCellType = YAMLGetValue(YAMLGetChildByKey(metas1, field.originColumn)); // TODO : HANDLE NEW METADATA STRUCTURE
-                targetCellType = YAMLGetValue(YAMLGetChildByKey(metas2, field.targetColumn)); // TODO : IDEM
+                originCellType = YAMLGetValue(YAMLGetChildByKey(YAMLGetChildByKey(metas1, field.originColumn), "type"));
+                targetCellType = YAMLGetValue(YAMLGetChildByKey(YAMLGetChildByKey(metas2, field.targetColumn), "type"));
 
                 if (!originCell) {
                     *warningsNumber += addStringIntoArray(
-                            concat(2, "Invalid column data : ", field.originColumn),
+                            concat(2, "Invalid column data : ", strdup(field.originColumn)),
                             warnings,
                             *warningsNumber
                     );
@@ -103,20 +103,20 @@ static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMa
 
                 if (!originCellType || !targetCellType) {
                     *warningsNumber += addStringIntoArray(
-                            concat(3, "Invalid column type : ", field.originColumn, field.targetColumn),
+                            concat(3, "Invalid column type : ", strdup(field.originColumn), strdup(field.targetColumn)),
                             warnings,
                             *warningsNumber
                     );
                     return NULL;
                 }
 
-                // Column type check, we can only compare if they have the same type TODO HANDLE NEW METADATA STRUCTURE
+                // Column type check, we can only compare if they have the same type
                 if (!areStringsEquals(originCellType, targetCellType, 1)) {
                     *warningsNumber += addStringIntoArray(
                             concat(
                                     4,
                                     "Invalid join field. You can't compare two columns with a different type : ",
-                                    field.originColumn, " and ", field.targetColumn
+                                    strdup(field.originColumn), " and ", strdup(field.targetColumn)
                             ),
                             warnings,
                             *warningsNumber
@@ -126,7 +126,7 @@ static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMa
 
                 if (YAMLGetChildByKey(lineFull, field.originColumn) == NULL) {
                     *warningsNumber += addStringIntoArray(
-                            concat(2, "Invalid column in join field : ", field.originColumn),
+                            concat(2, "Invalid column in join field : ", strdup(field.originColumn)),
                             warnings,
                             *warningsNumber
                     );
@@ -173,39 +173,6 @@ static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMa
                 }
             } else if (fieldValues[0]) {
                 return YAMLGetChildAtIndex(targetData, i);
-            }
-        }
-    }
-
-    return NULL;
-}
-
-/**
- * Make a join, handle all types of joins
- * @param join
- * @param columns
- * @param columnsCounter
- * @param dataMap
- * @param warnings
- * @param warningsNumber
- * @param lineFull
- * @return the join in a node struct
- */
-static Node *makeJoin(Join *join, HashMap *dataMap, char ***warnings, size_t *warningsNumber, Node *lineFull) {
-    if (join && dataMap && warnings && lineFull) {
-        Node *joinRes = evalJoinFields(join->fields, join->fieldsNumber, dataMap, warnings, warningsNumber, lineFull, join->target);
-        if (joinRes) {
-            switch (join->type) {
-                case INNER:
-                    return joinRes;
-                case FULL:
-                    break;
-                case LEFT:
-                    break;
-                case RIGHT:
-                    break;
-                default:
-                    break;
             }
         }
     }
@@ -267,7 +234,21 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns,
         YAMLPartialNodeFree(root);
 
         for (i = 0; i < joins->joinsNumber; i++) { // For each join
-            joinLine = makeJoin(&joins->joins[i], dataMap, warnings, warningsNumber, lineFull);
+            joinLine = evalJoinFields(joins->joins[i].fields, joins->joins[i].fieldsNumber, dataMap, warnings, warningsNumber, lineFull, joins->joins[i].target);
+
+            // TODO : Handle join type
+            switch (joins->joins[i].type) {
+                case INNER:
+                    break;
+                case FULL:
+                    break;
+                case LEFT:
+                    break;
+                case RIGHT:
+                    break;
+            }
+
+
             for (j = 0; j < YAMLGetSize(joinLine); j++) { // For each column from a the join
                 joinCell = YAMLGetChildAtIndex(joinLine, j);
                 if (YAMLGetChildByKey(res, YAMLGetKey(joinCell)) == NULL) { // Check if the column is not here
@@ -278,6 +259,8 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns,
                 }
             }
         }
+
+        YAMLFreeNode(lineFull);
 
         return res;
     }
@@ -318,7 +301,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
 
     dataMap = initDataMap(joins, tables, tablesCounter, dbPath);
     handleFullTableSelector(&columns, &columnsCounter, tables, tablesCounter, dataMap);
-    removeInvalidColumns(&columns, &columnsCounter, tables, tablesCounter, res, dataMap);
+    removeInvalidColumns(&columns, &columnsCounter, res, dataMap);
     removeInvalidTables(&tables, &tablesCounter, res, dataMap);
 
     if (columnsCounter <= 0 || tablesCounter <= 0) {

@@ -182,7 +182,7 @@ Node *getMetas(HashMap *dataMap, char *table) {
  * @param res
  * @param dataMap
  */
-void removeInvalidColumns(char ***columns, int *columnsCounter, char **tables, int tablesCounter, QueryResult *res, HashMap *dataMap) {
+void removeInvalidColumns(char ***columns, int *columnsCounter, QueryResult *res, HashMap *dataMap) {
     if (columns && *columns && columnsCounter && *columnsCounter > 0 && dataMap) {
         int i;
         int j;
@@ -192,15 +192,17 @@ void removeInvalidColumns(char ***columns, int *columnsCounter, char **tables, i
         for (i = 0; i < *columnsCounter; i++) {
             columnExist = 0;
 
-            for (j = 0; j < tablesCounter; j++) {
-                checkColumnTable = getMetas(dataMap, tables[j]);
-                if (checkColumnTable) {
-                    columnExist += YAMLGetChildByKey(checkColumnTable, (*columns)[i]) != NULL;
+            for (j = 0; j < dataMap->size; j++) {
+                if (endsWith(dataMap->keys[j], "-metadata")) {
+                    checkColumnTable = dataMap->values[j];
+                    if (checkColumnTable) {
+                        columnExist += YAMLGetChildByKey(checkColumnTable, (*columns)[i]) != NULL;
+                    }
                 }
             }
 
             if (columnExist == 0) {
-                addWarningToResult(res, concat(2, "Invalid column : ", (*columns)[i]));
+                addWarningToResult(res, concat(2, "Invalid column : ", strdup((*columns)[i])));
                 removeElementAtIndex(columns, *columnsCounter, i, 1);
                 *columnsCounter -= 1;
             }
@@ -219,8 +221,8 @@ void removeInvalidTables(char ***tables, int *tablesCounter, QueryResult *res, H
     if (tables && *tables && tablesCounter && *tablesCounter > 0 && res && dataMap) {
         int i;
         for (i = 0; i < *tablesCounter; i++) {
-            if (hashLookup(dataMap, *tables[i]) == NULL) {
-                addWarningToResult(res, concat(2, "Invalid tabe : ", *tables[i]));
+            if (hashLookup(dataMap, (*tables)[i]) == NULL) {
+                addWarningToResult(res, concat(2, "Invalid table : ", strdup((*tables)[i])));
                 removeElementAtIndex(tables, *tablesCounter, i, 1);
                 *tablesCounter -= 1;
             }
@@ -245,8 +247,8 @@ void handleFullTableSelector(char ***columns, int *columnsCounter, char **tables
             Node *metas;
 
             for (i = 0; i < *columnsCounter; i++) {
-                free(*columns[i]);
-                *columns[i] = NULL;
+                free((*columns)[i]);
+                (*columns)[i] = NULL;
             }
 
             free(*columns);

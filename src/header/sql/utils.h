@@ -71,7 +71,7 @@ Node *getMetas(HashMap *dataMap, char *table);
  * @param res
  * @param dataMap
  */
-void removeInvalidColumns(char ***columns, int *columnsCounter, char **tables, int tablesCounter, QueryResult *res, HashMap *dataMap);
+void removeInvalidColumns(char ***columns, int *columnsCounter, QueryResult *res, HashMap *dataMap);
 
 /**
  * Remove invalid tables

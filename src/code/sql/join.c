@@ -3,6 +3,7 @@
 //
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "../../header/sql/join.h"
 
 /**
@@ -70,8 +71,10 @@ void freeJoinField(JoinField *field) {
             field->targetColumn = NULL;
         }
 
+        /*
         free(field);
         field = NULL;
+         */
     }
 }
 
@@ -92,8 +95,10 @@ void freeJoin(Join *join) {
             freeJoinField(&join->fields[i]);
         }
 
+        /*
         free(join);
         join = NULL;
+         */
     }
 }
 

@@ -508,7 +508,7 @@ void removeElementAtIndex(char ***array, int arraySize, int index, int freeEleme
         int i;
 
         if (freeElement) {
-            free(*array[index]);
+            free((*array)[index]);
         }
 
 
