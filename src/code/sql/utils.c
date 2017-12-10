@@ -160,7 +160,7 @@ void removeInvalidColumns(char ***columns, int *columnsCounter, QueryResult *res
             columnExist = 0;
 
             for (j = 0; j < dataMap->size; j++) {
-                if (endsWith(dataMap->keys[j], "-metadata")) {
+                if (endsWith(dataMap->keys[j], "-metadata", 0)) {
                     checkColumnTable = dataMap->values[j];
                     if (checkColumnTable) {
                         columnExist += YAMLGetChildByKey(checkColumnTable, (*columns)[i]) != NULL;

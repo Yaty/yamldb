@@ -381,15 +381,29 @@ int startsWith(char *str, char *prefix, int sensitivity) {
  * Check if a string ends with another string
  * @param str
  * @param suffix
+ * @param sensitivity 1 for case insensitivity
  * @return 1 for true, 0 for false
  */
-int endsWith(char *str, char *suffix) {
+int endsWith(char *str, char *suffix, int sensitive) {
     if (str && suffix) {
-        size_t strLength = strlen(str);
-        size_t suffixLength = strlen(suffix);
-        if (suffixLength <= strLength && suffixLength > 0) {
-            return strncmp(str + strLength - suffixLength, suffix, suffixLength) == 0;
+        char *strCpy = strdup(str);
+        char *suffixCpy = strdup(suffix);
+        int res = 0;
+        size_t strLength = strlen(strCpy);
+        size_t suffixLength = strlen(suffixCpy);
+
+        if (sensitive == 1) {
+            strCpy = toLowerCase(strCpy);
+            suffixCpy = toLowerCase(suffixCpy);
         }
+
+        if (suffixLength <= strLength && suffixLength > 0) {
+            res = strncmp(strCpy + strLength - suffixLength, suffixCpy, suffixLength) == 0;
+        }
+
+        free(strCpy);
+        free(suffixCpy);
+        return res;
     }
 
     return 0;

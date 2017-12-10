@@ -4,13 +4,13 @@
 
 `SELECT customerId, customerName, city FROM customers`
 
-`SELECT * FROM products`
+`SELECT * FROM products` : you can select all columns with *
 
 ## Multi table select
 
 `SELECT customerId, productId FROM customers, products`
 
-## Joints
+## Joins
 
 ### Inner join
 
@@ -22,11 +22,11 @@
 
 ### Right join
 
-`SELECT customerName, orderId FROM customers RIGHT JOIN orders ON customers.customerId = orders.customerId`
+Not implemented.
 
 ### Full join
 
-`SELECT customerName, orderId FROM customers FULL JOIN orders ON customers.customerId = orders.customerId`
+Not implemented.
 
 ### Multi joins
 
@@ -36,6 +36,16 @@
 
 TODO
 
+### Joins with different conditions
+
+We can handle those comparators :
+1. = : equal
+2. <> : not equal
+3. > : greater
+4. >= : greater or equal
+5. < : lesser
+6. <= : lesser or equal
+
 ## Order by
 
 TODO
@@ -43,3 +53,7 @@ TODO
 ## Conditions
 
 TODO
+
+## Known limitations
+
+We can't use different join type in a query. It won't crash but the result will not be correct.

@@ -3,6 +3,7 @@
 //
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "../../../header/yaml/node.h"
 #include "../../../header/yaml/api/free.h"
 

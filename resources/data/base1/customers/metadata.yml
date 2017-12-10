@@ -9,7 +9,7 @@ structure:
         primary: no
         defaultValue: no
         autoIncrement: no
-    adress:
+    address:
         type: STRING
         primary: no
         defaultValue: no

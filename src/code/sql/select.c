@@ -93,11 +93,6 @@ static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int 
                 targetCellType = YAMLGetValue(YAMLGetChildByKey(YAMLGetChildByKey(metas2, field.targetColumn), "type"));
 
                 if (!originCell) {
-                    *warningsNumber += addStringIntoArray(
-                            concat(2, "Invalid column data : ", strdup(field.originColumn)),
-                            warnings,
-                            *warningsNumber
-                    );
                     return NULL;
                 }
 
@@ -143,14 +138,39 @@ static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int 
                         );
                         break;
                     case GREATER:
+                        fieldValues[j] = isGreater(
+                                originCell,
+                                YAMLGetValue(YAMLGetChildByKey(YAMLGetChildAtIndex(targetData, i), field.targetColumn)),
+                                originCellType
+                        );
                         break;
                     case LESSER:
+                        fieldValues[j] = isLesser(
+                                originCell,
+                                YAMLGetValue(YAMLGetChildByKey(YAMLGetChildAtIndex(targetData, i), field.targetColumn)),
+                                originCellType
+                        );
                         break;
                     case GREATER_EQUAL:
+                        fieldValues[j] = isGreaterOrEqual(
+                                originCell,
+                                YAMLGetValue(YAMLGetChildByKey(YAMLGetChildAtIndex(targetData, i), field.targetColumn)),
+                                originCellType
+                        );
                         break;
                     case LESSER_EQUAL:
+                        fieldValues[j] = isLesserOrEqual(
+                                originCell,
+                                YAMLGetValue(YAMLGetChildByKey(YAMLGetChildAtIndex(targetData, i), field.targetColumn)),
+                                originCellType
+                        );
                         break;
                     case NOT_EQUAL:
+                        fieldValues[j] = isNotEqual(
+                                originCell,
+                                YAMLGetValue(YAMLGetChildByKey(YAMLGetChildAtIndex(targetData, i), field.targetColumn)),
+                                originCellType
+                        );
                         break;
                     default:
                         *warningsNumber += addStringIntoArray(
@@ -231,7 +251,7 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns,
         Node *joinLine;
         Node *joinCell;
         Node *resLine;
-        Node *newLine;
+        int isEmpty = 1;
 
         // Deep copy of currentLine
         Node *wrap = YAMLGetMapNode("line");
@@ -244,19 +264,18 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns,
         for (i = 0; i < joins->joinsNumber; i++) { // For each join
             joinLines = evalJoinFields(&joins->joins[i], dataMap, warnings, warningsNumber, lineFull);
 
+            isEmpty = isEmpty && YAMLGetSize(joinLines) == 0;
+
             switch (joins->joins[i].type) {
-                case INNER:
-                    if (YAMLGetSize(joinLines) == 0) {
-                        YAMLFreeNode(lineFull);
-                        return NULL;
-                    }
+                case INNER: // we will ignore the result if isEmpty is true at the end of the loop
                     break;
-                case FULL:
-                    YAMLPrintNode(joinLines);
+                case FULL: // TODO
+                    *warningsNumber += addStringIntoArray(strdup("Unhandled join type (full)."), warnings, *warningsNumber);
                     break;
-                case LEFT: // by default we have this behaviour so we do not have to do anything
+                case LEFT: // by default we have this behaviour
                     break;
-                case RIGHT:
+                case RIGHT: // TODO
+                    *warningsNumber += addStringIntoArray(strdup("Unhandled join type (right)."), warnings, *warningsNumber);
                     break;
                 default:
                     *warningsNumber += addStringIntoArray(strdup("Invalid join type."), warnings, *warningsNumber);
@@ -271,6 +290,10 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns,
                     joinCell = YAMLGetChildAtIndex(joinLine, k);
 
                     if (resLine) {
+                        if (YAMLGetChildByKey(lineFull, YAMLGetKey(joinCell)) == NULL) {
+                            YAMLAddChild(lineFull, joinCell);
+                        }
+
                         YAMLAddChild(resLine, joinCell);
                     } else {
                         // Add a new node and restart the loop to add the line
@@ -284,7 +307,9 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns,
 
         YAMLFreeNode(lineFull);
 
-        return res;
+        if (!isEmpty) {
+            return res;
+        }
     }
 
     return NULL;
@@ -372,7 +397,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
 
     res->status = res->warningsCounter == 0 ? SUCCESS : FAILURE;
 
-    freeHashMapFilledWithNode(dataMap);
+    // freeHashMapFilledWithNode(dataMap);
     for (i = 0; i < tablesCounter; i++) free(tables[i]);
     for (i = 0; i < columnsCounter; i++) free(columns[i]);
     freeJoins(joins);

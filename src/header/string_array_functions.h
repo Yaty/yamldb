@@ -161,9 +161,10 @@ int startsWith(char *str, char *prefix, int sensitivity);
  * Check if a string ends with another string
  * @param str
  * @param suffix
+ * @param sensitivity 1 for case insensitivity
  * @return 1 for true, 0 for false
  */
-int endsWith(char *str, char *suffix);
+int endsWith(char *str, char *suffix, int sensitive);
 
 /**
  * Get index where a substring is in a string

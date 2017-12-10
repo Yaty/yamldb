@@ -148,31 +148,35 @@ static char *startsWith8() {
 }
 
 static char *endsWith1() {
-    mu_assert("endsWith1", endsWith("manger", "nger"));
+    mu_assert("endsWith1", endsWith("manger", "nger", 0));
 }
 
 static char *endsWith2() {
-    mu_assert("endsWith2", endsWith("manger", "abcd") == 0);
+    mu_assert("endsWith2", endsWith("manger", "abcd", 0) == 0);
 }
 
 static char *endsWith3() {
-    mu_assert("endsWith3", endsWith("manger", "") == 0);
+    mu_assert("endsWith3", endsWith("manger", "", 0) == 0);
 }
 
 static char *endsWith4() {
-    mu_assert("endsWith4", endsWith("manger", NULL) == 0);
+    mu_assert("endsWith4", endsWith("manger", NULL, 0) == 0);
 }
 
 static char *endsWith5() {
-    mu_assert("endsWith5", endsWith(NULL, "nger") == 0);
+    mu_assert("endsWith5", endsWith(NULL, "nger", 0) == 0);
 }
 
 static char *endsWith6() {
-    mu_assert("endsWith6", endsWith("manger", "manger"));
+    mu_assert("endsWith6", endsWith("manger", "manger", 0));
 }
 
 static char *endsWith7() {
-    mu_assert("endsWith6", endsWith(NULL, NULL) == 0);
+    mu_assert("endsWith7", endsWith(NULL, NULL, 0) == 0);
+}
+
+static char *endsWith8() {
+    mu_assert("endsWith8", endsWith("blablablaBLE", "ble", 1));
 }
 
 static char *substringIndex1() {
@@ -413,6 +417,7 @@ static char *allTests() {
     mu_run_test(endsWith5);
     mu_run_test(endsWith6);
     mu_run_test(endsWith7);
+    mu_run_test(endsWith8);
     mu_run_test(substringIndex1);
     mu_run_test(substringIndex2);
     mu_run_test(substringIndex3);

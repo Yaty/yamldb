@@ -49,4 +49,49 @@ int evalComparatorInt(int a, int b, Comparator operator);
  */
 int isEqual(char *a, char *b, char *type);
 
+/**
+ * Check if value a is greater than value b according to a type
+ * @param a
+ * @param b
+ * @param type
+ * @return 1 for equal, 0 for not, -1 for error
+ */
+int isGreater(char *a, char *b, char *type);
+
+/**
+ * Check if value a is lesser than value b according to a type
+ * @param a
+ * @param b
+ * @param type
+ * @return 1 for equal, 0 for not, -1 for error
+ */
+int isLesser(char *a, char *b, char *type);
+
+/**
+ * Check if value a is greater of equal to value b according to a type
+ * @param a
+ * @param b
+ * @param type
+ * @return 1 for equal, 0 for not, -1 for error
+ */
+int isGreaterOrEqual(char *a, char *b, char *type);
+
+/**
+ * Check if value a is lesser of equal to value b according to a type
+ * @param a
+ * @param b
+ * @param type
+ * @return 1 for equal, 0 for not, -1 for error
+ */
+int isLesserOrEqual(char *a, char *b, char *type);
+
+/**
+ * Check if value a not equal to value b according to a type
+ * @param a
+ * @param b
+ * @param type
+ * @return 1 for equal, 0 for not, -1 for error
+ */
+int isNotEqual(char *a, char *b, char *type);
+
 #endif //CBDD1_OPERATORS_H

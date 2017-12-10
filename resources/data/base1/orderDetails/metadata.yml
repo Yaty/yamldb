@@ -10,7 +10,7 @@ structure:
         defaultValue: no
         autoIncrement: no
     productId:
-        type: STRING
+        type: INT
         primary: no
         defaultValue: no
         autoIncrement: no

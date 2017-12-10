@@ -266,25 +266,20 @@ long getLogicalOperator(char *str, LogicalOperator *operator) {
 JoinType getJoinType(char *str, long index) {
     if (str) { // a from t (8)JOIN_TYPE join
         char *strCpy = strdup(str);
-        char *p;
         JoinType type = NONE;
+
         if (strCpy) {
             strCpy[index] = '\0';
             trim(strCpy);
-            p = strrchr(strCpy, ' ');
-            if (p && *(p + 1)) {
-                p += 1;
-                trim(p);
 
-                if (areStringsEquals(p, "left", 1)) {
-                    type = LEFT;
-                } else if (areStringsEquals(p, "right", 1)) {
-                    type = RIGHT;
-                } else if (areStringsEquals(p, "full", 1)) {
-                    type = FULL;
-                } else {
-                    type = INNER;
-                }
+            if (endsWith(strCpy, "left", 1)) {
+                type = LEFT;
+            } else if (endsWith(strCpy, "right", 1)) {
+                type = RIGHT;
+            } else if (endsWith(strCpy, "full", 1)) {
+                type = FULL;
+            } else {
+                type = INNER;
             }
 
             free(strCpy);
@@ -339,6 +334,7 @@ Joins* getJoins(char *query) {
                     if (indexOn == 0) {
                         ptr += 2; // ptr ~= "bla.bla = bla.bla ..."
                         ptr = trim(ptr);
+                        fieldsNumber = 0;
 
                         do {
                             indexOperator = getComparator(ptr, &currentComparator);
@@ -362,7 +358,7 @@ Joins* getJoins(char *query) {
                             }
                         } while (indexOperator >= 0 && indexOperator < getSubstringIndex(ptr, "join", 1));
 
-                        joinsTmp = realloc(joins->joins, (size_t) joins->joinsNumber + 1);
+                        joinsTmp = realloc(joins->joins, sizeof(Join) * ((size_t) joins->joinsNumber + 1));
                         if (joinsTmp) {
                             newJoin = getEmptyJoin();
                             newJoin->type = type;
@@ -373,6 +369,8 @@ Joins* getJoins(char *query) {
                             joins->joins = joinsTmp;
                             joins->joins[joins->joinsNumber++] = *newJoin;
                         }
+
+                        fields = NULL;
                         free(target);
                     }
                 }
