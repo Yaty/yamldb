@@ -200,7 +200,7 @@ int stringIntoArray(char *str, char **array, int arraySize);
  * @param arraySize
  * @return 1 for success, 0 for failure
  */
-int addStringIntoArray(char *string, char ***array, size_t arraySize);
+int addStringIntoArray(char *string, char ***array, int arraySize);
 
 /**
  * Remove an element at an index in an array

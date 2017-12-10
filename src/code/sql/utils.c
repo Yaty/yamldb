@@ -28,39 +28,6 @@ int addWarningToResult(QueryResult *result, char *warning) {
 }
 
 /**
- * Load data and metadata from a table
- * @param dbPath
- * @param currentTable
- * @param data
- * @param metas
- * @return the number of lines
- */
-int loadData(char *dbPath, char *currentTable, Node **data, Node **metas) {
-    char *currentTablePath = concat(3, dbPath, "/", currentTable);
-    char *currentTableMetaPath = concat(2, currentTablePath, "/metadata.yml");
-    char *currentTableDataPath = concat(2, currentTablePath, "/data.yml");
-    Node *rootMetas = YAMLParseFile(currentTableMetaPath);
-    Node *rootData = YAMLParseFile(currentTableDataPath);
-
-    *metas = YAMLGetChildByKey(rootMetas, "structure");
-    *data = YAMLGetChildByKey(rootData, "data");
-
-    free(currentTableDataPath);
-    free(currentTableMetaPath);
-    free(currentTablePath);
-
-    if (*metas && *data) {
-        YAMLPartialNodeFree(rootData);
-        YAMLPartialNodeFree(rootMetas);
-        return YAMLGetSize(*data);
-    } else {
-        YAMLFreeNode(rootData);
-        YAMLFreeNode(rootMetas);
-        return 0;
-    }
-}
-
-/**
  * Add a node by his file path to a hashmap
  * Data key = table
  * Metadata key = table-metadata

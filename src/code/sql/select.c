@@ -11,7 +11,7 @@
 #include "../../header/sql/parser.h"
 
 static int addLine(Node *line, QueryResult *res, int index, char **columns, int columnsNumber) {
-    if (line && res && index >= 0) {
+    if (line && res && index >= 0 && YAMLGetSize(line) > 0) {
         int i;
         Node *currentCouple;
 
@@ -34,21 +34,19 @@ static int addLine(Node *line, QueryResult *res, int index, char **columns, int 
 
 /**
  * Eval join fields and return columns
- * @param fields
- * @param fieldsNumber
+ * @param join
  * @param dataMap
  * @param warnings
  * @param warningsNumber
  * @param lineFull
- * @param target
- * @return node struct
+ * @return
  */
-static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMap, char ***warnings, size_t *warningsNumber, Node *lineFull, char *target) {
-    if (fields && fieldsNumber > 0 && dataMap) {
+static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int *warningsNumber, Node *lineFull) {
+    if (join && join->fields && join->fieldsNumber > 0 && dataMap) {
         int i;
         int j;
         int res;
-        int fieldValues[fieldsNumber];
+        int fieldValues[join->fieldsNumber];
         char *originCell;
         char *originCellType;
         char *targetCellType;
@@ -59,11 +57,13 @@ static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMa
         Node *metas2;
         Node *targetData;
 
-        targetData = hashLookup(dataMap, target);
+        Node *newLines = YAMLGetMapNode("lines");
+
+        targetData = hashLookup(dataMap, join->target);
 
         if (!targetData) {
             *warningsNumber += addStringIntoArray(
-                    concat(2, "Invalid target table for a join : ", target),
+                    concat(2, "Invalid target table for a join : ", strdup(join->target)),
                     warnings,
                     *warningsNumber
             );
@@ -71,8 +71,8 @@ static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMa
         }
 
         for (i = 0; i < YAMLGetSize(targetData); i++) {
-            for (j = 0; j < fieldsNumber; j++) {
-                field = fields[j];
+            for (j = 0; j < join->fieldsNumber; j++) {
+                field = join->fields[j];
 
                 table1 = hashLookup(dataMap, field.originTable);
                 metas1 = getMetas(dataMap, field.originTable);
@@ -163,18 +163,20 @@ static Node *evalJoinFields(JoinField *fields, int fieldsNumber, HashMap *dataMa
             }
 
             res = 0;
-            if (fieldsNumber > 1) {
-                for (j = 0; j < fieldsNumber - 1; j++) {
-                    res += evalOperatorInt(fieldValues[j], fieldValues[j + 1], fields[j].logicOp);
+            if (join->fieldsNumber > 1) {
+                for (j = 0; j < join->fieldsNumber - 1; j++) {
+                    res += evalOperatorInt(fieldValues[j], fieldValues[j + 1], join->fields[j].logicOp);
                 }
 
-                if (res == fieldsNumber - 1) {
-                    return YAMLGetChildAtIndex(targetData, i);
+                if (res == join->fieldsNumber - 1) {
+                    YAMLAddChild(newLines, YAMLGetChildAtIndex(targetData, i));
                 }
             } else if (fieldValues[0]) {
-                return YAMLGetChildAtIndex(targetData, i);
+                YAMLAddChild(newLines, YAMLGetChildAtIndex(targetData, i));
             }
         }
+
+        return newLines;
     }
 
     return NULL;
@@ -217,15 +219,21 @@ static Node *getNewLine(Node *currentLine, char **columns, int columnsCounter) {
  * @param warningsNumber
  * @return the join in a node struct
  */
-static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns, int columnsCounter, HashMap *dataMap, char ***warnings, size_t *warningsNumber) {
+static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns, int columnsCounter, HashMap *dataMap, char ***warnings, int *warningsNumber) {
     if (currentLine && joins && columns && columnsCounter > 0 && joins->joinsNumber > 0) {
         int i;
         int j;
+        int k;
 
-        Node *res = getNewLine(currentLine, columns, columnsCounter); // first we get value from a normal select
+        Node *res = YAMLGetMapNode("lines");
+        YAMLAddChild(res, getNewLine(currentLine, columns, columnsCounter)); // first we get value from a normal select
+        Node *joinLines;
         Node *joinLine;
         Node *joinCell;
+        Node *resLine;
+        Node *newLine;
 
+        // Deep copy of currentLine
         Node *wrap = YAMLGetMapNode("line");
         wrap->children = currentLine->children;
         wrap->childrenNumber = currentLine->childrenNumber;
@@ -234,28 +242,42 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns,
         YAMLPartialNodeFree(root);
 
         for (i = 0; i < joins->joinsNumber; i++) { // For each join
-            joinLine = evalJoinFields(joins->joins[i].fields, joins->joins[i].fieldsNumber, dataMap, warnings, warningsNumber, lineFull, joins->joins[i].target);
+            joinLines = evalJoinFields(&joins->joins[i], dataMap, warnings, warningsNumber, lineFull);
 
-            // TODO : Handle join type
             switch (joins->joins[i].type) {
                 case INNER:
+                    if (YAMLGetSize(joinLines) == 0) {
+                        YAMLFreeNode(lineFull);
+                        return NULL;
+                    }
                     break;
                 case FULL:
+                    YAMLPrintNode(joinLines);
                     break;
-                case LEFT:
+                case LEFT: // by default we have this behaviour so we do not have to do anything
                     break;
                 case RIGHT:
                     break;
+                default:
+                    *warningsNumber += addStringIntoArray(strdup("Invalid join type."), warnings, *warningsNumber);
+                    YAMLFreeNode(lineFull);
+                    return NULL;
             }
 
+            for (j = 0; j < YAMLGetSize(joinLines); j++) { // For each lines a join generated
+                joinLine = YAMLGetChildAtIndex(joinLines, j);
+                resLine = YAMLGetChildAtIndex(res, j);
+                for (k = 0; k < YAMLGetSize(joinLine); k++) { // For each line of a join
+                    joinCell = YAMLGetChildAtIndex(joinLine, k);
 
-            for (j = 0; j < YAMLGetSize(joinLine); j++) { // For each column from a the join
-                joinCell = YAMLGetChildAtIndex(joinLine, j);
-                if (YAMLGetChildByKey(res, YAMLGetKey(joinCell)) == NULL) { // Check if the column is not here
-                    YAMLAddChild(res, joinCell); // Add column: value into our result
-                    YAMLAddChild(lineFull, joinCell);
-                } else {
-                    *warningsNumber += addStringIntoArray(strdup("Duplicated column during a join."), warnings, *warningsNumber);
+                    if (resLine) {
+                        YAMLAddChild(resLine, joinCell);
+                    } else {
+                        // Add a new node and restart the loop to add the line
+                        YAMLAddChild(res, getNewLine(currentLine, columns, columnsCounter));
+                        j--;
+                        break;
+                    }
                 }
             }
         }
@@ -277,29 +299,26 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns,
 void executeSelect(QueryResult *res, char *query, char *dbPath) {
     int i = 0;
     int j = 0;
+    int k = 0;
     int dataSize = 0;
     int columnsCounter = 0;
     int tablesCounter = 0;
     // int conditionsCounter = 0;
     // int ordersCounter = 0;
     int linesCounter = 0;
-    int currentLineId = 0;
-    int addLineSuccess;
-    Joins *joins = getJoins(query);
     char **columns = getColumns(query, &columnsCounter);
     char **tables = getTables(query, &tablesCounter);
     // char **conditions = getConditions(query, &conditionsCounter); TODO
     // char **orders = getOrders(query, &ordersCounter); TODO
     char *currentTable;
     char ***tmp;
-    char *metasName = NULL;
+    Joins *joins = getJoins(query);
     Node *metas;
     Node *data;
     Node *currentLine;
-    HashMap *dataMap = NULL;
-    Node *newLine;
+    Node *newLines;
+    HashMap *dataMap = initDataMap(joins, tables, tablesCounter, dbPath);
 
-    dataMap = initDataMap(joins, tables, tablesCounter, dbPath);
     handleFullTableSelector(&columns, &columnsCounter, tables, tablesCounter, dataMap);
     removeInvalidColumns(&columns, &columnsCounter, res, dataMap);
     removeInvalidTables(&tables, &tablesCounter, res, dataMap);
@@ -311,17 +330,16 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     }
 
     res->headers = makeStringsDeepCopy(columns, columnsCounter);
-    res->columnsCounter = (size_t) columnsCounter;
+    res->columnsCounter = columnsCounter;
+    res->rowsCounter = 0;
 
     for (i = 0; i < tablesCounter; i++) {
         currentTable = tables[i];
 
         // Get table data and metadatas from the HashMap
         data = hashLookup(dataMap, currentTable);
-        metasName = concat(2, currentTable, "-metadata");
-        metas = hashLookup(dataMap, metasName);
-        free(metasName);
-        dataSize = loadData(dbPath, currentTable, &data, &metas);
+        metas = getMetas(dataMap, currentTable);
+        dataSize = YAMLGetSize(data);
         linesCounter += dataSize;
 
         if (!DBIsValidMetadata(metas) || !DBIsValidData(data)) {
@@ -337,31 +355,19 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
         }
 
         res->table = tmp;
-        res->rowsCounter = 0;
 
         for (j = 0; j < dataSize; j++) {
             currentLine = YAMLGetChildAtIndex(data, j);
 
-            if (!currentLine) {
-                addWarningToResult(res, strdup("Line not found."));
-                continue; // go to next line in table
-            }
-
             if (joins->joinsNumber > 0) {
-                newLine = getNewLineWithJoin(currentLine, joins, columns, columnsCounter, dataMap, &res->warnings, &res->warningsCounter);
+                newLines = getNewLineWithJoin(currentLine, joins, columns, columnsCounter, dataMap, &res->warnings, &res->warningsCounter);
+                for (k = 0; k < YAMLGetSize(newLines); k++) {
+                    res->rowsCounter += addLine(YAMLGetChildAtIndex(newLines, k), res, res->rowsCounter, columns, columnsCounter);
+                }
             } else {
-                newLine = getNewLine(currentLine, columns, columnsCounter);
-            }
-
-            if (YAMLGetSize(newLine) > 0) {
-                addLineSuccess = addLine(newLine, res, currentLineId, columns, columnsCounter);
-                currentLineId += addLineSuccess;
-                res->rowsCounter += addLineSuccess;
+                res->rowsCounter += addLine(getNewLine(currentLine, columns, columnsCounter), res, res->rowsCounter, columns, columnsCounter);
             }
         }
-
-        YAMLFreeNode(metas);
-        YAMLFreeNode(data);
     }
 
     res->status = res->warningsCounter == 0 ? SUCCESS : FAILURE;

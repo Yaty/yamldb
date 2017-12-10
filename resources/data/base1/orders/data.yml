@@ -20,3 +20,6 @@ data:
     - orderId: 7
       customerId: 9
       orderDate: 7/9/1996
+    - orderId: 8
+      customerId: 500
+      orderDate: 7/9/1996
