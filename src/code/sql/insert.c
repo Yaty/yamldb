@@ -16,4 +16,7 @@ void executeInsert(QueryResult *res, char *query, char *dbPath) {
     res->table = malloc(sizeof(char **));
     res->table[0] = malloc(sizeof(char *));
     res->table[0][0] = strdup("BAAAM");
+
+
+
 }

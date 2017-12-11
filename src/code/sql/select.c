@@ -344,7 +344,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     Node *newLines;
     HashMap *dataMap = initDataMap(joins, tables, tablesCounter, dbPath);
 
-    handleFullTableSelector(&columns, &columnsCounter, tables, tablesCounter, dataMap);
+    handleFullTableSelector(&columns, &columnsCounter, joins, tables, tablesCounter, dataMap);
     removeInvalidColumns(&columns, &columnsCounter, res, dataMap);
     removeInvalidTables(&tables, &tablesCounter, res, dataMap);
 

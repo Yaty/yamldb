@@ -205,12 +205,14 @@ void removeInvalidTables(char ***tables, int *tablesCounter, QueryResult *res, H
  * @param tablesCounter
  * @param dataMap
  */
-void handleFullTableSelector(char ***columns, int *columnsCounter, char **tables, int tablesCounter, HashMap *dataMap) {
+// TODO ADD JOIN TARGET TABLES
+void handleFullTableSelector(char ***columns, int *columnsCounter, Joins *joins, char **tables, int tablesCounter, HashMap *dataMap) {
     if (columns && columnsCounter && *columnsCounter > 0 && dataMap) {
         if (stringIntoArray("*", *columns, *columnsCounter)) {
             int i;
             int j;
             char *key;
+            char **tmp;
             Node *metas;
 
             for (i = 0; i < *columnsCounter; i++) {
@@ -224,13 +226,26 @@ void handleFullTableSelector(char ***columns, int *columnsCounter, char **tables
 
             for (i = 0; i < tablesCounter; i++) {
                 metas = getMetas(dataMap, tables[i]);
-                if (metas) {
-                    *columns = malloc(sizeof(char*) * YAMLGetSize(metas));
-                    for (j = 0; j < YAMLGetSize(metas); j++) {
-                        key = YAMLGetKey(YAMLGetChildAtIndex(metas, j));
-                        if (key) {
-                            (*columns)[j] = strdup(key);
-                            (*columnsCounter)++;
+                *columns = malloc(sizeof(char*) * YAMLGetSize(metas));
+                for (j = 0; j < YAMLGetSize(metas); j++) {
+                    key = YAMLGetKey(YAMLGetChildAtIndex(metas, j));
+                    if (key) {
+                        (*columns)[j] = strdup(key);
+                        (*columnsCounter)++;
+                    }
+                }
+            }
+
+            for (i = 0; i < joins->joinsNumber; i++) {
+                metas = getMetas(dataMap, joins->joins[i].target);
+                for (j = 0; j < YAMLGetSize(metas); j++) {
+                    key = YAMLGetKey(YAMLGetChildAtIndex(metas, j));
+                    if (key && !stringIntoArray(key, *columns, *columnsCounter)) {;
+                        tmp = realloc(*columns, ((*columnsCounter) + 1) * sizeof(char*));
+                        if (tmp) {
+                            *columns = tmp;
+                            (*columns)[(*columnsCounter)++] = strdup(key);
+
                         }
                     }
                 }

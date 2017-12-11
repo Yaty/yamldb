@@ -90,6 +90,6 @@ void removeInvalidTables(char ***tables, int *tablesCounter, QueryResult *res, H
  * @param tablesCounter
  * @param dataMap
  */
-void handleFullTableSelector(char ***columns, int *columnsCounter, char **tables, int tablesCounter, HashMap *dataMap);
+void handleFullTableSelector(char ***columns, int *columnsCounter, Joins *joins, char **tables, int tablesCounter, HashMap *dataMap);
 
 #endif //CBDD1_UTILS_SQL_H

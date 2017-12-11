@@ -82,13 +82,13 @@ int evalComparatorInt(int a, int b, Comparator operator) {
 int isEqual(char *a, char *b, char *type) {
     if (a && b && type) {
         type = toLowerCase(type);
-        if (areStringsEquals(type, "int", 1)) {
+        if (startsWith(type, "int", 1)) {
             return strtol(a, NULL, 10) == strtol(b, NULL, 10);
-        } else if (areStringsEquals(type, "string", 1)) {
+        } else if (startsWith(type, "string", 1)) {
             return areStringsEquals(a, b, 0);
-        } else if (areStringsEquals(type, "double", 1)) {
+        } else if (startsWith(type, "double", 1)) {
             return strtod(a, NULL) == strtod(b, NULL);
-        } else if (areStringsEquals(type, "char", 1)) {
+        } else if (startsWith(type, "char", 1)) {
             return a[0] == b[0];
         }
     }
@@ -106,9 +106,9 @@ int isEqual(char *a, char *b, char *type) {
 int isGreater(char *a, char *b, char *type) {
     if (a && b && type) {
         type = toLowerCase(type);
-        if (areStringsEquals(type, "int", 1)) {
+        if (startsWith(type, "int", 1)) {
             return strtol(a, NULL, 10) > strtol(b, NULL, 10);
-        } else if (areStringsEquals(type, "double", 1)) {
+        } else if (startsWith(type, "double", 1)) {
             return strtod(a, NULL) > strtod(b, NULL);
         }
     }
@@ -126,9 +126,9 @@ int isGreater(char *a, char *b, char *type) {
 int isLesser(char *a, char *b, char *type) {
     if (a && b && type) {
         type = toLowerCase(type);
-        if (areStringsEquals(type, "int", 1)) {
+        if (startsWith(type, "int", 1)) {
             return strtol(a, NULL, 10) < strtol(b, NULL, 10);
-        } else if (areStringsEquals(type, "double", 1)) {
+        } else if (startsWith(type, "double", 1)) {
             return strtod(a, NULL) < strtod(b, NULL);
         }
     }
