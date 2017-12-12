@@ -4,38 +4,42 @@ data:
       productId: 1
       quantity: 50
     - orderDetailId: 2
-      orderId: 1
+      orderId: 2
       productId: 2
       quantity: 10
     - orderDetailId: 3
-      orderId: 2
+      orderId: 3
       productId: 1
       quantity: 50
     - orderDetailId: 4
-      orderId: 3
+      orderId: 4
       productId: 3
       quantity: 10
     - orderDetailId: 5
       orderId: 4
-      productId: 1
-      quantity: 1
+      productId: 2
+      quantity: 10
     - orderDetailId: 6
       orderId: 5
-      productId: 3
-      quantity: 25
+      productId: 1
+      quantity: 1
     - orderDetailId: 7
       orderId: 6
       productId: 3
-      quantity: 5
+      quantity: 25
     - orderDetailId: 8
       orderId: 7
+      productId: 3
+      quantity: 5
+    - orderDetailId: 9
+      orderId: 8
       productId: 1
       quantity: 50
-    - orderDetailId: 9
-      orderId: 7
+    - orderDetailId: 10
+      orderId: 9
       productId: 2
       quantity: 50
-    - orderDetailId: 10
-      orderId: 7
+    - orderDetailId: 11
+      orderId: 10
       productId: 3
       quantity: 50

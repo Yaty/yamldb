@@ -149,10 +149,18 @@ int YAMLSetKey(Node *node, char *key) {
  * @return the new node
  */
 Node *YAMLDeepCopy(Node *node) {
-    char path[] = "./resources/data/tmp.yml";
+    char *path = strdup("./resources/data/tmp.yml");
 
-    if (node && YAMLSaveNode(node, path)) {
-        return YAMLParseFile(path);
+    if (path) {
+        Node *res = NULL;
+
+        if (node && YAMLSaveNode(node, path)) {
+            res = YAMLParseFile(path);
+        }
+
+        free(path);
+        path = NULL;
+        return res;
     }
 
     return NULL;

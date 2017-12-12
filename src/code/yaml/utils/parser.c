@@ -55,9 +55,9 @@ Node *getEmptyNode() {
     Node *node = malloc(sizeof(Node));
     if (node) {
         node->childrenNumber = 0;
-        node->key = malloc(0);
-        node->value = malloc(0);
-        node->children = malloc(0);
+        node->key = NULL;
+        node->value = NULL;
+        node->children = NULL;
         node->type = UNDEFINED;
         return node;
     }

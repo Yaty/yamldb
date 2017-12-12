@@ -4,7 +4,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include "../../header/yaml/api.h"
 #include "../../header/sql/query.h"
 #include "../../header/string_array_functions.h"
@@ -19,7 +18,7 @@
  */
 int addWarningToResult(QueryResult *result, char *warning) {
     if (warning) {
-        int res = addStringIntoArray(warning, &result->warnings, (int) result->warningsCounter);
+        int res = addStringIntoArray(warning, &result->warnings, result->warningsCounter);
         result->warningsCounter += res;
         return res;
     }
@@ -205,7 +204,6 @@ void removeInvalidTables(char ***tables, int *tablesCounter, QueryResult *res, H
  * @param tablesCounter
  * @param dataMap
  */
-// TODO ADD JOIN TARGET TABLES
 void handleFullTableSelector(char ***columns, int *columnsCounter, Joins *joins, char **tables, int tablesCounter, HashMap *dataMap) {
     if (columns && columnsCounter && *columnsCounter > 0 && dataMap) {
         if (stringIntoArray("*", *columns, *columnsCounter)) {
@@ -224,6 +222,7 @@ void handleFullTableSelector(char ***columns, int *columnsCounter, Joins *joins,
 
             *columnsCounter = 0;
 
+            // Add all columns from tables
             for (i = 0; i < tablesCounter; i++) {
                 metas = getMetas(dataMap, tables[i]);
                 *columns = malloc(sizeof(char*) * YAMLGetSize(metas));
@@ -236,6 +235,7 @@ void handleFullTableSelector(char ***columns, int *columnsCounter, Joins *joins,
                 }
             }
 
+            // Add all columns from each join target
             for (i = 0; i < joins->joinsNumber; i++) {
                 metas = getMetas(dataMap, joins->joins[i].target);
                 for (j = 0; j < YAMLGetSize(metas); j++) {
@@ -245,7 +245,6 @@ void handleFullTableSelector(char ***columns, int *columnsCounter, Joins *joins,
                         if (tmp) {
                             *columns = tmp;
                             (*columns)[(*columnsCounter)++] = strdup(key);
-
                         }
                     }
                 }

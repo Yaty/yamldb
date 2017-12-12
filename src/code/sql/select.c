@@ -38,14 +38,14 @@ static int addLine(Node *line, QueryResult *res, int index, char **columns, int 
  * @param dataMap
  * @param warnings
  * @param warningsNumber
- * @param lineFull
+ * @param resLine
  * @return
  */
-static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int *warningsNumber, Node *lineFull) {
+static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int *warningsNumber, Node *resLine) {
     if (join && join->fields && join->fieldsNumber > 0 && dataMap) {
         int i;
         int j;
-        int res;
+        int evalOperators;
         int fieldValues[join->fieldsNumber];
         char *originCell;
         char *originCellType;
@@ -88,7 +88,7 @@ static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int 
                     return NULL;
                 }
 
-                originCell = YAMLGetValue(YAMLGetChildByKey(lineFull, field.originColumn));
+                originCell = YAMLGetValue(YAMLGetChildByKey(resLine, field.originColumn));
                 originCellType = YAMLGetValue(YAMLGetChildByKey(YAMLGetChildByKey(metas1, field.originColumn), "type"));
                 targetCellType = YAMLGetValue(YAMLGetChildByKey(YAMLGetChildByKey(metas2, field.targetColumn), "type"));
 
@@ -119,7 +119,7 @@ static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int 
                     return NULL;
                 }
 
-                if (YAMLGetChildByKey(lineFull, field.originColumn) == NULL) {
+                if (YAMLGetChildByKey(resLine, field.originColumn) == NULL) {
                     *warningsNumber += addStringIntoArray(
                             concat(2, "Invalid column in join field : ", strdup(field.originColumn)),
                             warnings,
@@ -182,13 +182,13 @@ static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int 
                 }
             }
 
-            res = 0;
+            evalOperators = 0;
             if (join->fieldsNumber > 1) {
                 for (j = 0; j < join->fieldsNumber - 1; j++) {
-                    res += evalOperatorInt(fieldValues[j], fieldValues[j + 1], join->fields[j].logicOp);
+                    evalOperators += evalOperatorInt(fieldValues[j], fieldValues[j + 1], join->fields[j].logicOp);
                 }
 
-                if (res == join->fieldsNumber - 1) {
+                if (evalOperators == join->fieldsNumber - 1) {
                     YAMLAddChild(newLines, YAMLGetChildAtIndex(targetData, i));
                 }
             } else if (fieldValues[0]) {
@@ -228,6 +228,10 @@ static Node *getNewLine(Node *currentLine, char **columns, int columnsCounter) {
     return NULL;
 }
 
+static Node *test() {
+
+}
+
 /**
  * Make a join on the current line
  * @param currentLine
@@ -239,73 +243,72 @@ static Node *getNewLine(Node *currentLine, char **columns, int columnsCounter) {
  * @param warningsNumber
  * @return the join in a node struct
  */
-static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, char **columns, int columnsCounter, HashMap *dataMap, char ***warnings, int *warningsNumber) {
-    if (currentLine && joins && columns && columnsCounter > 0 && joins->joinsNumber > 0) {
+static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, HashMap *dataMap, char ***warnings, int *warningsNumber) {
+    if (currentLine && joins && joins->joinsNumber > 0) {
         int i;
         int j;
         int k;
+        int l;
+        int m = 0;
+        int stop = 0;
 
+        Node *tmp = YAMLGetMapNode("line");
+        tmp->children = currentLine->children; // currentLine is a sequence value so we have to do like this
+        tmp->childrenNumber = currentLine->childrenNumber;
+        Node *line = YAMLGetChildByKey(YAMLDeepCopy(tmp), "line");
         Node *res = YAMLGetMapNode("lines");
-        YAMLAddChild(res, getNewLine(currentLine, columns, columnsCounter)); // first we get value from a normal select
+        YAMLAddChild(res, line);
         Node *joinLines;
         Node *joinLine;
         Node *joinCell;
         Node *resLine;
         int isEmpty = 1;
-
-        // Deep copy of currentLine
-        Node *wrap = YAMLGetMapNode("line");
-        wrap->children = currentLine->children;
-        wrap->childrenNumber = currentLine->childrenNumber;
-        Node *root = YAMLDeepCopy(wrap);
-        Node *lineFull = YAMLGetChildByKey(root, "line");
-        YAMLPartialNodeFree(root);
+        int test;
 
         for (i = 0; i < joins->joinsNumber; i++) { // For each join
-            joinLines = evalJoinFields(&joins->joins[i], dataMap, warnings, warningsNumber, lineFull);
-
-            isEmpty = isEmpty && YAMLGetSize(joinLines) == 0;
-
-            switch (joins->joins[i].type) {
-                case INNER: // we will ignore the result if isEmpty is true at the end of the loop
-                    break;
-                case FULL: // TODO
-                    *warningsNumber += addStringIntoArray(strdup("Unhandled join type (full)."), warnings, *warningsNumber);
-                    break;
-                case LEFT: // by default we have this behaviour
-                    break;
-                case RIGHT: // TODO
-                    *warningsNumber += addStringIntoArray(strdup("Unhandled join type (right)."), warnings, *warningsNumber);
-                    break;
-                default:
-                    *warningsNumber += addStringIntoArray(strdup("Invalid join type."), warnings, *warningsNumber);
-                    YAMLFreeNode(lineFull);
-                    return NULL;
-            }
-
-            for (j = 0; j < YAMLGetSize(joinLines); j++) { // For each lines a join generated
-                joinLine = YAMLGetChildAtIndex(joinLines, j);
+            for (j = 0, m = 0; j < YAMLGetSize(res); j += 1 + m) {
                 resLine = YAMLGetChildAtIndex(res, j);
-                for (k = 0; k < YAMLGetSize(joinLine); k++) { // For each line of a join
-                    joinCell = YAMLGetChildAtIndex(joinLine, k);
+                joinLines = evalJoinFields(&joins->joins[i], dataMap, warnings, warningsNumber, resLine);
+                isEmpty = isEmpty && YAMLGetSize(joinLines) == 0;
 
-                    if (resLine) {
-                        if (YAMLGetChildByKey(lineFull, YAMLGetKey(joinCell)) == NULL) {
-                            YAMLAddChild(lineFull, joinCell);
-                        }
-
-                        YAMLAddChild(resLine, joinCell);
-                    } else {
-                        // Add a new node and restart the loop to add the line
-                        YAMLAddChild(res, getNewLine(currentLine, columns, columnsCounter));
-                        j--;
+                switch (joins->joins[i].type) {
+                    case LEFT:// by default we have this behaviour
+                    case INNER: // we will ignore the result if isEmpty is true at the end of the loop
                         break;
+                    case FULL: // TODO
+                        *warningsNumber += addStringIntoArray(strdup("Unhandled join type (full)."), warnings, *warningsNumber);
+                        break;
+                    case RIGHT: // TODO
+                        *warningsNumber += addStringIntoArray(strdup("Unhandled join type (right)."), warnings, *warningsNumber);
+                        break;
+                    default:
+                        *warningsNumber += addStringIntoArray(strdup("Invalid join type."), warnings, *warningsNumber);
+                        YAMLFreeNode(res);
+                        return NULL;
+                }
+
+                line = resLine;
+
+                // Add lines if it doesn't exists
+                for(k = 0, stop = YAMLGetSize(joinLines) - YAMLGetSize(res); k < stop; k++) {
+                    // A new line will be equal to be first one at first
+                    line = YAMLGetChildAtIndex(YAMLDeepCopy(line), 0);
+                    m += YAMLAddChild(res, line);
+                }
+
+                for (k = 0; k < YAMLGetSize(joinLines); k++) { // For each lines a join generated
+                    joinLine = YAMLGetChildAtIndex(joinLines, k);
+                    resLine = YAMLGetChildAtIndex(res, k + j);
+
+                    for (l = 0; l < YAMLGetSize(joinLine); l++) { // For each line of a join
+                        joinCell = YAMLGetChildAtIndex(joinLine, l);
+                        if (YAMLGetChildByKey(resLine, YAMLGetKey(joinCell)) == NULL) {
+                            YAMLAddChild(resLine, joinCell);
+                        }
                     }
                 }
             }
         }
-
-        YAMLFreeNode(lineFull);
 
         if (!isEmpty) {
             return res;
@@ -385,7 +388,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
             currentLine = YAMLGetChildAtIndex(data, j);
 
             if (joins->joinsNumber > 0) {
-                newLines = getNewLineWithJoin(currentLine, joins, columns, columnsCounter, dataMap, &res->warnings, &res->warningsCounter);
+                newLines = getNewLineWithJoin(currentLine, joins, dataMap, &res->warnings, &res->warningsCounter);
                 for (k = 0; k < YAMLGetSize(newLines); k++) {
                     res->rowsCounter += addLine(YAMLGetChildAtIndex(newLines, k), res, res->rowsCounter, columns, columnsCounter);
                 }
