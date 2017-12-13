@@ -7,8 +7,10 @@
 - [x] ajouter une table
 - [x] supprimer une table
 - [x] détruire la base de donnée
-- [ ] colonnes de type entier, réel, caractère et chaine de caractères
+- [X] colonnes de type entier, réel, caractère et chaine de caractères
 - [x] pas de limite de table dans une base
+
+**TODO : Full check**
 
 ## Etape 2 : SQL1
 
@@ -16,18 +18,18 @@
 - [ ] modifier une ligne dans une table
 - [ ] supprimer une ligne dans une table
 - [ ] pas de limite en nombre de ligne dans les table
-
-## Etape 3 : SQL2
-
 - [x] faire une requête select sur une table
 - [x] faire une requête select sur plusieurs tables sans conditions
-- [ ] faire une requête select sur plusieurs tables avec jointures
-  - [ ] inner join
-  - [ ] left join
+- [x] faire une requête select sur plusieurs tables avec jointures
+  - [x] inner join
+  - [x] left join
   - [ ] right join
   - [ ] full join
+- [x] faire une reqûete select avec jointures avec conditions
+- [ ] order by
+- [ ] where
   
-## Etape 4 : GTK
+## Etape 3 : GTK
 
 - [ ] exécuter vos requêtes SQL
 - [ ] visualiser les tables
