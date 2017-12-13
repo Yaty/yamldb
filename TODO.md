@@ -28,6 +28,7 @@
 - [x] faire une reqûete select avec jointures avec conditions
 - [ ] order by
 - [ ] where
+- [ ] pouvoir lancer les requêtes depuis l'UI
   
 ## Etape 3 : GTK
 
