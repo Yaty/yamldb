@@ -30,11 +30,15 @@ Not implemented.
 
 ### Multi joins
 
-`SELECT customerName, orderId FROM customers JOIN orders ON customers.customerId = orders.customerId JOIN orderDetails ON orders.orderId = orderDetails.orderId`
+`SELECT * FROM customers JOIN orders ON customers.customerId = orders.customerId JOIN orderDetails ON orders.orderId = orderDetails.orderId JOIN products ON orderDetails.productId = products.productId`
 
-### Joins with multiple fields
+### Joins with multiple fields (conditions)
 
-TODO
+Without (we will get multiple lines for each customer if there is multiple time this city in the world):
+`SELECT * FROM customers JOIN cities ON customers.city = cities.cityName`
+
+To avoid that we could do this :
+`SELECT * FROM customers JOIN cities ON customers.city = cities.cityName AND customers.country = cities.cityCountry`
 
 ### Joins with different conditions
 

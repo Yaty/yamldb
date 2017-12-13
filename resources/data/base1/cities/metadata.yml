@@ -1,0 +1,26 @@
+structure:
+    cityId:
+        type: INT
+        primary: yes
+        defaultValue: no
+        autoIncrement: yes
+    cityName:
+        type: STRING
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    cityCountry:
+        type: STRING
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    cityPopulation:
+        type: INT
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    cityRanking:
+        type: INT
+        primary: no
+        defaultValue: no
+        autoIncrement: no

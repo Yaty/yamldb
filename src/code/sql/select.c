@@ -98,7 +98,7 @@ static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int 
 
                 if (!originCellType || !targetCellType) {
                     *warningsNumber += addStringIntoArray(
-                            concat(3, "Invalid column type : ", strdup(field.originColumn), strdup(field.targetColumn)),
+                            concat(4, "Invalid column type : ", strdup(field.originColumn), " / ", strdup(field.targetColumn)),
                             warnings,
                             *warningsNumber
                     );
@@ -228,10 +228,6 @@ static Node *getNewLine(Node *currentLine, char **columns, int columnsCounter) {
     return NULL;
 }
 
-static Node *test() {
-
-}
-
 /**
  * Make a join on the current line
  * @param currentLine
@@ -263,7 +259,6 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, HashMap *dataMa
         Node *joinCell;
         Node *resLine;
         int isEmpty = 1;
-        int test;
 
         for (i = 0; i < joins->joinsNumber; i++) { // For each join
             for (j = 0, m = 0; j < YAMLGetSize(res); j += 1 + m) {
@@ -272,7 +267,9 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, HashMap *dataMa
                 isEmpty = isEmpty && YAMLGetSize(joinLines) == 0;
 
                 switch (joins->joins[i].type) {
-                    case LEFT:// by default we have this behaviour
+                    case LEFT: // by default we have this behaviour
+                        isEmpty = 0;
+                        break;
                     case INNER: // we will ignore the result if isEmpty is true at the end of the loop
                         break;
                     case FULL: // TODO

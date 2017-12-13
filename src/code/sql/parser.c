@@ -188,6 +188,14 @@ int getTableColumn(char *str, long indexStart, long indexEnd, char **table, char
             if (*table && *column) {
                 int success1 = substring(str, *table, 0, (size_t) pointIndex);
                 int success2 = substring(str, *column, (int) pointIndex + 1, (size_t) indexEnd - pointIndex);
+
+                if (success2) { // remove whats after if there is
+                    long index = getSubstringIndex(*column, " ", 0);
+                    if (index > 0) {
+                        (*column)[index] = '\0';
+                    }
+                }
+
                 if (success1 && success2) {
                     *table = trim(*table);
                     *column = trim(*column);
@@ -309,7 +317,8 @@ Joins* getJoins(char *query) {
         long index;
         long indexSpace;
         long indexOn;
-        long indexOperator;
+        long indexOperator = 0;
+        long indexComparator;
         Join *joinsTmp = NULL;
         Join *newJoin;
         JoinType type;
@@ -337,26 +346,35 @@ Joins* getJoins(char *query) {
                         fieldsNumber = 0;
 
                         do {
-                            indexOperator = getComparator(ptr, &currentComparator);
-                            if (indexOperator > 2 && getTableColumn(ptr, 0, indexOperator - 1, &table1, &col1)) { // b.b=...
-                                ptr += indexOperator + 1;
+                            if (indexOperator) {
+                                ptr += indexOperator;
+                                indexSpace = getSubstringIndex(ptr, " ", 0);
+                                if (indexSpace > 0) {
+                                    ptr += indexSpace;
+                                } else {
+                                    break;
+                                }
+                            }
+                            indexComparator = getComparator(ptr, &currentComparator);
+                            if (indexComparator > 2 && getTableColumn(ptr, 0, indexComparator - 1, &table1, &col1)) { // b.b=...
+                                ptr += indexComparator + 1;
                                 ptr = trim(ptr);
-                                if (getTableColumn(ptr, 0, indexOperator - 1, &table2, &col2)) {
-                                    fieldsTmp = realloc(fields, (size_t) fieldsNumber + 1);
+                                if (getTableColumn(ptr, 0, strlen(ptr) - 1, &table2, &col2)) {
+                                    fieldsTmp = realloc(fields, sizeof(JoinField) * ((size_t) fieldsNumber + 1));
                                     if (fieldsTmp) {
                                         fields = fieldsTmp;
                                         fields[fieldsNumber] = *getEmptyJoinField();
                                         fields[fieldsNumber].originTable = strdup(table1);
                                         fields[fieldsNumber].originColumn = strdup(col1);
                                         fields[fieldsNumber].targetTable = strdup(table2);
-                                        fields[fieldsNumber].targetColumn = strdup(col1);
+                                        fields[fieldsNumber].targetColumn = strdup(col2);
                                         fields[fieldsNumber].comparator = currentComparator;
                                         indexOperator = getLogicalOperator(ptr, &fields[fieldsNumber].logicOp); // This will set logicOp
                                         fieldsNumber++;
                                     }
                                 }
                             }
-                        } while (indexOperator >= 0 && indexOperator < getSubstringIndex(ptr, "join", 1));
+                        } while (indexOperator > 0 && (indexOperator < getSubstringIndex(ptr, "join", 1) || getSubstringIndex(ptr, "join", 1) < 0));
 
                         joinsTmp = realloc(joins->joins, sizeof(Join) * ((size_t) joins->joinsNumber + 1));
                         if (joinsTmp) {

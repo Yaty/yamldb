@@ -1,0 +1,16 @@
+data:
+    - cityId: 1
+      cityName: Memphis
+      cityCountry: Egypt
+      cityPopulation: 15
+      cityRanking: 50000
+    - cityId: 2
+      cityName: Memphis
+      cityCountry: USA
+      cityPopulation: 1523625
+      cityRanking: 50
+    - cityId: 2
+      cityName: Mexico
+      cityCountry: Mexico
+      cityPopulation: 5000000
+      cityRanking: 15

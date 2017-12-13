@@ -7,3 +7,5 @@ tables:
       empty: no
     - name: products
       empty: no
+    - name: cities
+      empty: no

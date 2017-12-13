@@ -2,15 +2,15 @@ data:
     - customerId: 1
       customerName: Alfreds Futterkiste
       address: Obere Str. 57
-      city: Berlin
+      city: Memphis
       postalCode: 12209
-      country: Germany
+      country: Egypt
     - customerId: 2
       customerName: Ana Trujillo
-      address: Avda. de la Constitución
-      city: Mexico
+      address: Avda. de la Constitucion
+      city: Memphis
       postalCode: 05021
-      country: Mexico
+      country: USA
     - customerId: 3
       customerName: Antonio Moreno Taqueria
       address: Mataderos 2312
