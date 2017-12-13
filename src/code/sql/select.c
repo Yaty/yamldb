@@ -42,7 +42,7 @@ static int addLine(Node *line, QueryResult *res, int index, char **columns, int 
  * @return
  */
 static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int *warningsNumber, Node *resLine) {
-    if (join && join->fields && join->fieldsNumber > 0 && dataMap) {
+    if (join && join->fieldsNumber > 0 && dataMap) {
         int i;
         int j;
         int evalOperators;
@@ -202,30 +202,44 @@ static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int 
     return NULL;
 }
 
-/**
- * This function retrieve only some columns from a table line
- * @param currentLine
- * @param columns
- * @param columnsCounter
- * @return
- */
-static Node *getNewLine(Node *currentLine, char **columns, int columnsCounter) {
-    if (currentLine && columns && columnsCounter > 0) {
+static int matchConditions(Conditions *c, Node *line) {
+    if (c && line && c->conditionsNumber == c->operatorsNumber + 1) {
         int i;
-        Node *currentColumn;
-        Node *line = YAMLGetMapNode("line");
+        int j;
+        int addLine;
+        int evalConditions[c->conditionsNumber];
+        Condition condition;
+        Type colType;
 
-        for (i = 0; i < YAMLGetSize(currentLine); i++) {
-            currentColumn = YAMLGetChildAtIndex(currentLine, i);
-            if (stringIntoArray(YAMLGetKey(currentColumn), columns, columnsCounter) || stringIntoArray("*", columns, columnsCounter)) {
-                YAMLAddChild(line, currentColumn);
+        memset(evalConditions, 0, (size_t) c->conditionsNumber * sizeof(int)); // reset to 0, as evalConditions is variable-sized we have to do this by this way
+
+
+        for (i = 0; i < c->conditionsNumber; i++) {
+            condition = c->conditions[i];
+            colType = evalType(condition.key);
+
+            for (j = 0; j < YAMLGetSize(line); j++) {
+                if (areStringsEquals(condition.key, YAMLGetKey(YAMLGetChildAtIndex(line, j)), 1)) {
+                    evalConditions[i] = evalComparator(condition.value, YAMLGetValue(YAMLGetChildAtIndex(line, j)), colType, condition.comparator);
+                    break;
+                }
             }
         }
 
-        return line;
+        if (c->conditionsNumber == 1) {
+            addLine = evalConditions[0];
+        } else {
+            addLine = 1;
+
+            for (i = 0; i < c->conditionsNumber - 1; i++) {
+                addLine &= evalOperatorInt(evalConditions[i], evalConditions[i + 1], c->operators[i]);
+            }
+        }
+
+        return addLine;
     }
 
-    return NULL;
+    return 0;
 }
 
 /**
@@ -239,7 +253,7 @@ static Node *getNewLine(Node *currentLine, char **columns, int columnsCounter) {
  * @param warningsNumber
  * @return the join in a node struct
  */
-static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, HashMap *dataMap, char ***warnings, int *warningsNumber) {
+static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, HashMap *dataMap, char ***warnings, int *warningsNumber, Conditions *c) {
     if (currentLine && joins && joins->joinsNumber > 0) {
         int i;
         int j;
@@ -272,10 +286,10 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, HashMap *dataMa
                         break;
                     case INNER: // we will ignore the result if isEmpty is true at the end of the loop
                         break;
-                    case FULL: // TODO
+                    case FULL:
                         *warningsNumber += addStringIntoArray(strdup("Unhandled join type (full)."), warnings, *warningsNumber);
                         break;
-                    case RIGHT: // TODO
+                    case RIGHT:
                         *warningsNumber += addStringIntoArray(strdup("Unhandled join type (right)."), warnings, *warningsNumber);
                         break;
                     default:
@@ -313,14 +327,6 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, HashMap *dataMa
     }
 
     return NULL;
-}
-
-void applyConditions(Conditions *c, QueryResult *res) {
-    if (c && res) {
-        // for each line apply condition
-        // if condition is true we pass to the next line
-        // if false then we splice the line et pass the next line
-    }
 }
 
 /**
@@ -392,17 +398,23 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
             currentLine = YAMLGetChildAtIndex(data, j);
 
             if (joins->joinsNumber > 0) {
-                newLines = getNewLineWithJoin(currentLine, joins, dataMap, &res->warnings, &res->warningsCounter);
+                newLines = getNewLineWithJoin(currentLine, joins, dataMap, &res->warnings, &res->warningsCounter, c);
                 for (k = 0; k < YAMLGetSize(newLines); k++) {
-                    res->rowsCounter += addLine(YAMLGetChildAtIndex(newLines, k), res, res->rowsCounter, columns, columnsCounter);
+                    if (matchConditions(c, YAMLGetChildAtIndex(newLines, k))) {
+                        res->rowsCounter += addLine(YAMLGetChildAtIndex(newLines, k), res, res->rowsCounter, columns, columnsCounter);
+                    } else {
+                        YAMLRemoveChildAtIndex(newLines, k);
+                    }
                 }
             } else {
-                res->rowsCounter += addLine(getNewLine(currentLine, columns, columnsCounter), res, res->rowsCounter, columns, columnsCounter);
+                if (matchConditions(c, currentLine)) {
+                    res->rowsCounter += addLine(currentLine, res, res->rowsCounter, columns, columnsCounter);
+                } else {
+                    YAMLFreeNode(currentLine);
+                }
             }
         }
     }
-
-    applyConditions(c, res);
 
     res->status = res->warningsCounter == 0 ? SUCCESS : FAILURE;
 

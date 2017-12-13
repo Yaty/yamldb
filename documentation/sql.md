@@ -40,6 +40,21 @@ Without (we will get multiple lines for each customer if there is multiple time 
 To avoid that we could do this :
 `SELECT * FROM customers JOIN cities ON customers.city = cities.cityName AND customers.country = cities.cityCountry`
 
+### Logical operators
+
+We handle those operators :
+1. AND
+2. OR
+3. NOT
+
+TODO :
+1. ANY
+2. BETWEEN
+3. EXISTS
+4. IN
+5. LIKE
+6. SOME
+
 ### Joins with different conditions
 
 We can handle those comparators :
@@ -56,8 +71,18 @@ TODO
 
 ## Conditions
 
-TODO
+`SELECT * FROM customers WHERE city = Memphis`
+
+`SELECT * FROM customers WHERE city = Memphis AND country = USA`
+
+`SELECT * FROM customers WHERE city = Memphis OR country = USA`
+
+`SELECT * FROM customers WHERE city = Memphis NOT country = USA`
+
+`SELECT * FROM customers JOIN orders ON customers.customerId = orders.customerId JOIN orderDetails ON orders.orderId = orderDetails.orderId JOIN products ON orderDetails.productId = products.productId WHERE productId = 1`
+
+TODO : Other operators (LIKE, ...)
 
 ## Known limitations
 
-We can't use different join type in a query. It won't crash but the result will not be correct.
+We can't use different join type in a query. It won't crash but the result will be incorrect.

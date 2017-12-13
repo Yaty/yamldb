@@ -381,6 +381,36 @@ static char *addStringIntoArray4() {
     mu_assert("addStringIntoArray4", res == 0);
 }
 
+static char *splice1() {
+    char **array = getArray(3);
+    int res = splice(array, 3, 0, 1);
+    mu_assert("splice1", res && stringIntoArray("bla0", array, 3) == 0);
+}
+
+static char *splice2() {
+    char **array = getArray(3);
+    int res = splice(array, 3, 0, 2);
+    mu_assert("splice2", res && stringIntoArray("bla0", array, 3) == 0 && stringIntoArray("bla1", array, 3) == 0);
+}
+
+static char *splice3() {
+    char **array = getArray(3);
+    int res = splice(array, 3, 0, 0);
+    mu_assert("splice3", res == 0);
+}
+
+static char *splice4() {
+    char **array = getArray(3);
+    int res = splice(array, 3, 3, 1);
+    mu_assert("splice4", res == 0);
+}
+
+static char *splice5() {
+    char **array = getArray(1);
+    int res = splice(array, 1, 0, 1);
+    mu_assert("splice5", res == 0);
+}
+
 static char *allTests() {
     mu_run_test(trim1);
     mu_run_test(trim2);
@@ -458,6 +488,11 @@ static char *allTests() {
     mu_run_test(addStringIntoArray2);
     mu_run_test(addStringIntoArray3);
     mu_run_test(addStringIntoArray4);
+    mu_run_test(splice1);
+    mu_run_test(splice2);
+    mu_run_test(splice3);
+    mu_run_test(splice4);
+    mu_run_test(splice5);
     return 0;
 }
 

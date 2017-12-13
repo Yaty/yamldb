@@ -28,6 +28,22 @@ int evalOperatorInt(int a, int b, LogicalOperator operator) {
     }
 }
 
+int evalComparator(char *a, char *b, Type type, Comparator comparator) {
+    if (a && b && type != UNKNOWN) {
+        switch (type) {
+            case INT:
+                return evalComparatorInt((int) strtol(a, NULL, 10), (int) strtol(b, NULL, 10), comparator);
+            case DOUBLE:
+                return evalComparatorDouble(strtod(a, NULL), strtod(b, NULL), comparator);
+            case STRING:
+            case CHAR:
+                return evalComparatorString(a, b, comparator);
+        }
+    }
+
+    return 0;
+}
+
 /**
  * Eval a string with a comparator
  * @param a
@@ -54,6 +70,32 @@ int evalComparatorString(char *a, char *b, Comparator operator) {
  * @return the comparator result
  */
 int evalComparatorInt(int a, int b, Comparator operator) {
+    switch (operator) {
+        case EQUAL:
+            return a == b;
+        case GREATER:
+            return a > b;
+        case LESSER:
+            return a < b;
+        case GREATER_EQUAL:
+            return a >= b;
+        case LESSER_EQUAL:
+            return a <= b;
+        case NOT_EQUAL:
+            return a != b;
+        default:
+            return 0;
+    }
+};
+
+/**
+ * Eval a double with a comparator
+ * @param a
+ * @param b
+ * @param operator
+ * @return the comparator result
+ */
+int evalComparatorDouble(double a, double b, Comparator operator) {
     switch (operator) {
         case EQUAL:
             return a == b;

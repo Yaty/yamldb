@@ -220,4 +220,14 @@ void removeElementAtIndex(char ***array, int arraySize, int index, int freeEleme
  */
 char **makeStringsDeepCopy(char **columns, int columnsCounter);
 
+/**
+ * Remove a number of elements from an index
+ * It will move elements to fill the created gaps
+ * @param array
+ * @param start
+ * @param length
+ * @return 1 for success, 0 for failure
+ */
+int splice(void **array, int arrayLength, int start, int length);
+
 #endif // STRING_ARRAY_FUNCTIONS_H_INCLUDED

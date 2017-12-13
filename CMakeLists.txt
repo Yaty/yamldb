@@ -26,7 +26,8 @@ set(SRCS
         src/code/utils/hashmap.c
         src/code/sql/operators.c
         src/code/sql/parser.c
-        src/code/sql/conditions.c)
+        src/code/sql/conditions.c
+        src/code/utils/type.c)
 
 set(HEADERS
         src/header/yaml/api.h
@@ -54,14 +55,14 @@ set(HEADERS
         src/header/utils/hashmap.h
         src/header/sql/parser.h
         src/header/sql/operators.h
-        src/header/sql/conditions.h)
+        src/header/sql/conditions.h
+        src/header/utils/type.h)
 
 add_executable(cbdd ${SRCS} ${HEADERS})
 
 # Tests
 
 set(TESTS_SRCS
-
         src/code/string_array_functions.c
         src/code/yaml/utils/parser.c
         src/code/yaml/api/children.c
@@ -70,6 +71,7 @@ set(TESTS_SRCS
         src/code/yaml/api/output.c
         src/code/yaml/api/parse.c
         src/code/yaml/api/type.c
+        src/code/utils/type.c
 
         tests/main.c
         tests/utils.c
@@ -79,7 +81,8 @@ set(TESTS_SRCS
         tests/src/code/api/allApi.c
         tests/src/code/api/free.c
         tests/src/code/api/type.c
-        tests/src/code/utils/string.c)
+        tests/src/code/utils/string.c
+        tests/src/code/utils/type.c)
 
 set(TESTS_HEADERS
 
@@ -92,8 +95,9 @@ set(TESTS_HEADERS
         src/header/yaml/api/output.h
         src/header/yaml/api/parse.h
         src/header/yaml/api/type.h
-
         src/header/string_array_functions.h
+        src/header/utils/type.h
+
         tests/src/header/minunit.h
         tests/src/header/utils.h
         tests/src/header/parser/allParser.h
@@ -103,6 +107,7 @@ set(TESTS_HEADERS
         tests/src/header/api/free.h
         tests/src/header/api/output.h
         tests/src/header/api/type.h
-        tests/src/header/utils/string.h)
+        tests/src/header/utils/string.h
+        tests/src/header/utils/type.h)
 
 add_executable(cbdd_tests ${TESTS_SRCS} ${TESTS_HEADERS})

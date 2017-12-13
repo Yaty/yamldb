@@ -476,7 +476,7 @@ int areStringsEquals(char *str1, char *str2, int sensitivity) {
  * @param str
  * @param array
  * @param arraySize
- * @return 1 for true, 0 for false
+ * @return index, -1 for false
  */
 int stringIntoArray(char *str, char **array, int arraySize) {
     if (str && array && arraySize >= 0) {
@@ -553,4 +553,37 @@ char **makeStringsDeepCopy(char **columns, int columnsCounter) {
     }
 
     return NULL;
+}
+
+/**
+ * Remove a number of elements from an index
+ * It will move elements to fill the created gaps
+ * @param array
+ * @param start
+ * @param length
+ * @return 1 for success, 0 for failure
+ */
+int splice(void **array, int arrayLength, int start, int length) {
+    // Should we realloc array ?
+    if (array && start >= 0 && length > 0 && arrayLength > 0 && start + length < arrayLength) {
+        int i;
+        int j;
+
+        if (arrayLength == 1) {
+            array[0] = NULL;
+            return 1;
+        }
+
+        for (i = 0; i < length; i++) {
+            for (j = start; j < arrayLength - 1; j++) {
+                array[j] = array[j + 1];
+            }
+        }
+
+        array[arrayLength - 1] = NULL;
+
+        return 1;
+    }
+
+    return 0;
 }

@@ -22,7 +22,7 @@ typedef struct JoinField {
 } JoinField;
 
 typedef struct Join {
-    enum JoinType type;
+    JoinType type;
     JoinField *fields;
     int fieldsNumber;
     char *target;

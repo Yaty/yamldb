@@ -437,7 +437,7 @@ Joins* getJoins(char *query) {
                         fieldsNumber = 0;
 
                         do {
-                            if (indexOperator) {
+                            if (indexOperator > 0) {
                                 ptr += indexOperator;
                                 indexSpace = getSubstringIndex(ptr, " ", 0);
                                 if (indexSpace > 0) {
@@ -466,6 +466,8 @@ Joins* getJoins(char *query) {
                                 }
                             }
                         } while (indexOperator > 0 && (indexOperator < getSubstringIndex(ptr, "join", 1) || getSubstringIndex(ptr, "join", 1) < 0));
+
+                        indexOperator = -1;
 
                         joinsTmp = realloc(joins->joins, sizeof(Join) * ((size_t) joins->joinsNumber + 1));
                         if (joinsTmp) {

@@ -5,6 +5,8 @@
 #ifndef CBDD1_OPERATORS_H
 #define CBDD1_OPERATORS_H
 
+#include "../utils/type.h"
+
 typedef enum Comparator {
     NO_COMPARATOR, EQUAL, GREATER, LESSER, GREATER_EQUAL, LESSER_EQUAL, NOT_EQUAL
 } Comparator;
@@ -22,6 +24,8 @@ typedef enum LogicalOperator {
  */
 int evalOperatorInt(int a, int b, LogicalOperator operator);
 
+int evalComparator(char *a, char *b, Type type, Comparator comparator);
+
 /**
  * Eval a string with a comparator
  * @param a
@@ -30,6 +34,15 @@ int evalOperatorInt(int a, int b, LogicalOperator operator);
  * @return the comparator result
  */
 int evalComparatorString(char *a, char *b, Comparator operator);
+
+/**
+ * Eval a double with a comparator
+ * @param a
+ * @param b
+ * @param operator
+ * @return the comparator result
+ */
+int evalComparatorDouble(double a, double b, Comparator operator);
 
 /**
  * Eval an int with a comparator
