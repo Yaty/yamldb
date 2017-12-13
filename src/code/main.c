@@ -83,6 +83,9 @@ int main (int argc, char **argv) {
     */
 
     databaseManager();
+    /*QueryResult *res = SQLExecuteQuery("SELECT * FROM customers JOIN orders ON customers.customerId = orders.customerId JOIN orderDetails ON orders.orderId = orderDetails.orderId JOIN products ON orderDetails.productId = products.productId", "./resources/data/base1");
+    SQLPrintQueryResult(res);
+    SQLFreeQueryResult(res);*/
 
     return EXIT_SUCCESS;
 }
