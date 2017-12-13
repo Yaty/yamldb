@@ -233,7 +233,7 @@ long getCharIndex (char *str, char c) {
 int substring (char *str, char *substr, int start, size_t length) {
     if (str && substr && start >= 0 && length >= 1) {
         size_t strLength = strlen(str);
-        if (start < strLength && length < strLength) {
+        if (start < strLength && length <= strLength) {
             memcpy(substr, &str[start], length);
             substr[length] = '\0';
             return 1;

@@ -8,6 +8,7 @@
 #include "../../header/string_array_functions.h"
 #include "../../header/sql/operators.h"
 #include "../../header/sql/join.h"
+#include "../../header/sql/parser.h"
 
 /**
  * Get params from a string
@@ -98,17 +99,107 @@ char **getTables(char *query, int *tablesCounter) {
     return NULL;
 }
 
-// TODO
-char **getConditions(char *query, int *conditionsCounter) {
-    char *queryCpy = trim(strdup(query));
+Conditions *getConditions(char *query) {
+    if (query) {
+        char *queryCpy = trim(strdup(query));
+        char *savePtrPosition = &queryCpy[0];
+        char *key;
+        char *value;
+        Conditions *c = NULL;
+        Condition *condition = NULL;
+        Condition *tmp = NULL;
+        Comparator currentComparator;
+        LogicalOperator currentLogicalOperator;
+        LogicalOperator *tmp2 = NULL;
+        long comparatorIndex = -1;
+        long logicalOperatorIndex = -1;
+        long spaceIndex = -1;
+        long whereIndex = -1;
+        int success1 = 0;
+        int success2 = 0;
+        size_t valueLength;
 
-    if (queryCpy) {
-        long whereIndex = getSubstringIndex(queryCpy, "where", 1);
+        if (queryCpy) {
+            whereIndex = getSubstringIndex(queryCpy, "where", 1);
 
-        if (whereIndex > 0) {
-            char *queryCpy2 = trim(queryCpy + whereIndex + 5);
-            free(queryCpy);
-            return NULL; // TODO
+            if (whereIndex > 0) {
+                c = getEmptyConditions();
+                queryCpy = trim(queryCpy + whereIndex + 5); // 5 -> WHERE length
+
+                do {
+                    if (logicalOperatorIndex > 0) {
+                        queryCpy += logicalOperatorIndex;
+                        queryCpy = trim(queryCpy);
+
+                        spaceIndex = getSubstringIndex(queryCpy, " ", 0);
+
+                        if (spaceIndex > 0) {
+                            queryCpy += spaceIndex;
+                            queryCpy = trim(queryCpy);
+                            tmp2 = realloc(c->operators, sizeof(LogicalOperator) * (c->operatorsNumber + 1));
+                            if (tmp2) {
+                                c->operators = tmp2;
+                                c->operators[c->operatorsNumber++] = currentLogicalOperator;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+
+                    success1 = 0;
+                    success2 = 0;
+                    key = NULL;
+                    value = NULL;
+
+                    comparatorIndex = getComparator(queryCpy, &currentComparator);
+                    if (comparatorIndex > 2) { // c = ...
+                        key = malloc(((size_t) comparatorIndex + 1) * sizeof(char));
+                        if (key) {
+                            success1 = substring(queryCpy, key, 0, (size_t) comparatorIndex);
+                            queryCpy += comparatorIndex;
+                            queryCpy = trim(queryCpy);
+                            spaceIndex = getSubstringIndex(queryCpy, " ", 0);
+                            if (spaceIndex > 0) {
+                                queryCpy += spaceIndex;
+                                queryCpy = trim(queryCpy);
+                                spaceIndex = getSubstringIndex(queryCpy, " ", 0);
+                                if (spaceIndex > 0) {
+                                    value = malloc(((size_t) spaceIndex + 1) * sizeof(char));
+                                    if (value) {
+                                        success2 = substring(queryCpy, value, 0, (size_t) spaceIndex);
+                                    }
+                                } else if (spaceIndex == -1) {
+                                    valueLength = strlen(queryCpy);
+                                    value = malloc(((size_t) valueLength + 1) * sizeof(char));
+                                    if (value) {
+                                        success2 = substring(queryCpy, value, 0, valueLength);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (success1 && success2 && (condition = getEmptyCondition())) {
+                            key = trim(key);
+                            value = trim(value);
+                            condition->key = key;
+                            condition->value = value;
+                            condition->comparator = currentComparator;
+                            tmp = realloc(c->conditions, sizeof(Condition) * (c->conditionsNumber + 1));
+                            if (tmp) {
+                                c->conditions = tmp;
+                                c->conditions[c->conditionsNumber++] = *condition;
+                            }
+
+                        } else {
+                            if (key) free(key);
+                            if (value) free(value);
+                        }
+                    }
+                } while((logicalOperatorIndex = getLogicalOperator(queryCpy, &currentLogicalOperator)) > 0);
+            }
+
+            free(savePtrPosition);
+            return c;
         }
     }
 

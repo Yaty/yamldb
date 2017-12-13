@@ -315,6 +315,14 @@ static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, HashMap *dataMa
     return NULL;
 }
 
+void applyConditions(Conditions *c, QueryResult *res) {
+    if (c && res) {
+        // for each line apply condition
+        // if condition is true we pass to the next line
+        // if false then we splice the line et pass the next line
+    }
+}
+
 /**
  * Execute a SQL select from a string which is the query
  * @param query  a string
@@ -328,12 +336,11 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     int dataSize = 0;
     int columnsCounter = 0;
     int tablesCounter = 0;
-    // int conditionsCounter = 0;
     // int ordersCounter = 0;
     int linesCounter = 0;
     char **columns = getColumns(query, &columnsCounter);
     char **tables = getTables(query, &tablesCounter);
-    // char **conditions = getConditions(query, &conditionsCounter); TODO
+    Conditions *c = getConditions(query);
     // char **orders = getOrders(query, &ordersCounter); TODO
     char *currentTable;
     char ***tmp;
@@ -394,6 +401,8 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
             }
         }
     }
+
+    applyConditions(c, res);
 
     res->status = res->warningsCounter == 0 ? SUCCESS : FAILURE;
 

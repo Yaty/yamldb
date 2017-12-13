@@ -6,6 +6,7 @@
 #define CBDD1_PARSER_H
 
 #include "operators.h"
+#include "../../header/sql/conditions.h"
 
 /**
  * Get params from a string
@@ -32,7 +33,7 @@ char **getColumns(char *query, int *columnsCounter);
  */
 char **getTables(char *query, int *tablesCounter);
 
-char **getConditions(char *query, int *conditionsCounter);
+Conditions *getConditions(char *query);
 
 char **getOrders(char *query, int *ordersCounter);
 

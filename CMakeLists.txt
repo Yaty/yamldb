@@ -25,7 +25,8 @@ set(SRCS
         src/code/sql/join.c
         src/code/utils/hashmap.c
         src/code/sql/operators.c
-        src/code/sql/parser.c)
+        src/code/sql/parser.c
+        src/code/sql/conditions.c)
 
 set(HEADERS
         src/header/yaml/api.h
@@ -52,7 +53,8 @@ set(HEADERS
         src/header/sql/join.h
         src/header/utils/hashmap.h
         src/header/sql/parser.h
-        src/header/sql/operators.h)
+        src/header/sql/operators.h
+        src/header/sql/conditions.h)
 
 add_executable(cbdd ${SRCS} ${HEADERS})
 
