@@ -57,7 +57,7 @@ Goal : Clear the last '\n' char in a string
 Input : str (char*), string to clear
 Output : void
 */
-void clear_input(char *str);
+void clearInput(char *str);
 
 /*
 Goal : Save the input from stdin into a variable

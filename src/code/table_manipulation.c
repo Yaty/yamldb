@@ -250,6 +250,7 @@ TODO : Interdire de rentrer un nom de colonne déjà existant
 */
 void columnName(int incomeColumnNumber, Node *columnsNode){
     char columnNameStr[255];
+    char val[255];
     char columnType[50];
     int length = 0;
     Node *temp;
@@ -270,6 +271,12 @@ void columnName(int incomeColumnNumber, Node *columnsNode){
     }while( length <= 0 );
     do{
         strcpy(columnType, selectColumnType());
+        if( strstr(columnType, "STRING") != NULL ){
+            system(PAUSE);
+            printf("Saisir le nombre de caractere que vous voulez mettre dans votre colonne: ");
+            getInput(255, val);
+            strcat(columnType, val);
+        }
     }while( columnType == NULL );
 
     temp = YAMLGetMapNode(columnNameStr);
@@ -298,8 +305,8 @@ char *selectColumnType(){
     switch( menu ) { // TODO USE ENUM
     case 0: //INT
         return "INT";
-    case 1: //VARCHAR
-        return "VARCHAR";
+    case 1: //STRING
+        return "STRING";
     case 2: //CHAR
         return "CHAR";
     case 3: //FLOAT
@@ -319,7 +326,7 @@ Input : nothing
 Output : short, choice of the user in the menu
 */
 short typeManipulationManagerMenu(){
-    char *array[] = {"INT", "VARCHAR", "CHAR", "FLOAT", "DOUBLE", "TEXT"};
+    char *array[] = {"INT", "STRING", "CHAR", "FLOAT", "DOUBLE", "TEXT"};
     short length = 6;
     char title[100] = "Type de la colonne";
     short choice;
