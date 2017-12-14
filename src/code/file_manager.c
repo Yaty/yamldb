@@ -67,7 +67,7 @@ short deleteFile(char* filename) {
         return 1;
     }
 
-    if( !remove(filename) ) {
+    if( remove(filename) ) {
         return 2;
     }
 

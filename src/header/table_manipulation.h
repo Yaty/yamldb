@@ -27,6 +27,14 @@ Output : short, choice of the user in the menu
 short tableManipulationManagerMenu(char *dbName, char *tableName);
 
 /*
+ * Goal : Manage the table suppression
+ * Input : - dbName (char*), name of the database
+ *         - tableName (char*), name of the table we want to suppress
+ * Output : void
+ */
+void dropTableManager(char *dbName, char *tableName);
+
+/*
 Goal : Suppress a table from a database
 Input : - dbName (char*), name of the database
         - tableName (char*), name of the table we want to suppress

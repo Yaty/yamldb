@@ -1,11 +1,2 @@
 tables:
-    - name: customers
-      empty: no
-    - name: orders
-      empty: no
-    - name: orderDetails
-      empty: no
-    - name: products
-      empty: no
-    - name: cities
-      empty: no
+    1: table1

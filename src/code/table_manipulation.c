@@ -44,8 +44,7 @@ void tableManipulationManager(char *dbName, char *tableName) {
         case 0: //Quitter le programme
             return;
         case 1: //Supprimer la table
-            printf("%d\n", dropTable(dbName, tableName)); //TEST
-            printf("Supprimer la table.\n");
+            dropTableManager(dbName, tableName);
             system(PAUSE);
             system(CLEAR);
             return;
@@ -89,6 +88,24 @@ short tableManipulationManagerMenu(char *dbName, char *tableName) {
 }
 
 /*
+ * Goal : Manage the table suppression
+ * Input : - dbName (char*), name of the database
+ *         - tableName (char*), name of the table we want to suppress
+ * Output : void
+ */
+void dropTableManager(char *dbName, char *tableName) {
+    switch( dropTable(dbName, tableName) ) {
+        case 0:
+            printf("La table %s a ete supprimee avec succes.\n", dbName);
+            return;
+        case 1:
+        case 2:
+            //L'erreur a déjà été affichée
+            return;
+    }
+}
+
+/*
 Goal : Suppress a table from a database
 Input : - dbName (char*), name of the database
         - tableName (char*), name of the table we want to suppress
@@ -104,6 +121,9 @@ short dropTable(char *dbName, char *tableName) {
     char metadataPath[255];
     char dataPath[255];
     char dirPath[255];
+    char message[50];
+
+    sprintf(message, "Erreur table %s", tableName); //Préformatage du message d'erreur
 
     concatenateSeveralStr(255, dirPath, strLength, str);
     concatenateSeveralStr(255, metadataPath, strLength, str);
@@ -112,17 +132,18 @@ short dropTable(char *dbName, char *tableName) {
     strcat(dataPath, "\\data.yml");
 
     if( deleteFile(metadataPath) == 2 ) { //Supprime le fichier correspondant à la structure de la table
+        perror(message);
         return 1;
     }
 
     //Supprime le fichier correspondant à la table
     if( deleteFile(dataPath) == 2 ) {
+        perror(message);
         return 2;
     }
 
     //Supprime le répertoire correspondant à la table
-    //deleteDirectory(dirPath);
-    printf("%d\n", rmdir(dirPath));
+    rmdir(dirPath);
 
     //Supprime la ligne correspondant à la table dans le fichier de la db
     deleteTableInDb(dbName, tableName);
@@ -149,12 +170,12 @@ void deleteTableInDb(char *dbName, char *tableName) {
     for( counter = 0; counter < YAMLGetSize(root); counter++ ) { //Pour chaque table
         currentTable = YAMLGetChildAtIndex(root, counter);
         name = YAMLGetChildAtIndex(currentTable, 0);
-        if( strcmp( YAMLGetValue(name), tableName ) ) { //Si on est sur la table
+        if( strcmp( YAMLGetValue(name), tableName ) == 0 ) { //Si on est sur la table
             //On supprime le noeud dans root
             YAMLRemoveChildAtIndex(root, counter);
             YAMLSaveNode(root, dbPath);
-            YAMLFreeNode(name);
-            YAMLFreeNode(currentTable);
+            //YAMLFreeNode(name);
+            //YAMLFreeNode(currentTable);
             YAMLFreeNode(root);
             return;
         }
