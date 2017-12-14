@@ -145,11 +145,15 @@ short dropDatabase(char *dbName) {
     char *str1[] = {dirPath, dbName, "\\"};
     short str2Length = 3;
     char *str2[] = {dirPath, dbName, ".yml"};
+    char **tableList;
+    short tableListLength;
+    short counter;
 
     if( concatenateSeveralStr(dirLength, dirName, str1Length, str1) != 0 ) {
         return 6;
     }
 
+    /*
     if( dirExist(dirPath, dbName) == 1 ) { //Si le r�pertoire au nom de la base existe
         funcState = deleteTableFiles(dirName); //Supprime les fichiers table
         if( funcState != 0 ) {
@@ -170,6 +174,39 @@ short dropDatabase(char *dbName) {
     if( funcState != 0 ) {
         return 5;
     }
+
+    return 0;
+     */
+
+    if( dirExist(dirPath, dbName) == 1 ) { //Si le répertoire au nom de la base existe
+        //Récupère la liste des tables
+        getTablesListManager(dirName, &tableListLength, &tableList);
+
+        //Supprime toutes les tables
+        for( counter = 0; counter < tableListLength; counter++ ) {
+            if( dropTable(dbName, tableList[counter]) != 0 ) {
+                return 3;
+            }
+        }
+
+        //Supprime le répertoire de la base
+        funcState = (short)rmdir(dirName); //Supprime le répertoire
+        if( funcState != 0 ) {
+            return 4;
+        }
+
+    }
+
+    //Supprime le fichier de la base
+    if( concatenateSeveralStr(255, fileName, str2Length, str2) != 0 ) {
+        return 6;
+    }
+
+    funcState = (short)remove(fileName); //Supprime le fichier db
+    if( funcState != 0 ) {
+        return 5;
+    }
+
     return 0;
 }
 
@@ -185,9 +222,9 @@ short dropDatabaseManager(char *dbName) {
 
     funcState = dropDatabase(dbName);
     if( funcState == 0 ) {
-        printf("La base de donnees a ete supprimee avec succes.\n");
+        printf("La base de donnees %s a ete supprimee avec succes.\n", dbName);
     }else{
-        printf("Erreur lors de la suppression de la base de donnees.\n");
+        printf("Erreur lors de la suppression de la base de donnees %s.\n", dbName);
     }
     system(PAUSE);
 
