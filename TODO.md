@@ -17,7 +17,6 @@
 - [ ] ajouter une ligne dans une table
 - [ ] modifier une ligne dans une table
 - [ ] supprimer une ligne dans une table
-- [ ] pas de limite en nombre de ligne dans les table
 - [x] faire une requête select sur une table
 - [x] faire une requête select sur plusieurs tables sans conditions
 - [x] faire une requête select sur plusieurs tables avec jointures
