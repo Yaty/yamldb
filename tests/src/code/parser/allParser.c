@@ -52,6 +52,7 @@ static char *allTests() {
     mu_run_test(sequenceAreCorrectlyParsedAndPrinted);
     mu_run_test(mixAreCorrectlyParsedAndPrinted);
     mu_run_test(multipleParse);
+    remove(outputPath);
     return 0;
 }
 
