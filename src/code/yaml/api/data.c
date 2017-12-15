@@ -156,10 +156,10 @@ Node *YAMLDeepCopy(Node *node) {
 
         if (node && YAMLSaveNode(node, path)) {
             res = YAMLParseFile(path);
+            remove(path); // remove tmp path
         }
 
         free(path);
-        path = NULL;
         return res;
     }
 
