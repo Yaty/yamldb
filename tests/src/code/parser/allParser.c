@@ -52,13 +52,13 @@ static char *allTests() {
     mu_run_test(sequenceAreCorrectlyParsedAndPrinted);
     mu_run_test(mixAreCorrectlyParsedAndPrinted);
     mu_run_test(multipleParse);
-    remove(outputPath);
     return 0;
 }
 
 int parserTestAll() {
     printf("Testing parser ... ");
     char *result = allTests();
+    remove(outputPath);
     if (result != NULL) {
         printf("Error : %s\n", result);
     } else {
