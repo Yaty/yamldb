@@ -9,6 +9,7 @@
 #include "../../header/sql/operators.h"
 #include "../../header/sql/join.h"
 #include "../../header/sql/parser.h"
+#include "../../header/sql/order.h"
 
 /**
  * Get params from a string
@@ -64,14 +65,17 @@ char **getParams(char *query, int *paramsCounter) {
  * @return
  */
 char **getColumns(char *query, int *columnsCounter) {
-    char *queryCpy = trim(strdup(query));
+    char *queryCpy = strdup(query);
+    char *savePtrPos = queryCpy;
     char **res;
+    long fromIndex;
 
     if (queryCpy) {
-        long fromIndex = getSubstringIndex(queryCpy, "from", 1) - 1;
+        queryCpy = trim(queryCpy);
+        fromIndex = getSubstringIndex(queryCpy, "from", 1) - 1;
         queryCpy[fromIndex] = '\0';
         res = getParams(queryCpy, columnsCounter); // Get columns after select
-        free(queryCpy);
+        free(savePtrPos);
         return res;
     }
 
@@ -85,14 +89,25 @@ char **getColumns(char *query, int *columnsCounter) {
  * @return
  */
 char **getTables(char *query, int *tablesCounter) {
-    char *queryCpy = trim(strdup(query));
+    char *queryCpy = strdup(query);
+    char *savePtrPos = queryCpy;
     char *tables;
     char **res;
+    long orderByIndex;
 
     if (queryCpy) {
+        queryCpy = trim (queryCpy);
         tables = trim(queryCpy + getSubstringIndex(queryCpy, "from", 1) + 5);
         res = getParams(tables, tablesCounter);
-        free(queryCpy);
+
+        if ((orderByIndex = getSubstringIndex(queryCpy, "order by", 1)) > 0) {
+            if (getSubstringIndex(queryCpy, ",", 0) > orderByIndex) {
+                *tablesCounter -= removeElementAtIndex(&res, *tablesCounter, (*tablesCounter) - 1, 1);
+            }
+        }
+
+
+        free(savePtrPos);
         return res;
     }
 
@@ -101,8 +116,8 @@ char **getTables(char *query, int *tablesCounter) {
 
 Conditions *getConditions(char *query) {
     if (query) {
-        char *queryCpy = trim(strdup(query));
-        char *savePtrPosition = &queryCpy[0];
+        char *queryCpy = strdup(query);
+        char *savePtrPosition = queryCpy;
         char *key;
         char *value;
         Conditions *c = NULL;
@@ -120,6 +135,7 @@ Conditions *getConditions(char *query) {
         size_t valueLength;
 
         if (queryCpy) {
+            queryCpy = trim(queryCpy);
             whereIndex = getSubstringIndex(queryCpy, "where", 1);
 
             if (whereIndex > 0) {
@@ -206,9 +222,68 @@ Conditions *getConditions(char *query) {
     return NULL;
 }
 
-// TODO
-char **getOrders(char *query, int *ordersCounter) {
-    return NULL; // TODO
+Orders *getOrders(char *query) {
+    if (query) {
+        int isAsc;
+        int isDesc;
+        long commaIndex = -1;
+        long orderByIndex;
+        long spaceIndex;
+        char *col;
+        char *queryCpy = strdup(query);
+        char *savePtrPos = queryCpy;
+        Orders *orders = NULL;
+        Order *order = NULL;
+        Order *tmp = NULL;
+
+        if (queryCpy) {
+            orders = getEmptyOrders();
+            queryCpy = trim(queryCpy);
+            orderByIndex = getSubstringIndex(queryCpy, "ORDER BY", 1);
+            if (orderByIndex > 0) {
+                queryCpy += orderByIndex + 8; // 8 is the length of "order by"
+                queryCpy = trim(queryCpy);
+
+                do {
+                    if (commaIndex > 0) {
+                        queryCpy += commaIndex + 1;
+                        queryCpy = trim(queryCpy);
+                    }
+
+                    spaceIndex = getSubstringIndex(queryCpy, " ", 0);
+                    if (spaceIndex > 1
+                        && (col = malloc(sizeof(char) * (spaceIndex + 1))) && substring(queryCpy, col, 0, spaceIndex)) {
+                        queryCpy += spaceIndex;
+                        queryCpy = trim(queryCpy);
+                        isAsc = startsWith(queryCpy, "asc", 1);
+                        isDesc = startsWith(queryCpy, "desc", 1);
+                        if (isAsc || isDesc) {
+                            order = getEmptyOrder();
+                            order->column = col;
+                            order->type = isDesc ? DESC : ASC;
+                            tmp = realloc(orders->orders, sizeof(Order) * (orders->ordersNumber + 1));
+                            if (tmp) {
+                                orders->orders = tmp;
+                                orders->orders[orders->ordersNumber++] = *order;
+                            } else {
+                                freeOrder(order);
+                                free(col);
+                            }
+                        } else {
+                            free(col);
+                        }
+                    }
+                } while((commaIndex = getSubstringIndex(queryCpy, ",", 0)) > 0);
+            } else {
+                freeOrders(orders);
+                orders = NULL;
+            }
+
+            free(savePtrPos);
+            return orders;
+        }
+    }
+    return NULL;
 }
 
 /**
@@ -465,7 +540,7 @@ Joins* getJoins(char *query) {
                                     }
                                 }
                             }
-                        } while (indexOperator > 0 && (indexOperator < getSubstringIndex(ptr, "join", 1) || getSubstringIndex(ptr, "join", 1) < 0));
+                        } while (indexOperator > 0 && (indexOperator < getSubstringIndex(ptr, "join", 1) || getSubstringIndex(ptr, "join", 1) != -1));
 
                         indexOperator = -1;
 

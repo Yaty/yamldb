@@ -161,6 +161,7 @@ static char **getColumnsSizeModifiers(QueryResult *res) {
 void SQLPrintQueryResult(QueryResult *res) {
     int i;
     int j;
+    long colSize;
 
     if (res->rowsCounter > 0) {
 
@@ -172,7 +173,7 @@ void SQLPrintQueryResult(QueryResult *res) {
             if (i == 0) printf("|");
             columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
             substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
-            for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
+            for (j = 0, colSize = strtol(columnSize, NULL, 10); j <= colSize; j++) {
                 printf("-");
             }
             printf("|");
@@ -191,7 +192,7 @@ void SQLPrintQueryResult(QueryResult *res) {
             if (i == 0) printf("|");
             columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
             substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
-            for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
+            for (j = 0, colSize = strtol(columnSize, NULL, 10); j <= colSize; j++) {
                 printf("-");
             }
             printf("|");
@@ -213,7 +214,7 @@ void SQLPrintQueryResult(QueryResult *res) {
             if (i == 0) printf("|");
             columnSize = malloc(sizeof(char) * strlen(columnsSizeModifiers[i]) - 1);
             substring(columnsSizeModifiers[i], columnSize, 1, strlen(columnsSizeModifiers[i]) - 1); // retrieve column length in the modifier
-            for (j = 0; j <= strtol(columnSize, NULL, 10); j++) {
+            for (j = 0, colSize = strtol(columnSize, NULL, 10); j <= colSize; j++) {
                 printf("-");
             }
             printf("|");
@@ -234,6 +235,8 @@ void SQLPrintQueryResult(QueryResult *res) {
     }
 
     // MESSAGE
-    printf("%s\n", res->message);
+   if (res->message) {
+       printf("%s\n", res->message);
+   }
 }
 

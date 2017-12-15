@@ -342,12 +342,11 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     int dataSize = 0;
     int columnsCounter = 0;
     int tablesCounter = 0;
-    // int ordersCounter = 0;
     int linesCounter = 0;
     char **columns = getColumns(query, &columnsCounter);
     char **tables = getTables(query, &tablesCounter);
     Conditions *c = getConditions(query);
-    // char **orders = getOrders(query, &ordersCounter); TODO
+    Orders *orders = getOrders(query);
     char *currentTable;
     char ***tmp;
     Joins *joins = getJoins(query);
@@ -400,14 +399,14 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
             if (joins->joinsNumber > 0) {
                 newLines = getNewLineWithJoin(currentLine, joins, dataMap, &res->warnings, &res->warningsCounter, c);
                 for (k = 0; k < YAMLGetSize(newLines); k++) {
-                    if (matchConditions(c, YAMLGetChildAtIndex(newLines, k))) {
+                    if (!c || matchConditions(c, YAMLGetChildAtIndex(newLines, k))) {
                         res->rowsCounter += addLine(YAMLGetChildAtIndex(newLines, k), res, res->rowsCounter, columns, columnsCounter);
                     } else {
                         YAMLRemoveChildAtIndex(newLines, k);
                     }
                 }
             } else {
-                if (matchConditions(c, currentLine)) {
+                if (!c || matchConditions(c, currentLine)) {
                     res->rowsCounter += addLine(currentLine, res, res->rowsCounter, columns, columnsCounter);
                 } else {
                     YAMLFreeNode(currentLine);
@@ -415,6 +414,8 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
             }
         }
     }
+
+    makeOrder(res, orders);
 
     res->status = res->warningsCounter == 0 ? SUCCESS : FAILURE;
 
