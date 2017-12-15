@@ -95,41 +95,46 @@ void mergeSort(char ***table, int l, int r, SortParameters sp) {
  * @param sp additional parameters (orderType, column to sort on)
  */
 void merge(char ***table, int l, int m, int r, SortParameters sp) {
-    int i, j, k;
+    int i;
+    int j;
+    int k;
+    int res;
     int n1 = m - l + 1;
     int n2 =  r - m;
-
     char *value1, *value2;
     Type valuesType;
 
     /* create temp arrays */
-    char ***L = malloc(sizeof(char**) * n1);
-    char ***R = malloc(sizeof(char**) * n2);
+    char ***left = malloc(sizeof(char**) * n1);
+    char ***right = malloc(sizeof(char**) * n2);
 
     /* Copy data to temp arrays L[] and R[] */
-    for (i = 0; i < n1; i++)
-        L[i] = table[l + i];
-    for (j = 0; j < n2; j++)
-        R[j] = table[m + 1 + j];
+    for (i = 0; i < n1; i++) {
+        left[i] = table[l + i];
+    }
+
+    for (j = 0; j < n2; j++) {
+        right[j] = table[m + 1 + j];
+    }
 
     /* Merge the temp arrays back into arr[l..r]*/
     i = 0;
     j = 0;
     k = l;
     while (i < n1 && j < n2) {
-        value1 = L[i][sp.columnIndex];
-        value2 = R[j][sp.columnIndex];
+        value1 = left[i][sp.columnIndex];
+        value2 = right[j][sp.columnIndex];
         valuesType = evalType(value1);
 
         // we suppose they have the same type, if its not the case then the sort will be incorrect
         // but that's what the user wanted so ...
         if (valuesType != UNKNOWN && value1 && value2) {
-            int res = evalComparator(value1, value2, valuesType, LESSER_EQUAL);
+            res = evalComparator(value1, value2, valuesType, LESSER_EQUAL);
             if (res && sp.orderType == ASC) {
-                table[k] = L[i];
+                table[k] = left[i];
                 i++;
             } else {
-                table[k] = R[j];
+                table[k] = right[j];
                 j++;
             }
             k++;
@@ -137,17 +142,15 @@ void merge(char ***table, int l, int m, int r, SortParameters sp) {
     }
 
     /* Copy the remaining elements of L[], if there are any */
-    while (i < n1)
-    {
-        table[k] = L[i];
+    while (i < n1) {
+        table[k] = left[i];
         i++;
         k++;
     }
 
     /* Copy the remaining elements of R[], if there are any */
-    while (j < n2)
-    {
-        table[k] = R[j];
+    while (j < n2) {
+        table[k] = right[j];
         j++;
         k++;
     }
