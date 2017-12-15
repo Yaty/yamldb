@@ -707,29 +707,34 @@ void setCaracteristics(Node *result, int choice, char *text, char *path, int typ
 void handleSqlQueries(char *dbName) {
     if (dbName) {
         QueryResult *res;
-        const int QUERY_MAX_SIZE = 2048;
-        char query[QUERY_MAX_SIZE]; // queries can be really large
-        size_t queryLength = 0;
         char *dbPath = concat(2, "./resources/", dbName);
+        size_t QUERY_MAX_SIZE = 2048;
+        char *buffer;
+        long characters;
+
+        buffer = (char *) malloc(QUERY_MAX_SIZE * sizeof(char));
+        if(buffer == NULL) {
+            return;
+        }
+
 
         system(CLEAR);
+        flush();
 
         while (1) {
-            query[0] = '\0';
             printf("Entrez une requete SQL (rien pour sortir) :\n");
-            getInput(QUERY_MAX_SIZE, query);
-            queryLength = strlen(query);
+            characters = getline(&buffer, &QUERY_MAX_SIZE, stdin);
 
-            if (queryLength == 0) {
+            if (characters == 1) { // for \n
                 break;
             }
 
-            printf("%s :\n", query);
-            res = SQLExecuteQuery(query, dbPath);
+            res = SQLExecuteQuery(buffer, dbPath);
             SQLPrintQueryResult(res);
             SQLFreeQueryResult(res);
         }
 
+        free(buffer);
         free(dbPath);
         system(CLEAR);
     }
