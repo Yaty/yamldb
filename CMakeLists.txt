@@ -28,7 +28,7 @@ set(SRCS
         src/code/sql/parser.c
         src/code/sql/conditions.c
         src/code/utils/type.c
-        src/code/sql/order.c)
+        src/code/sql/order.c src/code/sql/delete.c)
 
 set(HEADERS
         src/header/yaml/api.h
@@ -58,7 +58,7 @@ set(HEADERS
         src/header/sql/operators.h
         src/header/sql/conditions.h
         src/header/utils/type.h
-        src/header/sql/order.h)
+        src/header/sql/order.h src/header/sql/delete.h)
 
 add_executable(cbdd ${SRCS} ${HEADERS})
 

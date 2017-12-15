@@ -157,9 +157,11 @@ Input : str (char*), string to clear
 Output : void
 */
 void clearInput(char *str) {
-    short length = strlen(str);
-    if( str[ length - 1 ] == '\n' ) {
-        str[ length - 1 ] = '\0';
+    size_t length = strlen(str);
+    size_t i = length - 1;
+
+    while (i >= 0 && str[i--] == '\n') {
+        str[i] = '\0';
     }
 }
 

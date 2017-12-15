@@ -11,6 +11,7 @@
 #include "../../header/string_array_functions.h"
 #include "../../header/sql/select.h"
 #include "../../header/sql/insert.h"
+#include "../../header/sql/delete.h"
 
 /**
  * Execute a sql query on a db
@@ -22,18 +23,18 @@ QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
     if (queryString && dbPath) {
         char *queryCpy = trim(strdup(queryString));
         if (queryCpy) {
+            char *ptrSavePos = queryCpy;
             QueryResult *res = getEmptyResult();
-            short prependIndex = 0;
             char timeSpent[32];
             struct timeval start, end;
             gettimeofday(&start, NULL);
 
             if (startsWith(queryCpy, "select", 1)) {
-                prependIndex = 7; // length of "select "
-                executeSelect(res, queryCpy + prependIndex, dbPath);
+                executeSelect(res, queryCpy + 7, dbPath);
             } else if (startsWith(queryCpy, "insert", 1)) {
-                prependIndex = 7;
-                executeInsert(res, queryCpy + prependIndex, dbPath);
+                executeInsert(res, queryCpy + 7, dbPath);
+            } else if (startsWith(queryCpy, "delete from", 1)) {
+                executeDelete(res, queryCpy + 12, dbPath);
             } else {
                 res = getFailedResult("Error 2 : Invalid query. Please use a valid keyword like select, insert ...");
             }
@@ -43,7 +44,7 @@ QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
             res->message = res->status == SUCCESS
                 ? concat(3, "Successfully executed query in ", timeSpent, "ms.")
                 : concat(3, "Failure while executing the query in ", timeSpent, "ms.");
-            free(queryCpy - prependIndex);
+            free(ptrSavePos);
 
             return res;
          } else {
@@ -163,7 +164,7 @@ void SQLPrintQueryResult(QueryResult *res) {
     int j;
     long colSize;
 
-    if (res->rowsCounter > 0) {
+    if (res && res->rowsCounter > 0) {
 
         char **columnsSizeModifiers = getColumnsSizeModifiers(res);
         char *columnSize;

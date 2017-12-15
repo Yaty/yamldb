@@ -16,6 +16,7 @@
 #include "../header/file_manager.h"
 #include "../header/directory_functions.h"
 #include "../header/string_array_functions.h"
+#include "../header/sql/query.h"
 //#include "../yaml/parser.c"
 
 #if _WIN32
@@ -57,6 +58,9 @@ void databaseManipulationManager(char *dbName) {
             case 5:
                 createAttribut(dbName);
                 break;
+            case 6:
+                handleSqlQueries(dbName);
+                break;
             default:
                 break;
         }
@@ -71,9 +75,9 @@ Input : dbName (char*), name of the database
 Output : short, choice of the user in the menu
 */
 short databaseManipulationManagerMenu(char *dbName) {
-    short length = 6;
+    short length = 7;
     short choice;
-    char *array[] = {"Quitter le programme", "Creer une table", "Ouvrir une table", "Lister toutes les tables", "Supprimer une base de donnees", "Definir des attributs"};
+    char *array[] = {"Quitter le programme", "Creer une table", "Ouvrir une table", "Lister toutes les tables", "Supprimer une base de donnees", "Definir des attributs", "Executer des requetes SQL"};
 
     do{
         system(CLEAR);
@@ -695,4 +699,38 @@ void setCaracteristics(Node *result, int choice, char *text, char *path, int typ
     child = YAMLGetChildAtIndex(column, type);
     YAMLSetValue(child, text);
     YAMLSaveNode(result, path);
+}
+
+/**
+ * Handle SQL queries
+ */
+void handleSqlQueries(char *dbName) {
+    if (dbName) {
+        QueryResult *res;
+        const int QUERY_MAX_SIZE = 2048;
+        char query[QUERY_MAX_SIZE]; // queries can be really large
+        size_t queryLength = 0;
+        char *dbPath = concat(2, "./resources/", dbName);
+
+        system(CLEAR);
+
+        while (1) {
+            query[0] = '\0';
+            printf("Entrez une requete SQL (rien pour sortir) :\n");
+            getInput(QUERY_MAX_SIZE, query);
+            queryLength = strlen(query);
+
+            if (queryLength == 0) {
+                break;
+            }
+
+            printf("%s :\n", query);
+            res = SQLExecuteQuery(query, dbPath);
+            SQLPrintQueryResult(res);
+            SQLFreeQueryResult(res);
+        }
+
+        free(dbPath);
+        system(CLEAR);
+    }
 }
