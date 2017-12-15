@@ -169,8 +169,7 @@ void removeInvalidColumns(char ***columns, int *columnsCounter, QueryResult *res
 
             if (columnExist == 0) {
                 addWarningToResult(res, concat(2, "Invalid column : ", strdup((*columns)[i])));
-                removeElementAtIndex(columns, *columnsCounter, i, 1);
-                *columnsCounter -= 1;
+                *columnsCounter -= removeElementAtIndex(columns, *columnsCounter, i, 1);
             }
         }
     }
@@ -189,8 +188,7 @@ void removeInvalidTables(char ***tables, int *tablesCounter, QueryResult *res, H
         for (i = 0; i < *tablesCounter; i++) {
             if (hashLookup(dataMap, (*tables)[i]) == NULL) {
                 addWarningToResult(res, concat(2, "Invalid table : ", strdup((*tables)[i])));
-                removeElementAtIndex(tables, *tablesCounter, i, 1);
-                *tablesCounter -= 1;
+                *tablesCounter -= removeElementAtIndex(tables, *tablesCounter, i, 1);
             }
         }
     }

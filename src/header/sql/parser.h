@@ -7,6 +7,7 @@
 
 #include "operators.h"
 #include "../../header/sql/conditions.h"
+#include "order.h"
 
 /**
  * Get params from a string
@@ -35,7 +36,7 @@ char **getTables(char *query, int *tablesCounter);
 
 Conditions *getConditions(char *query);
 
-char **getOrders(char *query, int *ordersCounter);
+Orders *getOrders(char *query);
 
 /**
  * Get a comparator from a string

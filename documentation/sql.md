@@ -67,9 +67,14 @@ We can handle those comparators :
 
 ## Order by
 
-TODO
+We handle multi columns ordering, ASC and DESC support.
+Syntax : ORDER BY col1 ASC/DESC, col2 ASC/DESC ...
+
+`SELECT * FROM customers JOIN orders ON customers.customerId = orders.customerId JOIN orderDetails ON orders.orderId = orderDetails.orderId JOIN products ON orderDetails.productId = products.productId ORDER BY productId DESC, quantity ASC`
 
 ## Conditions
+
+We handle multiple conditions. We can compare strings, char, integer and double values.
 
 `SELECT * FROM customers WHERE city = Memphis`
 

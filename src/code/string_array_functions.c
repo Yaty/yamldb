@@ -476,7 +476,7 @@ int areStringsEquals(char *str1, char *str2, int sensitivity) {
  * @param str
  * @param array
  * @param arraySize
- * @return index, -1 for false
+ * @return 1 for true, 0 for false
  */
 int stringIntoArray(char *str, char **array, int arraySize) {
     if (str && array && arraySize >= 0) {
@@ -517,7 +517,7 @@ int addStringIntoArray(char *string, char ***array, int arraySize) {
  * @param index
  * @param freeElement if we free
  */
-void removeElementAtIndex(char ***array, int arraySize, int index, int freeElement) {
+int removeElementAtIndex(char ***array, int arraySize, int index, int freeElement) {
     if (array && *array && arraySize > 0 && index >= 0) {
         int i;
 
@@ -531,7 +531,10 @@ void removeElementAtIndex(char ***array, int arraySize, int index, int freeEleme
         }
 
         (*array)[arraySize - 1] = NULL;
+        return 1;
     }
+
+    return 0;
 }
 
 /**

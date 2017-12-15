@@ -210,7 +210,7 @@ int addStringIntoArray(char *string, char ***array, int arraySize);
  * @param index
  * @param freeElement if we free
  */
-void removeElementAtIndex(char ***array, int arraySize, int index, int freeElement);
+int removeElementAtIndex(char ***array, int arraySize, int index, int freeElement);
 
 /**
  * Make string array deep copy
