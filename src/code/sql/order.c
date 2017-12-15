@@ -70,13 +70,12 @@ void freeOrders(Orders *o) {
 // Furthermore it's a O(n log n) algorithm, which is nice !
 // Origin sources : http://www.geeksforgeeks.org/iterative-merge-sort/
 
-/* l is for left index and r is right index of the sub-array of arr to be sorted */
 /**
  * Sort a table with a merge sort algorithm
  * @param table
  * @param l left index (0 if you want to sort from the start)
  * @param r right index (tables length - 1 if you want to sort til the array end)
- * @param sp additional parameters (comparator
+ * @param sp additional parameters (orderType, column to sort on)
  */
 void mergeSort(char ***table, int l, int r, SortParameters sp) {
     if (l < r) {
@@ -87,7 +86,14 @@ void mergeSort(char ***table, int l, int r, SortParameters sp) {
     }
 }
 
-/* Function to merge the two haves arr[l..m] and arr[m+1..r] of array arr[] */
+/**
+ * Function to merge the two haves table[l..m] and table[m+1..r] of array table[]
+ * @param table
+ * @param l left index
+ * @param m middle index
+ * @param r right index
+ * @param sp additional parameters (orderType, column to sort on)
+ */
 void merge(char ***table, int l, int m, int r, SortParameters sp) {
     int i, j, k;
     int n1 = m - l + 1;
@@ -147,6 +153,11 @@ void merge(char ***table, int l, int m, int r, SortParameters sp) {
     }
 }
 
+/**
+ * Order a query result from an orders struct
+ * @param res
+ * @param o
+ */
 void makeOrder(QueryResult *res, Orders *o) {
     if (res && res->rowsCounter > 1 && o) {
         int i;
