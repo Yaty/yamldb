@@ -97,7 +97,7 @@ We can use joins, * selector, where, and order by at the same time.
 ## Delete
 
 We can also chains conditions here.
-If no conditions are provided all lines from the table are disabled.
+If no conditions are provided all lines from the table are removed.
 
 `DELETE FROM cities WHERE cityName = Mexico`
 
