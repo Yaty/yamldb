@@ -7,10 +7,10 @@ data:
     - cityId: 2
       cityName: Memphis
       cityCountry: USA
-      cityPopulation: 1523625
+      cityPopulation: 555
       cityRanking: 50
-    - cityId: 2
+    - cityId: 3
       cityName: Mexico
       cityCountry: Mexico
-      cityPopulation: 5000000
+      cityPopulation: 800
       cityRanking: 15

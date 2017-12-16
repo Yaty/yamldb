@@ -101,6 +101,13 @@ If no conditions are provided all lines from the table are removed.
 
 `DELETE FROM cities WHERE cityName = Mexico`
 
+## Update
+
+We can also chains conditions here.
+If no conditions are provided all lines from the table are updated.
+
+`UPDATE cities SET cityName = Mexico2, cityPopulation = 555 WHERE cityId = 3`
+
 ## Known limitations
 
 We can't use different join type in a query. It won't crash but the result will be incorrect.
