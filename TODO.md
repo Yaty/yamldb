@@ -12,11 +12,11 @@
 
 **TODO : Full check**
 
-## Etape 2 : SQL1
+## Etape 2 : SQL
 
-- [ ] ajouter une ligne dans une table
-- [ ] modifier une ligne dans une table
-- [ ] supprimer une ligne dans une table
+- [ ] ajouter des lignes dans une table
+- [ ] modifier des lignes dans une table
+- [x] supprimer des lignes dans une table
 - [x] faire une requête select sur une table
 - [x] faire une requête select sur plusieurs tables sans conditions
 - [x] faire une requête select sur plusieurs tables avec jointures
@@ -27,7 +27,7 @@
 - [x] faire une reqûete select avec jointures avec conditions
 - [x] order by
 - [x] where
-- [ ] pouvoir lancer les requêtes depuis l'UI
+- [x] pouvoir lancer les requêtes depuis l'UI
   
 ## Etape 3 : GTK
 
