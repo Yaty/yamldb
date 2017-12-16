@@ -5,9 +5,9 @@
 #ifndef CBDD1_PARSER_H
 #define CBDD1_PARSER_H
 
-#include "operators.h"
-#include "../../header/sql/conditions.h"
+#include "conditions.h"
 #include "order.h"
+#include "join.h"
 
 /**
  * Get params from a string

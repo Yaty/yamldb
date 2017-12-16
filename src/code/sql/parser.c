@@ -132,6 +132,7 @@ Conditions *getConditions(char *query) {
         long whereIndex = -1;
         int success1 = 0;
         int success2 = 0;
+        long orderByIndex = -1;
         size_t valueLength;
 
         if (queryCpy) {
@@ -144,6 +145,12 @@ Conditions *getConditions(char *query) {
 
                 do {
                     if (logicalOperatorIndex > 0) {
+                        orderByIndex = getSubstringIndex(queryCpy, "order by", 1);
+
+                        if (logicalOperatorIndex == orderByIndex) { // it will detect the OR of ORDER BY as an operator
+                            break;
+                        }
+
                         queryCpy += logicalOperatorIndex;
                         queryCpy = trim(queryCpy);
 

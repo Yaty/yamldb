@@ -35,13 +35,36 @@ int addWarningToResult(QueryResult *result, char *warning) {
  * @param data
  */
 void addNodeToHashMap(char *dbPath, char *table, HashMap *data) {
-    char *currentNodeDataPath = concat(4, dbPath, "/", table, "/data.yml");
-    Node *currentNodeRoot = YAMLParseFile(currentNodeDataPath);
-    Node *currentNode = YAMLGetChildByKey(currentNodeRoot, "data");
+    long slashIndex;
+    char *dbPathCopy = strdup(dbPath);
+    char *ptrPos = dbPathCopy;
+    int i;
+    Node *currentTable;
 
     char *currentNodeDataPathMeta = concat(4, dbPath, "/", table, "/metadata.yml");
     Node *currentNodeRootMeta = YAMLParseFile(currentNodeDataPathMeta);
     Node *currentNodeMeta = YAMLGetChildByKey(currentNodeRootMeta, "structure");
+
+    while ((slashIndex = getSubstringIndex(dbPathCopy, "/", 0)) >= 0) {
+        dbPathCopy += slashIndex + 1;
+    }
+
+    Node *baseRoot = YAMLParseFile(dbPathCopy);
+    Node *base = YAMLGetChildByKey(baseRoot, "tables");
+
+    char *currentNodeDataPath = concat(4, dbPath, "/", table, "/data.yml");
+    Node *currentNodeRoot = YAMLParseFile(currentNodeDataPath);
+    Node *currentNode = YAMLGetChildByKey(currentNodeRoot, "data");
+
+    for (i = 0; i < YAMLGetSize(base); i++) {
+        currentTable = YAMLGetChildAtIndex(base, i);
+        if (areStringsEquals(YAMLGetValue(YAMLGetChildByKey(currentTable, "name")), table, 1) &&
+                areStringsEquals(YAMLGetValue(YAMLGetChildByKey(currentTable, "empty")), "yes", 0)) { // empty table
+            YAMLFreeNode(currentNodeRoot);
+            currentNodeRoot = YAMLGetSequenceNode("data");
+            break;
+        }
+    }
 
     if (DBIsValidData(currentNode) && DBIsValidMetadata(currentNodeMeta)) {
         hashInsert(data, strdup(table), currentNode);
@@ -53,8 +76,10 @@ void addNodeToHashMap(char *dbPath, char *table, HashMap *data) {
         YAMLFreeNode(currentNodeRootMeta);
     }
 
+    if (baseRoot) YAMLFreeNode(baseRoot);
     free(currentNodeDataPath);
     free(currentNodeDataPathMeta);
+    free(ptrPos);
 }
 
 /**

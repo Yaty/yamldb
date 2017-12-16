@@ -72,7 +72,7 @@ int DBIsValidData(Node *data) {
         int size1 = YAMLGetSize(data);
         Node *child;
         Node *child2;
-        if (YAMLIsSequence(data) && size1 > 0 && areStringsEquals(YAMLGetKey(data), "data", 1)) {
+        if (YAMLIsSequence(data) && size1 >= 0 && areStringsEquals(YAMLGetKey(data), "data", 1)) {
             for (i = 0; i < size1; i++) {
                 child = YAMLGetChildAtIndex(data, i);
                 size2 = YAMLGetSize(child);

@@ -30,20 +30,27 @@ QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
             gettimeofday(&start, NULL);
 
             if (startsWith(queryCpy, "select", 1)) {
+                res->type = SELECT;
                 executeSelect(res, queryCpy + 7, dbPath);
             } else if (startsWith(queryCpy, "insert", 1)) {
+                res->type = INSERT;
                 executeInsert(res, queryCpy + 7, dbPath);
             } else if (startsWith(queryCpy, "delete from", 1)) {
+                res->type = DELETE;
                 executeDelete(res, queryCpy + 12, dbPath);
             } else {
-                res = getFailedResult("Error 2 : Invalid query. Please use a valid keyword like select, insert ...");
+                res = getFailedResult("Error 2 : Invalid query. Please use a valid keyword like select, insert, delete ...");
             }
 
             gettimeofday(&end, NULL);
             sprintf(timeSpent, "%ld", (end.tv_usec - start.tv_usec) / 1000);
-            res->message = res->status == SUCCESS
-                ? concat(3, "Successfully executed query in ", timeSpent, "ms.")
-                : concat(3, "Failure while executing the query in ", timeSpent, "ms.");
+            res->messagesCounter += addStringIntoArray(
+                res->status == SUCCESS
+                    ? concat(3, "Successfully executed query in ", timeSpent, "ms.")
+                    : concat(3, "Failure while executing the query in ", timeSpent, "ms."),
+                &res->messages,
+                res->messagesCounter
+            );
             free(ptrSavePos);
 
             return res;
@@ -74,9 +81,9 @@ void SQLFreeQueryResult(QueryResult *res) {
         res->table = NULL;
     }
 
-    if (res->message) {
-        free(res->message);
-        res->message = NULL;
+    for (j = 0; j < res->messagesCounter; j++) {
+        free(res->messages[j]);
+        res->messages[j] = NULL;
     }
 
     for (j = 0; j < res->warningsCounter; j++) {
@@ -103,6 +110,7 @@ QueryResult *getEmptyResult() {
     res->headers = NULL;
     res->warnings = NULL;
     res->warningsCounter = 0;
+    res->messagesCounter = 0;
     return res;
 }
 
@@ -114,7 +122,8 @@ QueryResult *getEmptyResult() {
 QueryResult *getFailedResult(char *message) {
     QueryResult *res = getEmptyResult();
     res->status = FAILURE;
-    res->message = message;
+    res->messages = malloc(sizeof(char*));
+    res->messages[0] = message;
     return res;
 }
 
@@ -226,7 +235,7 @@ void SQLPrintQueryResult(QueryResult *res) {
         for (i = 0; i < res->columnsCounter; i++) {
             free(columnsSizeModifiers[i]);
         }
-    } else {
+    } else if (res->type == SELECT) {
         printf("No results.\n");
     }
 
@@ -236,8 +245,8 @@ void SQLPrintQueryResult(QueryResult *res) {
     }
 
     // MESSAGE
-   if (res->message) {
-       printf("%s\n", res->message);
+   for (i = 0; i < res->messagesCounter; i++) {
+       printf("%s\n", res->messages[i]);
    }
 }
 

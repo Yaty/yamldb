@@ -6,6 +6,7 @@
 #define CBDD1_CONDITIONS_H
 
 #include "operators.h"
+#include "../yaml/node.h"
 
 typedef struct Condition {
     char *key;
@@ -37,6 +38,15 @@ Condition *getEmptyCondition();
  * @param c the struct to free
  */
 void freeConditions(Conditions *c);
+
+
+/**
+ * See if line match conditions, if true 1 if false 0
+ * @param c
+ * @param line
+ * @return
+ */
+int matchConditions(Conditions *c, Node *line);
 
 
 #endif //CBDD1_CONDITIONS_H

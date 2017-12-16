@@ -717,7 +717,6 @@ void handleSqlQueries(char *dbName) {
             return;
         }
 
-
         system(CLEAR);
         flush();
 

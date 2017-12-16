@@ -7,15 +7,19 @@
 
 typedef enum QueryStatus { SUCCESS, FAILURE } QueryStatus;
 
+typedef enum QueryType { SELECT, UPDATE, DELETE, INSERT } QueryType;
+
 typedef struct QueryResult {
     char ***table;
     char **headers;
     int columnsCounter;
     int rowsCounter;
     QueryStatus status;
-    char *message;
+    char **messages;
     char **warnings;
     int warningsCounter;
+    int messagesCounter;
+    QueryType type;
 } QueryResult;
 
 /**

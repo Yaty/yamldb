@@ -88,6 +88,19 @@ We handle multiple conditions. We can compare strings, char, integer and double 
 
 TODO : Other operators (LIKE, ...)
 
+## Mixes
+
+We can use joins, * selector, where, and order by at the same time.
+
+`SELECT * FROM customers JOIN orders ON customers.customerId = orders.customerId JOIN orderDetails ON orders.orderId = orderDetails.orderId JOIN products ON orderDetails.productId = products.productId WHERE productId = 1 ORDER BY customerId DESC`
+
+## Delete
+
+We can also chains conditions here.
+If no conditions are provided all lines from the table are disabled.
+
+`DELETE FROM cities WHERE cityName = Mexico`
+
 ## Known limitations
 
 We can't use different join type in a query. It won't crash but the result will be incorrect.

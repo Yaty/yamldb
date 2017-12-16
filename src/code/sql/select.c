@@ -202,46 +202,6 @@ static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int 
     return NULL;
 }
 
-static int matchConditions(Conditions *c, Node *line) {
-    if (c && line && c->conditionsNumber == c->operatorsNumber + 1) {
-        int i;
-        int j;
-        int addLine;
-        int evalConditions[c->conditionsNumber];
-        Condition condition;
-        Type colType;
-
-        memset(evalConditions, 0, (size_t) c->conditionsNumber * sizeof(int)); // reset to 0, as evalConditions is variable-sized we have to do this by this way
-
-
-        for (i = 0; i < c->conditionsNumber; i++) {
-            condition = c->conditions[i];
-            colType = evalType(condition.key);
-
-            for (j = 0; j < YAMLGetSize(line); j++) {
-                if (areStringsEquals(condition.key, YAMLGetKey(YAMLGetChildAtIndex(line, j)), 1)) {
-                    evalConditions[i] = evalComparator(condition.value, YAMLGetValue(YAMLGetChildAtIndex(line, j)), colType, condition.comparator);
-                    break;
-                }
-            }
-        }
-
-        if (c->conditionsNumber == 1) {
-            addLine = evalConditions[0];
-        } else {
-            addLine = 1;
-
-            for (i = 0; i < c->conditionsNumber - 1; i++) {
-                addLine &= evalOperatorInt(evalConditions[i], evalConditions[i + 1], c->operators[i]);
-            }
-        }
-
-        return addLine;
-    }
-
-    return 0;
-}
-
 /**
  * Make a join on the current line
  * @param currentLine
@@ -420,6 +380,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     res->status = res->warningsCounter == 0 ? SUCCESS : FAILURE;
 
     // freeHashMapFilledWithNode(dataMap);
+    freeConditions(c);
     for (i = 0; i < tablesCounter; i++) free(tables[i]);
     for (i = 0; i < columnsCounter; i++) free(columns[i]);
     freeJoins(joins);
