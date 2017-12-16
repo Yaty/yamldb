@@ -15,7 +15,7 @@
 ## Etape 2 : SQL
 
 - [ ] ajouter des lignes dans une table
-- [ ] modifier des lignes dans une table
+- [x] modifier des lignes dans une table
 - [x] supprimer des lignes dans une table
 - [x] faire une requête select sur une table
 - [x] faire une requête select sur plusieurs tables sans conditions
