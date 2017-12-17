@@ -23,7 +23,6 @@
 QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
     if (queryString && dbPath) {
         char *queryCpy = trim(strdup(queryString));
-        char *dataPath;
         if (queryCpy) {
             char *ptrSavePos = queryCpy;
             QueryResult *res = getEmptyResult();

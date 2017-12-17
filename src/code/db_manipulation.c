@@ -287,7 +287,7 @@ int createTableFile(char *db, char *tableName){
  * Output : void
  */
 void addTableToDbFile(char* dbName, char* tableName) {
-    Node *dbNode, *newTable, *name, *status;
+    Node *dbNode, *newTable, *name, *empty;
     char dbFilePath[255];
     char *str[] = {"resources\\", dbName, ".yml"};
 
@@ -300,10 +300,10 @@ void addTableToDbFile(char* dbName, char* tableName) {
     }
     newTable = YAMLGetSequenceValueNode();
     name = YAMLGetValueNode(strdup("name"), strdup(tableName));
-    status = YAMLGetValueNode(strdup("status"), strdup("empty"));
+    empty = YAMLGetValueNode(strdup("empty"), strdup("yes"));
 
     YAMLAddChild(newTable, name);
-    YAMLAddChild(newTable, status);
+    YAMLAddChild(newTable, empty);
     YAMLAddChild(dbNode, newTable);
 
     YAMLSaveNode(dbNode, dbFilePath);
