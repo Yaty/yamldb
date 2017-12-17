@@ -17,7 +17,7 @@ int main (int argc, char **argv) {
     // PART 1
     databaseManager();
 
-    // PART 2
+    // PART 2 + 3
     // QueryResult *res = SQLExecuteQuery("SELECT * FROM customers", "./resources/base1");
     // SQLPrintQueryResult(res);
     return EXIT_SUCCESS;
