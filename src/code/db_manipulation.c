@@ -287,7 +287,7 @@ int createTableFile(char *db, char *tableName){
  * Output : void
  */
 void addTableToDbFile(char* dbName, char* tableName) {
-    Node *dbNode, *newTable, *name, *status;
+    Node *dbNode, *newTable, *name, *empty;
     char dbFilePath[255];
     char *str[] = {"resources\\", dbName, ".yml"};
 
@@ -295,16 +295,15 @@ void addTableToDbFile(char* dbName, char* tableName) {
 
     //dbNode = YAMLParseFile(str);
     dbNode = YAMLGetChildAtIndex( YAMLParseFile(dbFilePath), 0 );
-    if( YAMLGetType(dbNode) == UNDEFINED ) {
-        YAMLFreeNode(dbNode);
+    if(dbNode == NULL) {
         dbNode = YAMLGetSequenceNode(strdup("Tables"));
     }
     newTable = YAMLGetSequenceValueNode();
     name = YAMLGetValueNode(strdup("name"), strdup(tableName));
-    status = YAMLGetValueNode(strdup("status"), strdup("empty"));
+    empty = YAMLGetValueNode(strdup("empty"), strdup("yes"));
 
     YAMLAddChild(newTable, name);
-    YAMLAddChild(newTable, status);
+    YAMLAddChild(newTable, empty);
     YAMLAddChild(dbNode, newTable);
 
     YAMLSaveNode(dbNode, dbFilePath);
@@ -319,19 +318,20 @@ void addTableToDbFile(char* dbName, char* tableName) {
  * Output : void
  */
 void askTableName(char* tableName) {
-    int length = 0;
-    do{
+    ssize_t length = 0;
+    size_t bufferSize = 100;
+    do {
+        flush();
         printf("Saisir le nom de la table a creer : ");
-        fflush(stdin);
-        getInput(100, tableName);
-        length = strlen(tableName);
+        length = getline(&tableName, &bufferSize, stdin);
+        tableName = trim(tableName);
 
-        if( length <= 0 ) { //Y a-t'il d'autres conditions d'erreur ?
+        if( length <= 1 ) { //Y a-t'il d'autres conditions d'erreur ?
             printf("Le nom entre n'est pas valide.\n");
             system(PAUSE);
             system(CLEAR);
         }
-    }while( length <= 0 );
+    } while (length <= 1);
 }
 
 /*

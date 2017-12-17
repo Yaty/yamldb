@@ -1,15 +1,10 @@
 Structure:
-    orderId:
-        type: INT
-        primary: yes
-        defaultValue: no
-        autoIncrement: yes
-    customerId:
-        type: INT
+    colonne_1:
+        type: STRING
         primary: no
         defaultValue: no
         autoIncrement: no
-    orderDate:
+    colonne_2:
         type: STRING
         primary: no
         defaultValue: no

@@ -14,6 +14,7 @@
 #include "../header/file_manager.h"
 #include "../header/general.h"
 #include "../header/table_manipulation.h"
+#include "../header/string_array_functions.h"
 
 #if _WIN32
 #define CLEAR "cls"
@@ -270,33 +271,37 @@ Output : void
 TODO : Interdire de rentrer un nom de colonne déjà existant
 */
 void columnName(int incomeColumnNumber, Node *columnsNode){
-    char columnNameStr[255];
-    char val[255];
+    size_t bufferSize = 255;
+    char *columnNameStr = malloc(sizeof(char) * bufferSize);
+    char *strLength = malloc(sizeof(char) * bufferSize);
+    char val[bufferSize];
     char columnType[50];
-    int length = 0;
+    ssize_t length = 0;
     Node *temp;
     Node *child;
 
     do{
         system(CLEAR);
         printf("Saisir le nom de la colonne %d : ", incomeColumnNumber + 1);
-        fflush(stdin);
-        getInput(255, columnNameStr);
-        length = strlen(columnNameStr);
+        flush();
+        length = getline(&columnNameStr, &bufferSize, stdin);
+        columnNameStr = trim(columnNameStr);
 
-        if( length <= 0 ) { //Y a-t'il d'autres conditions d'erreur ?
+        if( length <= 1 ) { //Y a-t'il d'autres conditions d'erreur ?
             printf("Le nom entre n'est pas valide.\n");
             system(PAUSE);
             system(CLEAR);
         }
-    }while( length <= 0 );
+    }while( length <= 1 );
     do{
         strcpy(columnType, selectColumnType());
         if( strstr(columnType, "STRING") != NULL ){
             system(PAUSE);
             printf("Saisir le nombre de caractere que vous voulez mettre dans votre colonne: ");
-            getInput(255, val);
-            strcat(columnType, val);
+            flush();
+            getline(&strLength, &bufferSize, stdin);
+            strLength = trim(strLength);
+            strcat(columnType, strLength);
         }
     }while( columnType == NULL );
 
@@ -329,13 +334,9 @@ char *selectColumnType(){
     case 1: //STRING
         return "STRING";
     case 2: //CHAR
-        return "CHAR";
-    case 3: //FLOAT
         return "FLOAT";
-    case 4: //DOUBLE
+    case 3: //DOUBLE
         return "DOUBLE";
-    case 5: //TEXT
-        return "TEXT";
     default:
         return NULL;
     }
@@ -347,8 +348,8 @@ Input : nothing
 Output : short, choice of the user in the menu
 */
 short typeManipulationManagerMenu(){
-    char *array[] = {"INT", "STRING", "CHAR", "FLOAT", "DOUBLE", "TEXT"};
-    short length = 6;
+    char *array[] = {"INT", "STRING", "CHAR", "DOUBLE"};
+    short length = 4;
     char title[100] = "Type de la colonne";
     short choice;
 

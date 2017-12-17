@@ -35,22 +35,18 @@ int addWarningToResult(QueryResult *result, char *warning) {
  * @param data
  */
 void addNodeToHashMap(char *dbPath, char *table, HashMap *data) {
-    long slashIndex;
     char *dbPathCopy = strdup(dbPath);
     char *ptrPos = dbPathCopy;
     int i;
     Node *currentTable;
+    char *dbDataPath = concat(2, dbPathCopy, ".yml");
 
     char *currentNodeDataPathMeta = concat(4, dbPath, "/", table, "/metadata.yml");
     Node *currentNodeRootMeta = YAMLParseFile(currentNodeDataPathMeta);
-    Node *currentNodeMeta = YAMLGetChildByKey(currentNodeRootMeta, "structure");
+    Node *currentNodeMeta = YAMLGetChildByKey(currentNodeRootMeta, "Structure");
 
-    while ((slashIndex = getSubstringIndex(dbPathCopy, "/", 0)) >= 0) {
-        dbPathCopy += slashIndex + 1;
-    }
-
-    Node *baseRoot = YAMLParseFile(dbPathCopy);
-    Node *base = YAMLGetChildByKey(baseRoot, "tables");
+    Node *baseRoot = YAMLParseFile(dbDataPath);
+    Node *base = YAMLGetChildByKey(baseRoot, "Tables");
 
     char *currentNodeDataPath = concat(4, dbPath, "/", table, "/data.yml");
     Node *currentNodeRoot = YAMLParseFile(currentNodeDataPath);
@@ -80,6 +76,7 @@ void addNodeToHashMap(char *dbPath, char *table, HashMap *data) {
     free(currentNodeDataPath);
     free(currentNodeDataPathMeta);
     free(ptrPos);
+    free(dbDataPath);
 }
 
 /**

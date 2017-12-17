@@ -1,21 +1,26 @@
 Structure:
-    orderDetailId:
-        type: INT
-        primary: no
-        defaultValue: no
-        autoIncrement: yes
-    orderId:
-        type: INT
+    lmdsjhgsdf:
+        type: STRING
         primary: no
         defaultValue: no
         autoIncrement: no
-    productId:
-        type: INT
+    gfsg:
+        type: STRING
         primary: no
         defaultValue: no
         autoIncrement: no
-    quantity:
-        type: INT
+    sqgds:
+        type: CHAR
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    fsg:
+        type: STRING
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    sdg:
+        type: STRING
         primary: no
         defaultValue: no
         autoIncrement: no
