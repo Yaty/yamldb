@@ -1,0 +1,11 @@
+Structure:
+    bonsoir:
+        type: STRINGTest
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    col:
+        type: STRINGTest
+        primary: no
+        defaultValue: no
+        autoIncrement: no

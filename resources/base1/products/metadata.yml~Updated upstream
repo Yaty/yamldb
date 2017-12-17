@@ -1,0 +1,16 @@
+structure:
+    productId:
+        type: INT
+        primary: yes
+        defaultValue: no
+        autoIncrement: yes
+    productName:
+        type: STRING
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    price:
+        type: DOUBLE
+        primary: no
+        defaultValue: no
+        autoIncrement: no

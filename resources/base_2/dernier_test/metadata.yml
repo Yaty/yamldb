@@ -1,0 +1,26 @@
+Structure:
+    nom:
+        type: STRING50
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    prenom:
+        type: STRING50
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    age:
+        type: INT
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    adresse:
+        type: STRING255
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    code postal:
+        type: INT
+        primary: no
+        defaultValue: no
+        autoIncrement: no

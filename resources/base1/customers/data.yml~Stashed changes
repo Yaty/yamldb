@@ -1,0 +1,61 @@
+data:
+    - customerId: 1
+      customerName: Alfreds Futterkiste
+      address: Obere Str. 57
+      city: Berlin
+      postalCode: 12209
+      country: Germany
+    - customerId: 2
+      customerName: Ana Trujillo
+      address: Avda. de la Constitución
+      city: Mexico
+      postalCode: 05021
+      country: Mexico
+    - customerId: 3
+      customerName: Antonio Moreno Taqueria
+      address: Mataderos 2312
+      city: Mexico D.F.
+      postalCode: 05023
+      country: Mexico
+    - customerId: 4
+      customerName: Thomas Hardy
+      address: 120 Hanover Sq.
+      city: London
+      postalCode: WA1 1DP
+      country: UK
+    - customerId: 5
+      customerName: Christina Berglund
+      address: Berguvsvagen 8
+      city: Lulea
+      postalCode: S-958 22
+      country: Sweden
+    - customerId: 6
+      customerName: Hanna Moos
+      address: Forsterstr. 57
+      city: Mannheim
+      postalCode: 68306
+      country: Germany
+    - customerId: 7
+      customerName: Frederique Citeaux
+      address: 24, place Kleber
+      city: Strasbourg
+      postalCode: 67000
+      country: France
+    - customerId: 8
+      customerName: Martin Sommer
+      address: C/ Araquil, 67
+      city: Madrid
+      postalCode: 28023
+      country: Spain
+    - customerId: 9
+      customerName: Laurence Lebihans
+      address: 12, rue des Bouchers
+      city: Marseille
+      postalCode: 13008
+      country: France
+    - customerId: 10
+      customerName: Elizabeth Lincoln
+      address: 23 Tsawassen Blvd.
+      city: Tsawassen
+      postalCode: T2F 8M4
+      country: Canada
