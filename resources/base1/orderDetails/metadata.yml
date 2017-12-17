@@ -1,4 +1,4 @@
-Structure:
+sstructure:
     orderDetailId:
         type: INT
         primary: no
