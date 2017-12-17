@@ -37,7 +37,7 @@ Not implemented.
 Without (we will get multiple lines for each customer if there is multiple time this city in the world):
 `SELECT * FROM customers JOIN cities ON customers.city = cities.cityName`
 
-To avoid that we could do this :
+To avoid that we could do this (not working) :
 `SELECT * FROM customers JOIN cities ON customers.city = cities.cityName AND customers.country = cities.cityCountry`
 
 ### Logical operators
