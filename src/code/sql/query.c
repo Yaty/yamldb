@@ -32,9 +32,8 @@ QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
             if (startsWith(queryCpy, "select", 1)) {
                 res->type = SELECT;
                 executeSelect(res, queryCpy + 7, dbPath);
-            } else if (startsWith(queryCpy, "insert", 1)) {
-                res->type = INSERT;
-                executeInsert(res, queryCpy + 7, dbPath);
+            }else if (startsWith(queryCpy, "insert into", 1)) {
+                executeInsert(res, queryCpy + 12, dbPath,  "D:\\git\\CBDD1\\resources\\base1\\cities\\data.yml");
             } else if (startsWith(queryCpy, "delete from", 1)) {
                 res->type = DELETE;
                 executeDelete(res, queryCpy + 12, dbPath);
