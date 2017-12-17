@@ -160,8 +160,8 @@ void clearInput(char *str) {
     size_t length = strlen(str);
     size_t i = length - 1;
 
-    while (i >= 0 && str[i--] == '\n') {
-        str[i] = '\0';
+    while (i >= 0 && str[i] == '\n') {
+        str[i--] = '\0';
     }
 }
 
