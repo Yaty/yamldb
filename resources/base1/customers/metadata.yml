@@ -1,4 +1,4 @@
-structure:
+Structure:
     customerId:
         type: INT
         primary: yes

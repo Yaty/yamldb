@@ -9,3 +9,5 @@ tables:
       empty: no
     - name: orders
       empty: no
+    - name: ab
+      status: empty

@@ -43,7 +43,7 @@ void addNodeToHashMap(char *dbPath, char *table, HashMap *data) {
 
     char *currentNodeDataPathMeta = concat(4, dbPath, "/", table, "/metadata.yml");
     Node *currentNodeRootMeta = YAMLParseFile(currentNodeDataPathMeta);
-    Node *currentNodeMeta = YAMLGetChildByKey(currentNodeRootMeta, "structure");
+    Node *currentNodeMeta = YAMLGetChildByKey(currentNodeRootMeta, "Structure");
 
     while ((slashIndex = getSubstringIndex(dbPathCopy, "/", 0)) >= 0) {
         dbPathCopy += slashIndex + 1;

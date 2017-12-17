@@ -13,7 +13,7 @@
 
 static int updateTable(char *table, Node *update, char *dbPath, Conditions *c) {
     if (table && update && dbPath) {
-        char *tableDataPath = concat(5, dbPath, "/", table, "/data.yml");
+        char *tableDataPath = concat(4, dbPath, "/", table, "/data.yml");
         if (tableDataPath) {
             Node *rootData = YAMLParseFile(tableDataPath);
             Node *data = YAMLGetChildByKey(rootData, "data");
