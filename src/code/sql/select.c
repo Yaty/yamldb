@@ -380,7 +380,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
     res->status = res->warningsCounter == 0 ? SUCCESS : FAILURE;
 
     // freeHashMapFilledWithNode(dataMap);
-    freeConditions(c);
+    // freeConditions(c);
     for (i = 0; i < tablesCounter; i++) free(tables[i]);
     for (i = 0; i < columnsCounter; i++) free(columns[i]);
     freeJoins(joins);
