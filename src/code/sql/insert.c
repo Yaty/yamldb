@@ -90,6 +90,13 @@ char *modifyStr(char *values, int childrenNumber, int i){
     return values;
 }
 
+/**
+ *
+ * @param res: query result
+ * @param query
+ * @param dbPath
+ * @param dataPath
+ */
 void executeInsert(QueryResult *res, char *query, char *dbPath, char *dataPath) {
     char *space; //chaine + le dernier espace
     char table[200]; //Nom de la table
@@ -109,7 +116,6 @@ void executeInsert(QueryResult *res, char *query, char *dbPath, char *dataPath) 
 
     sequence = YAMLGetChildAtIndex(sequence, 0);
     if( YAMLIsUndefined(sequence) || sequence == NULL ){
-        printf("OK");
         YAMLFreeNode(sequence);
         sequence = YAMLGetSequenceNode(key);
     }
@@ -117,7 +123,7 @@ void executeInsert(QueryResult *res, char *query, char *dbPath, char *dataPath) 
     file = file->children;
     val = tablesSizeAndName(query, space, table);
     query += val + 1;
-    if(startsWith(query, "values", 1) || startsWith(query, "VALUES", 1)){
+    if(startsWith(query, "values", 1)){
         query += 8;
         values = getParams(query, &counterValues);
         compareCounters(counterValues, file->childrenNumber, values);
@@ -130,7 +136,7 @@ void executeInsert(QueryResult *res, char *query, char *dbPath, char *dataPath) 
     }else if(startsWith(query, "(",1 )){
         counterColumns = columnsSizeAndName(query, &columns, &nextVal);
         query += nextVal + 2;
-        if(startsWith(query, "values", 1) || startsWith(query, "VALUES", 1)){
+        if(startsWith(query, "values", 1)){
             query += 8;
             values = getParams(query, &counterValues);
             compareCounters( counterColumns, counterValues, values );

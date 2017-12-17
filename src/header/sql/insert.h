@@ -16,9 +16,11 @@
 #define CBDD1_INSERT_H
 
 /**
- * Execute a insert SQL query
+ *
+ * @param res: query result
  * @param query
- * @return a query result (in params)
+ * @param dbPath
+ * @param dataPath
  */
 void executeInsert(QueryResult *res, char *query, char *dbPath, char *dataPath);
 
