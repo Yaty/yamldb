@@ -1,4 +1,4 @@
-structure:
+Structure:
     cityId:
         type: INT
         primary: yes
