@@ -1,4 +1,4 @@
-structure:
+Structure:
     productId:
         type: INT
         primary: yes

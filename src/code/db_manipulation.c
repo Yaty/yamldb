@@ -1,7 +1,7 @@
 /*
 **  Filename : db_manipulation.c
 **
-**  Made by : Vincent GU�NIN ESGI - 3AL-1
+**  Made by : Vincent GUENIN ESGI - 3AL-1
 **
 **  Description : Contains the database manipulation functions
 */
@@ -710,7 +710,7 @@ void handleSqlQueries(char *dbName) {
         char *dbPath = concat(2, "./resources/", dbName);
         size_t QUERY_MAX_SIZE = 2048;
         char *buffer;
-        long characters;
+        //long characters;
 
         buffer = (char *) malloc(QUERY_MAX_SIZE * sizeof(char));
         if(buffer == NULL) {
@@ -722,9 +722,12 @@ void handleSqlQueries(char *dbName) {
 
         while (1) {
             printf("Entrez une requete SQL (rien pour sortir) :\n");
-            characters = getline(&buffer, &QUERY_MAX_SIZE, stdin);
+            //characters = getline(&buffer, &QUERY_MAX_SIZE, stdin);
 
-            if (characters == 1) { // for \n
+            fgets(buffer, QUERY_MAX_SIZE, stdin);
+
+            //if (characters == 1) { // for \n
+            if (strlen(buffer) == 1) { // for \n
                 break;
             }
 

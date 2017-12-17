@@ -88,7 +88,8 @@ void addNodeToHashMap(char *dbPath, char *table, HashMap *data) {
  */
 void freeHashMapFilledWithNode(HashMap *map) {
     if (map) {
-        for (int i = 0; i < map->size; i++) {
+        int i;
+        for (i = 0; i < map->size; i++) {
             free(map->keys[i]);
             YAMLFreeNode(map->values[i]);
         }

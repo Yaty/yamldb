@@ -19,6 +19,9 @@
 #include "../header/sql/query.h"
 #include "../header/sql/utils.h"
 
+#include <gtk/gtk.h>
+#include "../header/gui/window_manager.h"
+
 int main (int argc, char **argv) {
     /*
     //sizeOfBiggestSlotOfStrArray() Example
@@ -82,10 +85,12 @@ int main (int argc, char **argv) {
     printf("dirExist(\"%s\", \"%s\") : %hd\n", path, dirName2, dirExist(path, dirName2));
     */
 
-    databaseManager();
     /*QueryResult *res = SQLExecuteQuery("SELECT * FROM customers JOIN orders ON customers.customerId = orders.customerId JOIN orderDetails ON orders.orderId = orderDetails.orderId JOIN products ON orderDetails.productId = products.productId", "./resources/data/base1");
     SQLPrintQueryResult(res);
     SQLFreeQueryResult(res);*/
+
+    //databaseManager();
+    guiMain(argc, argv);
 
     return EXIT_SUCCESS;
 }

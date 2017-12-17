@@ -151,7 +151,7 @@ Input : dirPath (char*), path of the directory to create
 Output : (void)
 */
 void createDir(char *dirPath){
-    mkdir(dirPath, 0700);
+    mkdir(dirPath);
 }
 
 /*
