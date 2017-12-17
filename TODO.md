@@ -5,24 +5,31 @@
 - [x] créer une base donnée
 - [x] utiliser une base de donnée existante
 - [x] ajouter une table
-- [ ] supprimer une table
+- [x] supprimer une table
 - [x] détruire la base de donnée
-- [ ] colonnes de type entier, réel, caractère et chaine de caractères
+- [X] colonnes de type entier, réel, caractère et chaine de caractères
 - [x] pas de limite de table dans une base
 
-## Etape 2 : SQL1
+**TODO : Full check**
 
-- [ ] ajouter une ligne dans une table
-- [ ] modifier une ligne dans une table
-- [ ] supprimer une ligne dans une table
-- [ ] pas de limite en nombre de ligne dans les table
+## Etape 2 : SQL
 
-## Etape 3 : SQL2
-
-- [ ] faire une requête select sur une table
-- [ ] faire une requête select sur plusieurs tables en même temps (jointures)
-
-## Etape 4 : GTK
+- [ ] ajouter des lignes dans une table
+- [x] modifier des lignes dans une table
+- [x] supprimer des lignes dans une table
+- [x] faire une requête select sur une table
+- [x] faire une requête select sur plusieurs tables sans conditions
+- [x] faire une requête select sur plusieurs tables avec jointures
+  - [x] inner join
+  - [x] left join
+  - [ ] right join
+  - [ ] full join
+- [x] faire une reqûete select avec jointures avec conditions
+- [x] order by
+- [x] where
+- [x] pouvoir lancer les requêtes depuis l'UI
+  
+## Etape 3 : GTK
 
 - [ ] exécuter vos requêtes SQL
 - [ ] visualiser les tables
