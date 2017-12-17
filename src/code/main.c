@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "../header/sql/insert.h"
 #include "../header/db_manager.h"
 #include "../header/general.h"
 #include "../header/string_array_functions.h"
@@ -86,6 +87,8 @@ int main (int argc, char **argv) {
     /*QueryResult *res = SQLExecuteQuery("SELECT * FROM customers JOIN orders ON customers.customerId = orders.customerId JOIN orderDetails ON orders.orderId = orderDetails.orderId JOIN products ON orderDetails.productId = products.productId", "./resources/data/base1");
     SQLPrintQueryResult(res);
     SQLFreeQueryResult(res);*/
+    //SQLExecuteQuery("INSERT INTO table (cityId, cityName, cityCountry) VALUES ('VALEUR_1', 'VALEUR_2', 'VALEUR_3')", "D:\\git\\CBDD1\\resources\\base1\\cities\\metadata.yml");
+    //executeQueryInsert("insert into table values ('valeur 1', 'valeur 2')", "on s'en fou");
 
     return EXIT_SUCCESS;
 }

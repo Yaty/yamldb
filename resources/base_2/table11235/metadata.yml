@@ -1,0 +1,11 @@
+Structure:
+    colonne_1:
+        type: STRING
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    colonne_2:
+        type: STRING
+        primary: no
+        defaultValue: no
+        autoIncrement: no

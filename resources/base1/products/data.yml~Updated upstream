@@ -1,0 +1,10 @@
+data:
+    - productId: 1
+      productName: Ikura
+      price: 25.32
+    - productId: 2
+      productName: Tofu
+      price: 12.99
+    - productId: 3
+      productName: Tarte au sucre
+      price: 1000.01

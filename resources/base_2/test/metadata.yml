@@ -1,0 +1,11 @@
+Structure:
+    trzt:
+        type: STRING89
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    rzgsqg:
+        type: STRING89
+        primary: no
+        defaultValue: no
+        autoIncrement: no

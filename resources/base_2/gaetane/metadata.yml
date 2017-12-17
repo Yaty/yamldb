@@ -1,0 +1,11 @@
+Structure:
+    carette:
+        type: STRING
+        primary: no
+        defaultValue: no
+        autoIncrement: no
+    string blanc trop beau:
+        type: CHAR
+        primary: no
+        defaultValue: no
+        autoIncrement: no

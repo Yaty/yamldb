@@ -329,13 +329,9 @@ char *selectColumnType(){
     case 1: //STRING
         return "STRING";
     case 2: //CHAR
-        return "CHAR";
-    case 3: //FLOAT
         return "FLOAT";
-    case 4: //DOUBLE
+    case 3: //DOUBLE
         return "DOUBLE";
-    case 5: //TEXT
-        return "TEXT";
     default:
         return NULL;
     }
@@ -347,7 +343,7 @@ Input : nothing
 Output : short, choice of the user in the menu
 */
 short typeManipulationManagerMenu(){
-    char *array[] = {"INT", "STRING", "CHAR", "FLOAT", "DOUBLE", "TEXT"};
+    char *array[] = {"INT", "STRING", "CHAR", "DOUBLE"};
     short length = 6;
     char title[100] = "Type de la colonne";
     short choice;

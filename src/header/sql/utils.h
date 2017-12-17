@@ -6,6 +6,7 @@
 #define CBDD1_UTILS_SQL_H
 
 #include "query.h"
+#include "../yaml/api.h"
 #include "../yaml/node.h"
 #include "../utils/hashmap.h"
 #include "join.h"
