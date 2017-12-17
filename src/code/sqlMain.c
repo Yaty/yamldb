@@ -27,7 +27,8 @@ int main (int argc, char **argv) {
         getline(&buffer, &bufsize, stdin);
         QueryResult *res = SQLExecuteQuery(buffer, "./resources/base1");
         SQLPrintQueryResult(res);
-        SQLFreeQueryResult(res);
     }
+
+    return EXIT_SUCCESS;
 }
 

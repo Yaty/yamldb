@@ -11,9 +11,15 @@
 
 #include <stdlib.h>
 #include "../header/db_manager.h"
+#include "../header/sql/query.h"
 
 int main (int argc, char **argv) {
+    // PART 1
     databaseManager();
+
+    // PART 2
+    // QueryResult *res = SQLExecuteQuery("SELECT * FROM customers", "./resources/base1");
+    // SQLPrintQueryResult(res);
     return EXIT_SUCCESS;
 }
 
