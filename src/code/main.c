@@ -83,11 +83,11 @@ int main (int argc, char **argv) {
     printf("dirExist(\"%s\", \"%s\") : %hd\n", path, dirName2, dirExist(path, dirName2));
     */
 
-    //databaseManager();
+    databaseManager();
     /*QueryResult *res = SQLExecuteQuery("SELECT * FROM customers JOIN orders ON customers.customerId = orders.customerId JOIN orderDetails ON orders.orderId = orderDetails.orderId JOIN products ON orderDetails.productId = products.productId", "./resources/data/base1");
     SQLPrintQueryResult(res);
     SQLFreeQueryResult(res);*/
-    SQLExecuteQuery("INSERT INTO table (cityId, cityName, cityCountry) VALUES ('VALEUR_1', 'VALEUR_2', 'VALEUR_3')", "D:\\git\\CBDD1\\resources\\base1\\cities\\metadata.yml");
+    //SQLExecuteQuery("INSERT INTO table (cityId, cityName, cityCountry) VALUES ('VALEUR_1', 'VALEUR_2', 'VALEUR_3')", "D:\\git\\CBDD1\\resources\\base1\\cities\\metadata.yml");
     //executeQueryInsert("insert into table values ('valeur 1', 'valeur 2')", "on s'en fou");
 
     return EXIT_SUCCESS;
