@@ -20,9 +20,8 @@
  * @param res: query result
  * @param query
  * @param dbPath
- * @param dataPath
  */
-void executeInsert(QueryResult *res, char *query, char *dbPath, char *dataPath);
+void executeInsert(QueryResult *res, char *query, char *dbPath);
 
 /**
  * allow to collect the column name

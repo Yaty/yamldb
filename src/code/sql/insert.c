@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "../../header/general.h"
 #include "../../header/sql/parser.h"
 #include "../../header/string_array_functions.h"
 #include "../../header/sql/utils.h"
@@ -95,10 +96,10 @@ char *modifyStr(char *values, int childrenNumber, int i){
  * @param res: query result
  * @param query
  * @param dbPath
- * @param dataPath
  */
-void executeInsert(QueryResult *res, char *query, char *dbPath, char *dataPath) {
+void executeInsert(QueryResult *res, char *query, char *dbPath) {
     char *space; //chaine + le dernier espace
+    char *dataPath;
     char table[200]; //Nom de la table
     char **columns; //colonnes
     char **values; //valeurs à inserer
@@ -108,20 +109,31 @@ void executeInsert(QueryResult *res, char *query, char *dbPath, char *dataPath) 
     int j;
     int state;
     char *key = "data";
+    short size = 500;
+    short length = 5;
+    char *stringsData[] = {dbPath, "/", table, "/", "data.yml"};
+    char *strings[] = {dbPath, "/", table, "/", "metadata.yml"};
     size_t val;
     size_t nextVal;
-    Node *sequence = YAMLParseFile(dataPath);
-    Node *file = YAMLParseFile(dbPath);
-    Node *add = YAMLGetSequenceValueNode();
+    Node *sequence;
+    Node *file;
+    Node *add;
+
+    val = tablesSizeAndName(query, space, table);
+    concatenateSeveralStr(size, dataPath, length, stringsData);
+    concatenateSeveralStr(size, dbPath, length, strings);
+
+    sequence = YAMLParseFile(dataPath);
+    file = YAMLParseFile(dbPath);
+    add = YAMLGetSequenceValueNode();
 
     sequence = YAMLGetChildAtIndex(sequence, 0);
     if( YAMLIsUndefined(sequence) || sequence == NULL ){
         YAMLFreeNode(sequence);
         sequence = YAMLGetSequenceNode(key);
     }
-
     file = file->children;
-    val = tablesSizeAndName(query, space, table);
+
     query += val + 1;
     if(startsWith(query, "values", 1)){
         query += 8;

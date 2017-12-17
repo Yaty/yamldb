@@ -23,6 +23,7 @@
 QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
     if (queryString && dbPath) {
         char *queryCpy = trim(strdup(queryString));
+        char *dataPath;
         if (queryCpy) {
             char *ptrSavePos = queryCpy;
             QueryResult *res = getEmptyResult();
@@ -34,7 +35,7 @@ QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
                 res->type = SELECT;
                 executeSelect(res, queryCpy + 7, dbPath);
             }else if (startsWith(queryCpy, "insert into", 1)) {
-                executeInsert(res, queryCpy + 12, dbPath,  "D:\\git\\CBDD1\\resources\\base1\\cities\\data.yml");
+                executeInsert(res, queryCpy + 12, dbPath);
             } else if (startsWith(queryCpy, "delete from", 1)) {
                 res->type = DELETE;
                 executeDelete(res, queryCpy + 12, dbPath);
