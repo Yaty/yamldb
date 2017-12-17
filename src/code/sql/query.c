@@ -12,6 +12,7 @@
 #include "../../header/sql/select.h"
 #include "../../header/sql/insert.h"
 #include "../../header/sql/delete.h"
+#include "../../header/sql/update.h"
 
 /**
  * Execute a sql query on a db
@@ -37,6 +38,9 @@ QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
             } else if (startsWith(queryCpy, "delete from", 1)) {
                 res->type = DELETE;
                 executeDelete(res, queryCpy + 12, dbPath);
+            } else if (startsWith(queryCpy, "update", 1)) {
+                res->type = UPDATE;
+                executeUpdate(res, queryCpy + 7, dbPath);
             } else {
                 res = getFailedResult("Error 2 : Invalid query. Please use a valid keyword like select, insert, delete ...");
             }

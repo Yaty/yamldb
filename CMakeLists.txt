@@ -28,7 +28,7 @@ set(SRCS
         src/code/sql/parser.c
         src/code/sql/conditions.c
         src/code/utils/type.c
-        src/code/sql/order.c src/code/sql/delete.c)
+        src/code/sql/order.c src/code/sql/delete.c src/code/sql/update.c)
 
 set(HEADERS
         src/header/yaml/api.h
@@ -58,7 +58,7 @@ set(HEADERS
         src/header/sql/operators.h
         src/header/sql/conditions.h
         src/header/utils/type.h
-        src/header/sql/order.h src/header/sql/delete.h)
+        src/header/sql/order.h src/header/sql/delete.h src/header/sql/update.h)
 
 add_executable(cbdd ${SRCS} ${HEADERS})
 
@@ -74,7 +74,6 @@ set(TESTS_SRCS
         src/code/yaml/api/parse.c
         src/code/yaml/api/type.c
         src/code/utils/type.c
-
         tests/main.c
         tests/utils.c
         tests/src/code/parser/allParser.c
@@ -87,7 +86,6 @@ set(TESTS_SRCS
         tests/src/code/utils/type.c)
 
 set(TESTS_HEADERS
-
         src/header/yaml/api.h
         src/header/yaml/node.h
         src/header/yaml/utils/parser.h
@@ -99,7 +97,6 @@ set(TESTS_HEADERS
         src/header/yaml/api/type.h
         src/header/string_array_functions.h
         src/header/utils/type.h
-
         tests/src/header/minunit.h
         tests/src/header/utils.h
         tests/src/header/parser/allParser.h

@@ -138,6 +138,7 @@ int YAMLRemoveChildAtIndex(Node *parent, int index) {
     if (child) {
         int i;
         int success = YAMLFreeNode(child);
+        child = NULL;
 
         if (YAMLGetSize(parent) > 1) {
             for (i = index; i < YAMLGetSize(parent) - 1; i++) {
