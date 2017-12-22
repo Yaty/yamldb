@@ -24,11 +24,7 @@ QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
     if (queryString && dbPath) {
         char *queryCpy = trim(strdup(queryString));
         if (queryCpy) {
-            char *ptrSavePos = queryCpy;
             QueryResult *res = getEmptyResult();
-            char timeSpent[32];
-            struct timeval start, end;
-            gettimeofday(&start, NULL);
 
             if (startsWith(queryCpy, "select", 1)) {
                 res->type = SELECT;
@@ -46,17 +42,7 @@ QueryResult *SQLExecuteQuery(char *queryString, char *dbPath) {
                 res = getFailedResult("Error 2 : Invalid query. Please use a valid keyword like select, insert, delete ...");
             }
 
-            gettimeofday(&end, NULL);
-            sprintf(timeSpent, "%ld", (end.tv_usec - start.tv_usec) / 1000);
-            res->messagesCounter += addStringIntoArray(
-                res->status == SUCCESS
-                    ? concat(3, "Successfully executed query in ", timeSpent, "ms.")
-                    : concat(3, "Failure while executing the query in ", timeSpent, "ms."),
-                &res->messages,
-                res->messagesCounter
-            );
-            free(ptrSavePos);
-
+            free(queryCpy);
             return res;
          } else {
              return getFailedResult("Error 3 : error while executing query.");
