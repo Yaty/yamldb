@@ -113,7 +113,6 @@ If no conditions are provided all lines from the table are updated.
 `INSERT INTO cities ( cityId, cityName, cityCountry ) VALUES ('val_1', 'val_2', 'val_3')`
 
 
-
 ## Known limitations
 
 We can't use different join type in a query. It won't crash but the result will be incorrect.
