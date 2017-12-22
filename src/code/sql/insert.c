@@ -10,7 +10,6 @@
 #include "../../header/sql/parser.h"
 #include "../../header/string_array_functions.h"
 #include "../../header/sql/utils.h"
-#include "../../header/yaml/api.h"
 
 #if _WIN32
 #define CLEAR "cls"
@@ -27,7 +26,7 @@
  * char *table: table name
  * return table name
  */
-size_t tablesSizeAndName(char *query, char *space, char *table){
+size_t tablesSizeAndName(char *query, const char *space, char *table){
     size_t val;
 
     space = strchr(query, ' ');
@@ -44,7 +43,7 @@ size_t tablesSizeAndName(char *query, char *space, char *table){
  * @param nextVal: limits of the selection
  * @return number of columns
  */
-int columnsSizeAndName(char *query, char **columns, size_t *nextVal){
+int columnsSizeAndName(char *query, char ***columns, size_t *nextVal){
     int counter;
     char *charac;
     char *tempQuery;
@@ -64,9 +63,7 @@ int columnsSizeAndName(char *query, char **columns, size_t *nextVal){
  * @param counterValuesr
  * @param values
  */
-void compareCounters( int counterColumns, int counterValues, char **values ){
-    int i;
-
+void compareCounters( int counterColumns, int counterValues ){
     if( counterValues > counterColumns || counterValues < counterColumns ){
         printf("La requete n'est pas valide 3.");
         system(PAUSE);
@@ -99,7 +96,7 @@ char *modifyStr(char *values, int childrenNumber, int i){
  */
 void executeInsert(QueryResult *res, char *query, char *dbPath) {
     char *space; //chaine + le dernier espace
-    char *dataPath;
+    char *dataPath = NULL;
     char table[200]; //Nom de la table
     char **columns; //colonnes
     char **values; //valeurs à inserer
@@ -138,7 +135,7 @@ void executeInsert(QueryResult *res, char *query, char *dbPath) {
     if(startsWith(query, "values", 1)){
         query += 8;
         values = getParams(query, &counterValues);
-        compareCounters(counterValues, file->childrenNumber, values);
+        compareCounters(counterValues, file->childrenNumber);
         for(i = 0; i < file->childrenNumber; i++){
             values[i] = modifyStr(values[i], file->childrenNumber, i);
             YAMLAddChild(add, YAMLGetValueNode(file->children[i].key, values[i]));
@@ -151,7 +148,7 @@ void executeInsert(QueryResult *res, char *query, char *dbPath) {
         if(startsWith(query, "values", 1)){
             query += 8;
             values = getParams(query, &counterValues);
-            compareCounters( counterColumns, counterValues, values );
+            compareCounters( counterColumns, counterValues );
             for(i = 0; i < counterValues; i++){
                 values[i] = modifyStr(values[i], counterValues, i);
             }

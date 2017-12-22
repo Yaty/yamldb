@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include "../../header/sql/order.h"
 #include "../../header/string_array_functions.h"
-#include "../../header/utils/type.h"
-#include "../../header/sql/operators.h"
 
 /**
  * Get allocated order

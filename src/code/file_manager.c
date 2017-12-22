@@ -88,7 +88,7 @@ int fileIsEmpty(char * path) {
         pf = fopen(path, "a");
         if(pf){
             fseek(pf, 0, SEEK_END);
-            sizeOfFile = ftell(pf);
+            sizeOfFile = (int) ftell(pf);
             fclose(pf);
             return sizeOfFile;
         }

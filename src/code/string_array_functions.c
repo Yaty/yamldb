@@ -12,7 +12,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
-#include "../header/general.h"
 #include "../header/string_array_functions.h"
 
 /*================ FUNCTIONS ================*/

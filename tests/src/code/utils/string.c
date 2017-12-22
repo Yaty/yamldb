@@ -383,31 +383,31 @@ static char *addStringIntoArray4() {
 
 static char *splice1() {
     char **array = getArray(3);
-    int res = splice(array, 3, 0, 1);
+    int res = splice((void **) array, 3, 0, 1);
     mu_assert("splice1", res && stringIntoArray("bla0", array, 3) == 0);
 }
 
 static char *splice2() {
     char **array = getArray(3);
-    int res = splice(array, 3, 0, 2);
+    int res = splice((void **) array, 3, 0, 2);
     mu_assert("splice2", res && stringIntoArray("bla0", array, 3) == 0 && stringIntoArray("bla1", array, 3) == 0);
 }
 
 static char *splice3() {
     char **array = getArray(3);
-    int res = splice(array, 3, 0, 0);
+    int res = splice((void **) array, 3, 0, 0);
     mu_assert("splice3", res == 0);
 }
 
 static char *splice4() {
     char **array = getArray(3);
-    int res = splice(array, 3, 3, 1);
+    int res = splice((void **) array, 3, 3, 1);
     mu_assert("splice4", res == 0);
 }
 
 static char *splice5() {
     char **array = getArray(1);
-    int res = splice(array, 1, 0, 1);
+    int res = splice((void **) array, 1, 0, 1);
     mu_assert("splice5", res == 0);
 }
 

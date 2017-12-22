@@ -7,7 +7,6 @@
 #include <string.h>
 #include "../../header/string_array_functions.h"
 #include "../../header/sql/utils.h"
-#include "../../header/yaml/api.h"
 #include "../../header/sql/parser.h"
 
 static int addLine(Node *line, QueryResult *res, int index, char **columns, int columnsNumber) {
@@ -213,7 +212,7 @@ static Node *evalJoinFields(Join *join, HashMap *dataMap, char ***warnings, int 
  * @param warningsNumber
  * @return the join in a node struct
  */
-static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, HashMap *dataMap, char ***warnings, int *warningsNumber, Conditions *c) {
+static Node *getNewLineWithJoin(Node *currentLine, Joins *joins, HashMap *dataMap, char ***warnings, int *warningsNumber) {
     if (currentLine && joins && joins->joinsNumber > 0) {
         int i;
         int j;
@@ -357,7 +356,7 @@ void executeSelect(QueryResult *res, char *query, char *dbPath) {
             currentLine = YAMLGetChildAtIndex(data, j);
 
             if (joins->joinsNumber > 0) {
-                newLines = getNewLineWithJoin(currentLine, joins, dataMap, &res->warnings, &res->warningsCounter, c);
+                newLines = getNewLineWithJoin(currentLine, joins, dataMap, &res->warnings, &res->warningsCounter);
                 for (k = 0; k < YAMLGetSize(newLines); k++) {
                     if (!c || matchConditions(c, YAMLGetChildAtIndex(newLines, k))) {
                         res->rowsCounter += addLine(YAMLGetChildAtIndex(newLines, k), res, res->rowsCounter, columns, columnsCounter);

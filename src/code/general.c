@@ -8,9 +8,7 @@
 
 /*================ INCLUDES ================*/
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
 #include "../header/general.h"
 
 /*================ FUNCTIONS ================*/
@@ -36,7 +34,7 @@ short sizeOfBiggestSlotOfStrArray(short length, char **array) {
     short currentLength;
 
     for( counter = 0; counter < length; counter++ ) {
-        currentLength = strlen( array[counter] );
+        currentLength = (short) strlen(array[counter] );
 
         if( currentLength > maxLength ) {
             maxLength = currentLength;
@@ -60,9 +58,9 @@ void displayMenuTitle(short maxLength, char *title, char leftChar, char rightCha
     short totalLength;
     short gap;
 
-    totalLength = maxLength + 4;
-    titleLength = strlen(title);
-    gap = (totalLength - titleLength) / 2;
+    totalLength = (short) (maxLength + 4);
+    titleLength = (short) strlen(title);
+    gap = (short) ((totalLength - titleLength) / 2);
 
     printf("%c", leftChar);
     for( counter = 0; counter < gap; counter++ ) { //Affiche les espaces � gauche
@@ -71,7 +69,7 @@ void displayMenuTitle(short maxLength, char *title, char leftChar, char rightCha
 
     printf("%s", title); //Affiche le titre
 
-    gap = totalLength - (gap + titleLength) + 1;
+    gap = (short) (totalLength - (gap + titleLength) + 1);
     for( counter = 0; counter < gap; counter++ ) { //Affiche les espaces � droite
         printf(" ");
     }
@@ -99,7 +97,7 @@ void displayMenu(char *title, short length, char **menuStr) {
     //Take the length of the longest string to display
     maxLength = sizeOfBiggestSlotOfStrArray(length, menuStr);
     if( maxLength < strlen(title) ) {
-        maxLength = strlen(title);
+        maxLength = (short) strlen(title);
     }
 
     //Take the number of figure in length
@@ -119,7 +117,7 @@ void displayMenu(char *title, short length, char **menuStr) {
         printf("%c %hd. %s ", leftChar, counter, menuStr[counter]); //Display string
 
         //Display extra spaces
-        spaceToWrite = maxLength - strlen(menuStr[counter]);
+        spaceToWrite = (short) (maxLength - strlen(menuStr[counter]));
         for( counter2 = 0; counter2 < spaceToWrite; counter2++ ) {
             printf(" ");
         }
@@ -184,9 +182,7 @@ void getInput(short length, char *input) {
  */
 void flush() {
     int c;
-    while ((c = getchar ()) != '\n'  &&  c != EOF){
-        continue;
-    }
+    while ((c = getchar ()) != '\n'  &&  c != EOF);
 }
 
 /*
@@ -242,6 +238,5 @@ short concatenateSeveralStr(short resSize, char res[resSize], short length, char
         strcat(temp, strings[counter]);
     }
 
-    res = temp;
     return 0;
 }

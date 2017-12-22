@@ -38,6 +38,8 @@ int evalComparator(char *a, char *b, Type type, Comparator comparator) {
             case STRING:
             case CHAR:
                 return evalComparatorString(a, b, comparator);
+            default:
+                break;
         }
     }
 

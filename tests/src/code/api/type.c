@@ -2,7 +2,6 @@
 // Created by Hugo on 10/11/2017.
 //
 
-#include <stdio.h>
 #include "../../header/minunit.h"
 #include "../../../../src/header/yaml/api.h"
 

@@ -378,10 +378,6 @@ Require : - tableNames (char***) needs to be free.
 */
 char getTablesList(char *dirName, short *tableNamesLength, char ***tableNames) {
     char funcState;
-    short counter;
-    char *lastOcc;
-    char **tempArray;
-    int pos;
 
     funcState = getDirInDirectory(tableNamesLength, tableNames, dirName);
     if( funcState != 0 ) {
@@ -618,6 +614,8 @@ void definedAttributs(char *dbName, char *table){
         case 3:
             addCaracteristics(dbName, table, choice);
             break;
+        default:
+            return;
     }
 }
 
@@ -634,7 +632,6 @@ void addCaracteristics(char *dbName, char *table, int type){
     short length = 7;
     int choice;
     Node *result;
-    Node *child;
 
 
     concatenateSeveralStr(255, path, length, array);
@@ -666,7 +663,6 @@ int displayColumns(Node *columns){
     int choice;
     char *value;
     Node *column;
-    Node *child;
 
     for( i = 0; i < YAMLGetSize(columns); i++ ){
         column = YAMLGetChildAtIndex(columns, i);

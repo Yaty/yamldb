@@ -40,17 +40,17 @@ void databaseManager(void) {
         system(CLEAR);
 
         switch( menu ) {
-        case 0: //Quitter le programme
-            return;
-        case 1: //Cr�er une bdd
-            createDatabaseManager();
-            break;
-        case 2: //Ouvrir une bdd
-            openDatabaseManager();
-            break;
-        case 3: //Lister les bases
-            displayDatabasesListManager();
-            break;
+            case 0: //Quitter le programme
+                return;
+            case 1: //Cr�er une bdd
+                createDatabaseManager();
+                break;
+            case 2: //Ouvrir une bdd
+                openDatabaseManager();
+                break;
+            case 3: //Lister les bases
+                displayDatabasesListManager();
+                break;
         }
 
         system(CLEAR);
@@ -81,7 +81,7 @@ char displayDatabaseManagerMenu(void) {
 
     }while( choice < 0 || choice > length );
 
-    return choice;
+    return (char) choice;
 }
 
 /*
@@ -100,18 +100,18 @@ void createDatabase(char* name) {
     strcat(filename, ".yml");
 
     switch( createDatabaseFile(filename) ) {
-    case 0:
-        printf("Cette base de donnee existe deja.\n");
-        break;
-        case 1:
-        printf("Erreur lors de la creation de la base de donnee.\nL'emplacement ne doit pas etre accessible\n");
-        break;
-    case 2:
-        strcpy(dirPath, "resources\\");
-        strcat(dirPath, name);
-        createDir(dirPath);
-        printf("La base de donnee a ete creee avec succes.\n");
-        break;
+        case 0:
+            printf("Cette base de donnee existe deja.\n");
+            break;
+            case 1:
+            printf("Erreur lors de la creation de la base de donnee.\nL'emplacement ne doit pas etre accessible\n");
+            break;
+        case 2:
+            strcpy(dirPath, "resources\\");
+            strcat(dirPath, name);
+            createDir(dirPath);
+            printf("La base de donnee a ete creee avec succes.\n");
+            break;
     }
     system(PAUSE);
     system(CLEAR);
@@ -152,7 +152,7 @@ void createDatabaseManager(void) {
         printf("Entrer le nom de la base de donnees a creer : ");
         getInput(70, dbName);
 
-        length = strlen(dbName);
+        length = (short) strlen(dbName);
 
         if( length <= 0 ) { //Y a-t'il d'autres conditions d'erreur ?
             printf("Le nom entre n'est pas valide.\n");
@@ -193,7 +193,7 @@ char getDatabasesList(short *dbNamesLength, char ***dbNames) {
     //Pour chaque nom, on coupe le nom au dernier '.' pour r�cup�rer juste le nom de la bdd
     for( counter = 0; counter < *dbNamesLength; counter++ ) {
         lastOcc = getLastOccInStr(tempArray[counter], '.');
-        pos = lastOcc - tempArray[counter]; //Nb de char avant le dernier '.'
+        pos = (int) (lastOcc - tempArray[counter]); //Nb de char avant le dernier '.'
         tempArray[counter][pos] = '\0';
     }
 

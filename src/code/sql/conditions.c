@@ -54,11 +54,9 @@ void freeConditions(Conditions *c) {
             }
 
             free(condition);
-            condition = NULL;
         }
 
         free(c);
-        c = NULL;
     }
 }
 

@@ -4,8 +4,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <sched.h>
-#include <sys/time.h>
 #include <stdio.h>
 #include "../../header/sql/utils.h"
 #include "../../header/string_array_functions.h"
@@ -225,7 +223,7 @@ void SQLPrintQueryResult(QueryResult *res) {
         for (i = 0; i < res->columnsCounter; i++) {
             free(columnsSizeModifiers[i]);
         }
-    } else if (res->type == SELECT) {
+    } else if (res && res->type == SELECT) {
         printf("No results.\n");
     }
 

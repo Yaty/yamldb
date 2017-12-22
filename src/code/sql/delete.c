@@ -112,7 +112,7 @@ void executeDelete(QueryResult *res, char *query, char *dbPath) {
         char deletedLines2[12];
         Conditions *c = NULL;
 
-        spaceIndex = spaceIndex == -1 ? strlen(queryCpy) : spaceIndex;
+        spaceIndex = spaceIndex == -1 ? strlen(queryCpy) : (size_t) spaceIndex;
         if (spaceIndex > 0) {
             target = malloc(sizeof(char) * spaceIndex);
             if (target) {

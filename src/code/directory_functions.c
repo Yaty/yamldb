@@ -12,7 +12,6 @@
 #include <string.h>
 #include <dirent.h>
 #include <sys/stat.h>
-#include "../header/general.h"
 #include "../header/string_array_functions.h"
 #include "../header/directory_functions.h"
 
@@ -44,7 +43,7 @@ char getDirectoryContent(short *incomeArrayLength, char ***incomeArray, char *pa
 
     while ((ent = readdir(directory)) != NULL) {
         //Si le nom du répertoire/fichier n'est ni "." ni ".."
-        if( strcmp(ent->d_name, ".") && strcmp(ent->d_name, "..") ) {
+        if( strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
 
             if( increaseStrArraySize(70, &length, 1, &array) == 0 ) { //Malloc error
                 freeStrArray(length, array);
@@ -82,7 +81,7 @@ char getDirInDirectory(short *incomeArrayLength, char ***incomeArray, char* path
     }
 
     short resultArrayLength = 0;
-    char **resultArray = malloc( resultArrayLength ); //Initializing with 0
+    char **resultArray = malloc((size_t) resultArrayLength); //Initializing with 0
     char **tempArray = *incomeArray;
     short counter;
 
@@ -124,7 +123,7 @@ char getFilesInDirectory(short *incomeArrayLength, char ***incomeArray, char* pa
     }
 
     short resultArrayLength = 0;
-    char **resultArray = malloc( resultArrayLength ); //Initializing with 0
+    char **resultArray = malloc((size_t) resultArrayLength); //Initializing with 0
     char **tempArray = *incomeArray;
     short counter;
 

@@ -4,12 +4,10 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include "../../header/string_array_functions.h"
 #include "../../header/sql/operators.h"
 #include "../../header/sql/join.h"
 #include "../../header/sql/parser.h"
-#include "../../header/sql/order.h"
 
 /**
  * Get params from a string
@@ -126,13 +124,13 @@ Conditions *getConditions(char *query) {
         Comparator currentComparator;
         LogicalOperator currentLogicalOperator;
         LogicalOperator *tmp2 = NULL;
-        long comparatorIndex = -1;
+        long comparatorIndex;
         long logicalOperatorIndex = -1;
-        long spaceIndex = -1;
-        long whereIndex = -1;
+        long spaceIndex;
+        long whereIndex;
         int success1 = 0;
         int success2 = 0;
-        long orderByIndex = -1;
+        long orderByIndex;
         size_t valueLength;
 
         if (queryCpy) {
@@ -171,7 +169,6 @@ Conditions *getConditions(char *query) {
 
                     success1 = 0;
                     success2 = 0;
-                    key = NULL;
                     value = NULL;
 
                     comparatorIndex = getComparator(queryCpy, &currentComparator);
@@ -259,7 +256,7 @@ Orders *getOrders(char *query) {
 
                     spaceIndex = getSubstringIndex(queryCpy, " ", 0);
                     if (spaceIndex > 1
-                        && (col = malloc(sizeof(char) * (spaceIndex + 1))) && substring(queryCpy, col, 0, spaceIndex)) {
+                        && (col = malloc(sizeof(char) * (spaceIndex + 1))) && substring(queryCpy, col, 0, (size_t) spaceIndex)) {
                         queryCpy += spaceIndex;
                         queryCpy = trim(queryCpy);
                         isAsc = startsWith(queryCpy, "asc", 1);
@@ -447,7 +444,7 @@ long getLogicalOperator(char *str, LogicalOperator *operator) {
 JoinType getJoinType(char *str, long index) {
     if (str) { // a from t (8)JOIN_TYPE join
         char *strCpy = strdup(str);
-        JoinType type = NONE;
+        JoinType type;
 
         if (strCpy) {
             strCpy[index] = '\0';

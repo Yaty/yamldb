@@ -199,4 +199,10 @@ int displayColumns(Node *columns);
  * Output : void
  * */
 void setCaracteristics(Node *result, int choice, char *text, char *path, int type);
+
+/**
+ * Handle SQL queries
+ */
+void handleSqlQueries(char *dbName);
+
 #endif // DB_MANIPULATION_H_INCLUDED

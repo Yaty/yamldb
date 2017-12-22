@@ -115,6 +115,5 @@ void freeJoins(Joins *joins) {
         }
 
         free(joins);
-        joins = NULL;
     }
 }

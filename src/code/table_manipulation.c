@@ -37,23 +37,22 @@ Output : void
 void tableManipulationManager(char *dbName, char *tableName) {
     short menu;
 
-    do{
+    while (1) {
         menu = tableManipulationManagerMenu(dbName, tableName);
         system(CLEAR);
 
         switch( menu ) {
-        case 0: //Quitter le programme
-            return;
-        case 1: //Supprimer la table
-            dropTableManager(dbName, tableName);
-            system(PAUSE);
-            system(CLEAR);
-            return;
+            case 0: //Quitter le programme
+                return;
+            case 1: //Supprimer la table
+                dropTableManager(dbName, tableName);
+                system(PAUSE);
+                system(CLEAR);
+                return;
+            default:
+                system(CLEAR);
         }
-
-        system(CLEAR);
-
-    }while( menu != 0 );
+    }
 }
 
 /*
@@ -101,6 +100,7 @@ void dropTableManager(char *dbName, char *tableName) {
             return;
         case 1:
         case 2:
+        default:
             //L'erreur a déjà été affichée
             return;
     }
@@ -205,14 +205,15 @@ void addColumns(char *dbName, char *tableName){
         system(CLEAR);
 
         switch( menu ) {
-        case 0: //Saisir une colonne
-            columnName(tempColumn, columnsNode);
-            tempColumn++;
-            break;
-        case 1: //Ajouter une colonne
-            columnNumberVal++;
-            break;
+            case 0: //Saisir une colonne
+                columnName(tempColumn, columnsNode);
+                tempColumn++;
+                break;
+            case 1: //Ajouter une colonne
+                columnNumberVal++;
+                break;
         }
+
         system(CLEAR);
 
     }while( columnNumberVal != tempColumn );
@@ -274,7 +275,6 @@ void columnName(int incomeColumnNumber, Node *columnsNode){
     size_t bufferSize = 255;
     char *columnNameStr = malloc(sizeof(char) * bufferSize);
     char *strLength = malloc(sizeof(char) * bufferSize);
-    char val[bufferSize];
     char columnType[50];
     ssize_t length = 0;
     Node *temp;

@@ -11,7 +11,6 @@
 
 #include <stdlib.h>
 #include "../header/db_manager.h"
-#include "../header/sql/query.h"
 
 int main (int argc, char **argv) {
     // PART 1

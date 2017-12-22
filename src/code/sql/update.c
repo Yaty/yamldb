@@ -61,8 +61,8 @@ void executeUpdate(QueryResult *res, char *query, char *dbPath) {
         char *queryCpy = strdup(query);
         char *savePtrPos = queryCpy;
         long spaceIndex = getSubstringIndex(queryCpy, " ", 0);
-        long equalIndex = -1;
-        long commaIndex = -1;
+        long equalIndex;
+        long commaIndex;
         char *target;
         int targetSuccess;
         int keySuccess;
