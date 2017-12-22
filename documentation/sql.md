@@ -108,6 +108,12 @@ If no conditions are provided all lines from the table are updated.
 
 `UPDATE cities SET cityName = Mexico2, cityPopulation = 555 WHERE cityId = 3`
 
+## Insert
+
+`INSERT INTO cities ( cityId, cityName, cityCountry ) VALUES ('val_1', 'val_2', 'val_3')`
+
+
+
 ## Known limitations
 
 We can't use different join type in a query. It won't crash but the result will be incorrect.
